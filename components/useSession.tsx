@@ -24,7 +24,7 @@ const useSession = () => {
     }
 
     setSession({username, token})
-    console.log('user-section')
+    console.log(session)
   
   }, []);
 

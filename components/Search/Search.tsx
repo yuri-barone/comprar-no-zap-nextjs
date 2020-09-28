@@ -1,67 +1,51 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  TextField,
-  Typography,
-} from "@material-ui/core";
-import React from "react";
+import { makeStyles, TextField, fade } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 
+export type SearchProps = {
+  onSearch: (filter: string) => void;
+};
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.grey[200],
-    minHeight: "100vh",
+  searchDiv: {
     display: "flex",
+    backgroundColor: fade(theme.palette.common.white, 0.15),
   },
-  searchField: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
+  searchInput: {
+    margin: 5,
+    width: "100%",
+  },
+  searchIcon: {
+    alignSelf: "flex-end",
+    marginBottom: 5,
+    marginLeft: 5,
   },
 }));
 
-function Search() {
+function Search({ onSearch }: SearchProps) {
   const classes = useStyles();
+  const [filter, setFilter] = useState("");
+  const handleSearchChange = (e: any) => {
+    setFilter(e.target.value);
+  };
+  useEffect(() => {
+    const searchTimeout = setTimeout(() => {
+      onSearch(filter);
+    }, 500);
+    return () => {
+      clearInterval(searchTimeout);
+    };
+  }, [filter]);
 
   return (
-    <div className={classes.root}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Grid container justify="center">
-            <Box p={2}>
-              <Grid item>
-                <Typography variant="h4">AskZap</Typography>
-              </Grid>
-            </Box>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Grid container justify="center">
-            <Grid item>
-              <Paper className={classes.searchField}>
-                <Grid container spacing={2}>
-                <Grid item xs={2}>
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={8}>
-                  <TextField id="searchField" label="Procurar produtos" variant="outlined"/>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}></Grid>
-
-        <Grid item xs={12}></Grid>
-      </Grid>
+    <div className={classes.searchDiv}>
+      <SearchIcon className={classes.searchIcon} />
+      <TextField
+        onChange={handleSearchChange}
+        className={classes.searchInput}
+        label="Pesquisar por produtos ou empresas"
+        variant="standard"
+      />
     </div>
   );
 }

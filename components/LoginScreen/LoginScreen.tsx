@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   FormControlLabel,
   Grid,
@@ -120,9 +121,9 @@ function LoginScreen({onLogin}:loginScreenProps) {
               <Grid item xs={12}>
                 <Typography variant="caption">
                   <Link color="inherit">Problemas com login?</Link>
-                  <br />
-                  <Link color="inherit">Criar conta</Link>
                 </Typography>
+                <br />
+                <Button variant="contained" color="secondary" href="/cadastro">Criar conta</Button>
               </Grid>
             </Grid>
           </Box>
