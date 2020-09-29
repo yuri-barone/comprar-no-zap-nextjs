@@ -19,6 +19,7 @@ export type ProductCardProps = {
   name: string;
   descricao?: string;
   valor: string;
+  onAdd: (item:any) => void
 };
 
 const useStyles = makeStyles({
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ProductCard({ src, name, descricao, valor }: ProductCardProps) {
+function ProductCard({ src, name, descricao, valor, onAdd }: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
   const addQuantity = () => {
@@ -41,6 +42,19 @@ function ProductCard({ src, name, descricao, valor }: ProductCardProps) {
     }
     setQuantity(finalQuantity);
   };
+
+  const createProductCart = () => {
+    const ProductCart:any = {}
+    ProductCart["product"] = {
+      src: src,
+      name: name,
+      descricao: descricao,
+      valor: valor,
+    };
+    ProductCart["quantity"] = quantity;
+    onAdd(ProductCart)
+  }
+
   return (
     <Card className={classes.root}>
       <CardMedia component="img" height="200" image={src} title={name} />
@@ -48,11 +62,11 @@ function ProductCard({ src, name, descricao, valor }: ProductCardProps) {
         <Typography variant="h5">{name}</Typography>
         <Typography color="textSecondary">{descricao}</Typography>
         <br />
-        <Typography color="primary">R${valor}</Typography>
+        <Typography color="primary">{valor}</Typography>
       </CardContent>
       <CardActions>
         <Grid container justify="flex-end">
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <IconButton onClick={removeQuantity}>
               <RemoveIcon fontSize="small"></RemoveIcon>
             </IconButton>
@@ -64,9 +78,9 @@ function ProductCard({ src, name, descricao, valor }: ProductCardProps) {
               <AddIcon fontSize="small"></AddIcon>
             </IconButton>
           </Grid>
-          <Grid item xs={4}>
-            <Button variant="contained" color="primary">
-              Pedir
+          <Grid item xs={6}>
+            <Button onClick={createProductCart} variant="contained" color="primary">
+              Adicionar
             </Button>
           </Grid>
         </Grid>

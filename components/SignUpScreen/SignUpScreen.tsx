@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ValidationErrors } from "final-form";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm, useField } from "react-final-form-hooks";
 import * as yup from "yup";
@@ -50,12 +51,12 @@ const useStyles = makeStyles((theme) => ({
 function SignUpScreen() {
   const classes = useStyles();
   const [img64, setImg64] = useState<string>("")
-
+  const router = useRouter();
   const onSubmit = (values: any) => {
     values["imgBase64"] = img64;
     delete values.confirmarSenha;
     perfisService.save(values)
-    
+    router.push("/entrar")
   };
   const validate = (values: any): any => {
     try {

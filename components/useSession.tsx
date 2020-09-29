@@ -5,12 +5,11 @@ import { useEffect, useState } from "react";
 export const PDZToken = "PDZT";
 export const PDZUsername = "PDZU";
 
-export const keepSession = (token:string, username:string) => {
+export const keepSession = (username:string, token:string) => {
     localStorage.setItem(PDZToken, token)
     localStorage.setItem(PDZUsername, username)
     configureMainApi(token)
 }
-
 
 const useSession = () => {
   const [session, setSession] = useState({});

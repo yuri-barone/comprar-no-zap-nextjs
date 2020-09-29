@@ -1,18 +1,57 @@
-import { Grid, Tab, Tabs } from "@material-ui/core";
-import React, { useState } from "react";
+import { AppBar, Box, Container, Grid, makeStyles, Paper, Slide, Tab, Tabs } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import EnterpriseCard from "../components/EnterpriseCard/EnterpriseCard";
+import MyCart from "../components/MyCart/MyCart";
 import ProductCard from "../components/ProductCard/ProductCard";
 import Search from "../components/Search/Search";
+import perfisService from "../components/services/perfisService";
 import productsService from "../components/services/productsService";
 
+const useStyles = makeStyles(theme => ({
+  appBar: {
+    top: 'auto',
+    bottom: 0,
+    backgroundColor: theme.palette.background.default,
+  },
+  showingCart:{
+    paddingBottom: theme.spacing(20)
+  }
+}))
+
 export default function Home() {
+  const classes = useStyles()
   const [tabValue, setTabValue] = useState(0);
   const [productsData, setProductsData] = useState([]);
+  const [locaisData, setLocaisData] = useState([]);
+  const [lastFilter, setLastFilter] = useState("");
+  const [cartProducts, setCartProducts] = useState([])
 
-  const buscarProdutos = async (filter) => {
+  useEffect(() => {
+    buscar(lastFilter);
+  }, [tabValue]);
+
+  const buscar = (filter) => {
+    if (tabValue == 0 && !!filter) {
+      getProducts(filter);
+    }
+    if (tabValue == 1 && !!filter) {
+      getLocais(filter);
+    }
+  };
+  const getProducts = async (filter) => {
     try {
       const productResponse = await productsService.find(filter);
       setProductsData(productResponse.data.data);
-      console.log(productsData)
+      setLastFilter(filter);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getLocais = async (filter) => {
+    try {
+      const localResponse = await perfisService.find(filter);
+      setLocaisData(localResponse.data.data);
+      setLastFilter(filter);
     } catch (error) {
       console.log(error);
     }
@@ -22,8 +61,15 @@ export default function Home() {
     setTabValue(value);
   };
 
+  const adicionar = (item) => {
+    const toAdd = [...cartProducts, item]
+    setCartProducts(toAdd);
+    console.log(cartProducts)
+  }
+  const showingCart = cartProducts.length > 0;
+
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} className={showingCart && classes.showingCart}>
       <Grid item xs={12}>
         <Grid container justify="center">
           <Grid item xs={2}>
@@ -34,7 +80,7 @@ export default function Home() {
       <Grid item xs={12}>
         <Grid container justify="center">
           <Grid item xs={8}>
-            <Search onSearch={buscarProdutos} />
+            <Search onSearch={buscar} />
           </Grid>
         </Grid>
       </Grid>
@@ -47,21 +93,47 @@ export default function Home() {
           centered
         >
           <Tab label="Produtos" />
-          <Tab label="Empresas" />
+          <Tab label="Locais" />
         </Tabs>
       </Grid>
-      {productsData.map((item, index) => {
-        return (
-          <Grid item xs={3} key={index}>
-            <ProductCard
-              name={item.titulo}
-              descricao={item.descricao}
-              valor={item.valor}
-              src={item["picture.imgBase64"]}
-            />
-          </Grid>
-        );
-      })}
+      {tabValue == 0 &&
+        productsData.map((item, index) => {
+          return (
+            <Grid item xs={3} key={index}>
+              <ProductCard
+                name={item.titulo}
+                descricao={item.descricao}
+                valor={item.valor}
+                src={item["picture.imgBase64"]}
+                onAdd={adicionar}
+              />
+            </Grid>
+          );
+        })}
+      {tabValue == 1 &&
+        locaisData.map((item, index) => {
+          return (
+            <Grid item xs={4} key={index}>
+              <EnterpriseCard
+                name={item.nome}
+                zap={item.zap}
+                endereco={item.endereco}
+                src={item["picture.imgBase64"]}
+              />
+            </Grid>
+          );
+        })}
+      <Grid item xs={12}>
+        <Slide direction="up" in={showingCart}> 
+        <AppBar position="fixed" className={classes.appBar} >
+            <Box p={2}>
+              <Container>
+                  <MyCart cartProducts={cartProducts}></MyCart>
+              </Container>
+            </Box>
+          </AppBar>
+        </Slide>
+        </Grid> 
     </Grid>
   );
 }

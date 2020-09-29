@@ -9,6 +9,16 @@ const save = async (data:object) => {
     }
 }
 
+const find = async (filter:string) => {
+    try {
+      const response = await api.get(`/perfis?nome[$like]=%${filter}%`);
+      return { data: response.data };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 export default {
-    save
+    save,
+    find
 }

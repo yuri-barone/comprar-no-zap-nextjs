@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 import LoginScreen from '../components/LoginScreen/LoginScreen';
-import { configureMainApi } from '../components/services/Api';
 import usersService from '../components/services/usersService';
 import { keepSession } from '../components/useSession';
 

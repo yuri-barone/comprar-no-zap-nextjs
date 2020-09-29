@@ -15,8 +15,6 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useForm, useField } from "react-final-form-hooks";
 import * as yup from "yup";
 import { ValidationErrors } from "final-form";
-import usersService from "../services/usersService";
-import {configureMainApi} from "../services/Api"
 
 export type loginScreenProps = {
   onLogin: (loginData:any) => void; 
