@@ -1,4 +1,14 @@
-import { AppBar, Box, Container, Grid, makeStyles, Paper, Slide, Tab, Tabs } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Container,
+  Grid,
+  makeStyles,
+  Paper,
+  Slide,
+  Tab,
+  Tabs,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import EnterpriseCard from "../components/EnterpriseCard/EnterpriseCard";
 import MyCart from "../components/MyCart/MyCart";
@@ -7,28 +17,39 @@ import Search from "../components/Search/Search";
 import perfisService from "../components/services/perfisService";
 import productsService from "../components/services/productsService";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
-    top: 'auto',
+    top: "auto",
     bottom: 0,
     backgroundColor: theme.palette.background.default,
+    maxHeight: theme.spacing(25),
   },
-  showingCart:{
-    paddingBottom: theme.spacing(20)
-  }
-}))
+  showingCart: {
+    paddingBottom: theme.spacing(25),
+  },
+  hiddenCart :{},
+}));
 
 export default function Home() {
-  const classes = useStyles()
+  const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [productsData, setProductsData] = useState([]);
   const [locaisData, setLocaisData] = useState([]);
   const [lastFilter, setLastFilter] = useState("");
-  const [cartProducts, setCartProducts] = useState([])
+  const [cartProducts, setCartProducts] = useState([]);
+  const [totalValue, setTotalValue] = useState();
 
   useEffect(() => {
     buscar(lastFilter);
   }, [tabValue]);
+
+  useEffect(() => {
+    const valor = cartProducts.map((item) => {
+      return Number(item.product.valor) * item.quantity;
+    });
+    const calcTotalValue = valor.reduce((a, b) => a + b, 0);
+    setTotalValue(calcTotalValue);
+  }, [cartProducts]);
 
   const buscar = (filter) => {
     if (tabValue == 0 && !!filter) {
@@ -62,14 +83,20 @@ export default function Home() {
   };
 
   const adicionar = (item) => {
-    const toAdd = [...cartProducts, item]
-    setCartProducts(toAdd);
-    console.log(cartProducts)
-  }
+    let newItems = [];
+    const existentItem = cartProducts.find((product) => product.id === item.id);
+    if (!!existentItem) {
+      existentItem.quantity = existentItem.quantity + item.quantity;
+      newItems = [...cartProducts]
+    } else {
+      newItems = [...cartProducts, item];
+    }
+    setCartProducts(newItems);
+  };
   const showingCart = cartProducts.length > 0;
 
   return (
-    <Grid container spacing={3} className={showingCart && classes.showingCart}>
+    <Grid container spacing={3} className={showingCart ? classes.showingCart : classes.hiddenCart}>
       <Grid item xs={12}>
         <Grid container justify="center">
           <Grid item xs={2}>
@@ -96,6 +123,7 @@ export default function Home() {
           <Tab label="Locais" />
         </Tabs>
       </Grid>
+
       {tabValue == 0 &&
         productsData.map((item, index) => {
           return (
@@ -105,6 +133,7 @@ export default function Home() {
                 descricao={item.descricao}
                 valor={item.valor}
                 src={item["picture.imgBase64"]}
+                id={item.id}
                 onAdd={adicionar}
               />
             </Grid>
@@ -123,17 +152,21 @@ export default function Home() {
             </Grid>
           );
         })}
+
       <Grid item xs={12}>
-        <Slide direction="up" in={showingCart}> 
-        <AppBar position="fixed" className={classes.appBar} >
+        <Slide direction="up" in={showingCart}>
+          <AppBar position="fixed" className={classes.appBar}>
             <Box p={2}>
               <Container>
-                  <MyCart cartProducts={cartProducts}></MyCart>
+                <MyCart
+                  cartProducts={cartProducts}
+                  totalValue={totalValue}
+                ></MyCart>
               </Container>
             </Box>
           </AppBar>
         </Slide>
-        </Grid> 
+      </Grid>
     </Grid>
   );
 }

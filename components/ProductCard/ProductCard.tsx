@@ -7,7 +7,6 @@ import {
   Grid,
   IconButton,
   makeStyles,
-  TextField,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -19,6 +18,7 @@ export type ProductCardProps = {
   name: string;
   descricao?: string;
   valor: string;
+  id: number;
   onAdd: (item:any) => void
 };
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ProductCard({ src, name, descricao, valor, onAdd }: ProductCardProps) {
+function ProductCard({ src, name, descricao, valor, id, onAdd }: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
   const addQuantity = () => {
@@ -52,6 +52,7 @@ function ProductCard({ src, name, descricao, valor, onAdd }: ProductCardProps) {
       valor: valor,
     };
     ProductCart["quantity"] = quantity;
+    ProductCart["id"] = id;
     onAdd(ProductCart)
   }
 
