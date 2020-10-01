@@ -1,11 +1,14 @@
 import { Button, Grid, makeStyles, Modal, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
+import { formatNumberToMoneyWithSymbol } from "../../formatters";
 import MyCartDetails from "../MyCartDetails/MyCartDetails";
 import ProductCart from "../ProductCart/ProductCart";
 
 export type MyCartProps = {
   cartProducts: Array<any>;
   totalValue: number;
+  changeItemQuantity: () => void;
+  removeItem: () => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyCart = ({ cartProducts, totalValue }: MyCartProps) => {
+const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeItem }: MyCartProps) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -28,7 +31,9 @@ const MyCart = ({ cartProducts, totalValue }: MyCartProps) => {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
+    <>
     <Grid container>
       <Grid item xs={10}>
         <Grid container>
@@ -39,11 +44,13 @@ const MyCart = ({ cartProducts, totalValue }: MyCartProps) => {
             <Grid container spacing={2}>
               {cartProducts.map((item: any, index: number) => {
                 return (
-                  <Grid item xs="auto" key={index}>
+                  <Grid item xs={2} key={index}>
                     <ProductCart
                       quantity={item.quantity}
-                      src={item.product.src}
-                      name={item.product.name}
+                      src={item.product["picture.imgBase64"]}
+                      name={item.product.titulo}
+                      id={item.product.id}
+                      removeItem={removeItem}
                     />
                   </Grid>
                 );
@@ -66,7 +73,7 @@ const MyCart = ({ cartProducts, totalValue }: MyCartProps) => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body1" color="primary">
-              R${totalValue}
+              {formatNumberToMoneyWithSymbol(totalValue, "R$")}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -82,10 +89,13 @@ const MyCart = ({ cartProducts, totalValue }: MyCartProps) => {
           </Grid>
         </Grid>
       </Grid>
-      <Modal open={open} onClose={handleClose}>
-              <MyCartDetails cartProductsData={cartProducts} onContinuarComprando={handleClose}/>
-      </Modal>
+     
     </Grid>
+
+    <Modal open={open} onClose={handleClose}>
+              <MyCartDetails cartProductsData={cartProducts} onContinuarComprando={handleClose} changeItemQuantity={changeItemQuantity} removeItem={removeItem}/>
+      </Modal>
+    </>
   );
 };
 

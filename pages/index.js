@@ -4,7 +4,6 @@ import {
   Container,
   Grid,
   makeStyles,
-  Paper,
   Slide,
   Tab,
   Tabs,
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   showingCart: {
     paddingBottom: theme.spacing(25),
   },
-  hiddenCart :{},
+  hiddenCart: {},
 }));
 
 export default function Home() {
@@ -84,10 +83,12 @@ export default function Home() {
 
   const adicionar = (item) => {
     let newItems = [];
-    const existentItem = cartProducts.find((product) => product.id === item.id);
+    const existentItem = cartProducts.find(
+      (product) => product.product.id === item.product.id
+    );
     if (!!existentItem) {
       existentItem.quantity = existentItem.quantity + item.quantity;
-      newItems = [...cartProducts]
+      newItems = [...cartProducts];
     } else {
       newItems = [...cartProducts, item];
     }
@@ -95,78 +96,100 @@ export default function Home() {
   };
   const showingCart = cartProducts.length > 0;
 
+  const changeItemQuantity = (id, quantidade) => {
+    let newItems = [];
+    const itemToChange = cartProducts.find(
+      (product) => product.product.id === id
+    );
+    itemToChange.quantity = quantidade;
+    newItems = [...cartProducts];
+    setCartProducts(newItems);
+  };
+
+  const removeItem = (id) => {
+    let newItems = [];
+    const filterProducts = (product) => {
+      return product.product.id != id;
+    };
+    newItems = cartProducts.filter(filterProducts);
+    setCartProducts(newItems);
+  };
+
   return (
-    <Grid container spacing={3} className={showingCart ? classes.showingCart : classes.hiddenCart}>
-      <Grid item xs={12}>
-        <Grid container justify="center">
-          <Grid item xs={2}>
-            <h1>Pedir no Zap</h1>
+    <Container>
+      <Grid
+        container
+        spacing={3}
+        className={showingCart ? classes.showingCart : classes.hiddenCart}
+      >
+        <Grid item xs={12}>
+          <Grid container justify="center">
+            <Grid item xs={2}>
+              <h1>Pedir no Zap</h1>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container justify="center">
+            <Grid item xs={8}>
+              <Search onSearch={buscar} />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Tabs
+            value={tabValue}
+            onChange={handleChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab label="Produtos" />
+            <Tab label="Locais" />
+          </Tabs>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container alignItems="stretch" spacing={4}>
+            {tabValue == 0 &&
+              productsData.map((item) => {
+                return (
+                  <Grid item xs={3} key={item.id}>
+                    <ProductCard product={item} onAdd={adicionar} />
+                  </Grid>
+                );
+              })}
+          </Grid>
+          <Grid container alignItems="stretch" spacing={4}>
+            {tabValue == 1 &&
+              locaisData.map((item) => {
+                return (
+                  <Grid item xs={6} key={item.id}>
+                    <EnterpriseCard
+                      name={item.nome}
+                      zap={item.zap}
+                      endereco={item.endereco}
+                      src={item["picture.imgBase64"]}
+                    />
+                  </Grid>
+                );
+              })}
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Grid container justify="center">
-          <Grid item xs={8}>
-            <Search onSearch={buscar} />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Tabs
-          value={tabValue}
-          onChange={handleChangeTab}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-        >
-          <Tab label="Produtos" />
-          <Tab label="Locais" />
-        </Tabs>
-      </Grid>
-
-      {tabValue == 0 &&
-        productsData.map((item, index) => {
-          return (
-            <Grid item xs={3} key={index}>
-              <ProductCard
-                name={item.titulo}
-                descricao={item.descricao}
-                valor={item.valor}
-                src={item["picture.imgBase64"]}
-                id={item.id}
-                onAdd={adicionar}
-              />
-            </Grid>
-          );
-        })}
-      {tabValue == 1 &&
-        locaisData.map((item, index) => {
-          return (
-            <Grid item xs={4} key={index}>
-              <EnterpriseCard
-                name={item.nome}
-                zap={item.zap}
-                endereco={item.endereco}
-                src={item["picture.imgBase64"]}
-              />
-            </Grid>
-          );
-        })}
-
-      <Grid item xs={12}>
-        <Slide direction="up" in={showingCart}>
-          <AppBar position="fixed" className={classes.appBar}>
-            <Box p={2}>
-              <Container>
-                <MyCart
-                  cartProducts={cartProducts}
-                  totalValue={totalValue}
-                ></MyCart>
-              </Container>
-            </Box>
-          </AppBar>
-        </Slide>
-      </Grid>
-    </Grid>
+      <Slide direction="up" in={showingCart}>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Box p={2}>
+            <Container>
+              <MyCart
+                cartProducts={cartProducts}
+                totalValue={totalValue}
+                changeItemQuantity={changeItemQuantity}
+                removeItem={removeItem}
+              ></MyCart>
+            </Container>
+          </Box>
+        </AppBar>
+      </Slide>
+    </Container>
   );
 }

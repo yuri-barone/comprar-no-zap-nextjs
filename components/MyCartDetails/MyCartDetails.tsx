@@ -1,156 +1,119 @@
 import {
   Box,
   Button,
-  Checkbox,
-  Collapse,
   Container,
-  FormControlLabel,
   Grid,
   makeStyles,
   Paper,
-  Radio,
-  RadioGroup,
-  TextField,
-  withStyles,
+  Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
-import ItemShowDetails from "../ItemShowDetails/ItemShowDetails";
-import { green } from "@material-ui/core/colors";
+import React, { useEffect, useMemo, useState } from "react";
+import CartDetails from "../CartDetails/CartDetails";
 
 export type MyCartDetailsProps = {
   cartProductsData: Array<any>;
   onContinuarComprando: () => void;
+  changeItemQuantity: () => void;
+  removeItem: () => void;
 };
 
-const ButtonColor = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(green[600]),
-    backgroundColor: green[600],
-    "&:hover": {
-      backgroundColor: green[800],
-    },
-  },
-}))(Button);
-
 const useStyles = makeStyles({
-  paperWidth: {
-    position:"absolute",
-    top:0,
-    left:0,
-    right:0,
-    bottom:0,
+  root: {
+    height: '100vh',
+    overflowY: 'auto',
   },
 });
 const MyCartDetails = ({
   cartProductsData,
   onContinuarComprando,
+  changeItemQuantity,
+  removeItem,
 }: MyCartDetailsProps) => {
   const classes = useStyles();
-  const [entregar, setEntregar] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState("")
-
-  const handleEntregar = () => {
-    if (entregar === true) {
-      setEntregar(false)
-    } else {
-    setEntregar(true)
-  }
-  }
-  const handlePaymentMethod = (e:any) => {
-    setPaymentMethod(e.target.value);
-  }
-
-  return (
-    
-      <Paper className={classes.paperWidth}>
-        <Box p={2}>
-          <Container>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Grid container spacing={4}>
-                  
-                    {cartProductsData.map((item, index) => {
-                      return (
-                        <Grid item xs={12}>
-                        <ItemShowDetails
-                          src={item.product.src}
-                          quantity={item.quantity}
-                          productValue={item.product.valor}
-                          productName={item.product.name}
-                          key={index}
-                        />
-                        </Grid>
-                      );
-                    })}
-                  
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Grid container spacing={2} justify="flex-end">
-                  <Grid item xs={12}>
-                    <Grid container>
-                      <Grid item xs={12}>
-                        <FormControlLabel
-                          control={<Checkbox color="primary" onChange={handleEntregar}/>}
-                          label="Entregar"
-                        />
-                        <Collapse in={entregar} >
-                        <TextField
-                          label="Endereço de entrega"
-                          fullWidth
-                        ></TextField>
-                        </Collapse>
-                      </Grid>
-                    </Grid>
+  const [cartSellers, setCartSellers] = useState([]);
+  const groupProductsBySeller = () => {
+    let sellerProductsMap: any = {};
+    cartProductsData.forEach((shoppItem: any) => {
+      const sellerId = shoppItem.product.perfilId;
+      sellerProductsMap[sellerId] = sellerProductsMap[sellerId] || {
+        perfilName: shoppItem.product["perfil.nome"],
+        zap: shoppItem.product["perfil.zap"],
+        endereco: shoppItem.product["perfil.endereco"],
+        items: [],
+      };
+      sellerProductsMap[sellerId].items.push(shoppItem);
+    });
+    setCartSellers(Object.values(sellerProductsMap));
+  };
+  useMemo(groupProductsBySeller, [cartProductsData]);
+  useEffect(() => {
+    if (cartProductsData.length === 0) {
+      onContinuarComprando();
+    }
+  }, [cartProductsData]);
+  return ( 
+    <div className={classes.root}>
+      <Box p={2}>
+        <Container>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Paper variant="outlined">
+                 <Box p={2}>
+                <Grid container alignItems="center" spacing={2}>                  
+                  <Grid item xs>
+                    <Typography variant="h5">Meu pedido</Typography>
+                    <Typography >Basta clicar no botão <Box component="span" fontWeight="fontWeightBold">Pedir no Zap</Box> que o seu pedido será enviado pelo WhatsApp</Typography>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Grid container>
-                      <Grid item xs={12}>
-                        <RadioGroup row name="payment" value={paymentMethod} onChange={handlePaymentMethod}>
-                          <FormControlLabel
-                            value="Cartão"
-                            control={<Radio />}
-                            label="Cartão"
-                            labelPlacement="end"
-                          />
-                          <FormControlLabel
-                            value="Dinheiro"
-                            control={<Radio />}
-                            label="Dinheiro"
-                            labelPlacement="end"
-                          />
-                        </RadioGroup>
-                        <Collapse in={paymentMethod === "Dinheiro"} >
-                        <TextField label="Troco para:"  />
-                        </Collapse>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Grid container justify="flex-end" spacing={2}>
-                      <Grid item xs="auto">
-                        <Button
-                          variant="contained"
-                          color="default"
-                          onClick={onContinuarComprando}
-                        >
-                          Continuar Comprando
-                        </Button>
-                      </Grid>
-                      <Grid item xs="auto">
-                        <ButtonColor variant="contained" color="primary">
-                          Pedir no zap
-                        </ButtonColor>
-                      </Grid>
-                    </Grid>
+
+                                  <Grid item xs="auto">
+                    <Button color="primary" variant="contained" onClick={onContinuarComprando}>Continuar pedindo</Button>
                   </Grid>
                 </Grid>
-              </Grid>
+                </Box>
+              </Paper>
             </Grid>
-            </Container>
-        </Box>
-      </Paper>
+            {cartSellers.map((item) => {
+              return (
+                <Grid item xs={12}>
+                  <Paper variant="outlined">
+                    <Box p={2}>
+                      <Typography variant="h5">
+                        <Box pb={2}>{item.perfilName}</Box>
+                      </Typography>
+
+                      <CartDetails
+                        cartProductsData={item.items}
+                        changeItemQuantity={changeItemQuantity}
+                        removeItem={removeItem}
+                      />
+                    </Box>
+                  </Paper>
+                </Grid>
+              );
+            })}
+<Grid item xs={12}>
+             <Paper variant="outlined">
+                 <Box p={2}>
+                <Grid container alignItems="center" justify="flex-end" spacing={2}>                  
+                <Grid item xs="auto">
+                    <Button color="primary" variant="outlined" onClick={onContinuarComprando}>Limpar Carrinho</Button>
+                  </Grid>
+
+                  <Grid item xs="auto">
+                    <Button color="primary" variant="contained" onClick={onContinuarComprando}>Fechar</Button>
+                  </Grid>
+                </Grid>
+                </Box>
+              </Paper>
+
+              </Grid>
+          </Grid>
+
+         
+        </Container>
+      </Box>
+      </div>   
+   
   );
 };
 

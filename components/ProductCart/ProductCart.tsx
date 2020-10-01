@@ -1,10 +1,13 @@
-import { Avatar, Badge, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Badge, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export type ProductCartProps = {
     quantity: number,
     src: string,
-    name: string
+    name: string,
+    id: number,
+    removeItem: (param1:number) => void,
 }
 
 const useStyles = makeStyles(theme => ({
@@ -14,10 +17,14 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ProductCart = ({quantity, src, name}:ProductCartProps) => {
+const ProductCart = ({quantity, src, name, id, removeItem}:ProductCartProps) => {
     const classes = useStyles()
+
+    const handleClick = () => {
+      removeItem(id)
+    }
     return (
-                <Grid container spacing={1}>
+                <Grid container spacing={1} justify="center">
                   <Grid item xs={12}>
                     <Badge
                       badgeContent={quantity}
@@ -29,12 +36,16 @@ const ProductCart = ({quantity, src, name}:ProductCartProps) => {
                     >
                       <Avatar src={src} className={classes.avatarSize} />
                     </Badge>
+                    <IconButton onClick={handleClick}>
+                      <DeleteIcon></DeleteIcon>
+                    </IconButton>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="caption" color="textSecondary">
                     {name}
                     </Typography>
                   </Grid>
+                  
                 </Grid>
 
     );

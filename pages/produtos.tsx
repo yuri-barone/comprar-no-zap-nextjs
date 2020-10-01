@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import React from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
 import ProductRegister from "../components/ProductRegister/ProductRegister";
@@ -12,26 +12,13 @@ const produtos = () => {
     productsService.save(values);
   };
   return (
+    <Container>
     <Grid container spacing={2}>
       <Grid item xs={3}>
         <ProductRegister onSave={salvarProduto}></ProductRegister>
       </Grid>
-      <Grid item xs={3}>
-        <ProductCard></ProductCard>
-      </Grid>
-      <Grid item xs={3}>
-        <ProductCard></ProductCard>
-      </Grid>
-      <Grid item xs={3}>
-        <ProductCard></ProductCard>
-      </Grid>
-      <Grid item xs={3}>
-        <ProductCard></ProductCard>
-      </Grid>
-      <Grid item xs={3}>
-        <ProductCard></ProductCard>
-      </Grid>
     </Grid>
+    </Container>
   );
 };
 
