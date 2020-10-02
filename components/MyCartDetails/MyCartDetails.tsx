@@ -15,12 +15,13 @@ export type MyCartDetailsProps = {
   onContinuarComprando: () => void;
   changeItemQuantity: () => void;
   removeItem: () => void;
+  removeAll: () => void;
 };
 
 const useStyles = makeStyles({
   root: {
-    height: '100vh',
-    overflowY: 'auto',
+    height: "100vh",
+    overflowY: "auto",
   },
 });
 const MyCartDetails = ({
@@ -28,6 +29,7 @@ const MyCartDetails = ({
   onContinuarComprando,
   changeItemQuantity,
   removeItem,
+  removeAll,
 }: MyCartDetailsProps) => {
   const classes = useStyles();
   const [cartSellers, setCartSellers] = useState([]);
@@ -51,30 +53,42 @@ const MyCartDetails = ({
       onContinuarComprando();
     }
   }, [cartProductsData]);
-  return ( 
+  return (
     <div className={classes.root}>
       <Box p={2}>
         <Container>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper variant="outlined">
-                 <Box p={2}>
-                <Grid container alignItems="center" spacing={2}>                  
-                  <Grid item xs>
-                    <Typography variant="h5">Meu pedido</Typography>
-                    <Typography >Basta clicar no botão <Box component="span" fontWeight="fontWeightBold">Pedir no Zap</Box> que o seu pedido será enviado pelo WhatsApp</Typography>
-                  </Grid>
+                <Box p={2}>
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item xs>
+                      <Typography variant="h5">Meu pedido</Typography>
+                      <Typography>
+                        Basta clicar no botão{" "}
+                        <Box component="span" fontWeight="fontWeightBold">
+                          Pedir no Zap
+                        </Box>{" "}
+                        que o seu pedido será enviado pelo WhatsApp
+                      </Typography>
+                    </Grid>
 
-                                  <Grid item xs="auto">
-                    <Button color="primary" variant="contained" onClick={onContinuarComprando}>Continuar pedindo</Button>
+                    <Grid item xs="auto">
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={onContinuarComprando}
+                      >
+                        Continuar pedindo
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
                 </Box>
               </Paper>
             </Grid>
             {cartSellers.map((item) => {
               return (
-                <Grid item xs={12}>
+                <Grid item xs={12} key={item.perfilId}>
                   <Paper variant="outlined">
                     <Box p={2}>
                       <Typography variant="h5">
@@ -91,29 +105,42 @@ const MyCartDetails = ({
                 </Grid>
               );
             })}
-<Grid item xs={12}>
-             <Paper variant="outlined">
-                 <Box p={2}>
-                <Grid container alignItems="center" justify="flex-end" spacing={2}>                  
-                <Grid item xs="auto">
-                    <Button color="primary" variant="outlined" onClick={onContinuarComprando}>Limpar Carrinho</Button>
-                  </Grid>
+            <Grid item xs={12}>
+              <Paper variant="outlined">
+                <Box p={2}>
+                  <Grid
+                    container
+                    alignItems="center"
+                    justify="flex-end"
+                    spacing={2}
+                  >
+                    <Grid item xs="auto">
+                      <Button
+                        color="primary"
+                        variant="outlined"
+                        onClick={removeAll}
+                      >
+                        Limpar Carrinho
+                      </Button>
+                    </Grid>
 
-                  <Grid item xs="auto">
-                    <Button color="primary" variant="contained" onClick={onContinuarComprando}>Fechar</Button>
+                    <Grid item xs="auto">
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={onContinuarComprando}
+                      >
+                        Fechar
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
                 </Box>
               </Paper>
-
-              </Grid>
+            </Grid>
           </Grid>
-
-         
         </Container>
       </Box>
-      </div>   
-   
+    </div>
   );
 };
 

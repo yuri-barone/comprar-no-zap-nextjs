@@ -114,6 +114,9 @@ export default function Home() {
     newItems = cartProducts.filter(filterProducts);
     setCartProducts(newItems);
   };
+  const removeAll = () => {
+    setCartProducts([])
+  }
 
   return (
     <Container>
@@ -185,6 +188,7 @@ export default function Home() {
                 totalValue={totalValue}
                 changeItemQuantity={changeItemQuantity}
                 removeItem={removeItem}
+                removeAll={removeAll}
               ></MyCart>
             </Container>
           </Box>

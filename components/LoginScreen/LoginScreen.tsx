@@ -109,9 +109,6 @@ function LoginScreen({onLogin}:loginScreenProps) {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel control={<Checkbox />} label="Manter login" />
-              </Grid>
-              <Grid item xs={12}>
                 <IconButton type="submit" disabled={pristine || submitting}>
                   <ArrowForwardIcon fontSize="large" />
                 </IconButton>

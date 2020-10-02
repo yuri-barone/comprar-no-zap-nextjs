@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
   Grid,
 
   makeStyles,
@@ -55,6 +57,7 @@ function SignUpScreen() {
   const onSubmit = (values: any) => {
     values["imgBase64"] = img64;
     delete values.confirmarSenha;
+    values.email = values.email.toLowerCase()
     perfisService.save(values)
     router.push("/entrar")
   };
@@ -209,7 +212,9 @@ function SignUpScreen() {
                     }
                   ></TextField>
                 </Grid>
-
+                <Grid item xs="auto">
+                <FormControlLabel control={<Checkbox />} label="Quero vender" />
+              </Grid>
                 <Grid item xs="auto">
                   <Button
                     variant="contained"

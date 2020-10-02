@@ -8,6 +8,7 @@ const entrar = () => {
     const router = useRouter();
     const logar = async (values: any) => {
         values["strategy"] = "local"
+        values.email = values.email.toLowerCase();
         const data:any = await usersService.login(values)
         keepSession(values.email.split("@")[0], data.token)
         router.push("/produtos")

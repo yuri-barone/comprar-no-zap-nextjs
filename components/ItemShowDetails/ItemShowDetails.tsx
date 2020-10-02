@@ -63,18 +63,18 @@ const ItemShowDetails = ({
 
   useEffect(() => {
     calcTotalValue();
-  }, [productQuantity]);
+  }, [quantity]);
 
   useEffect(() => {
     changeItemQuantity(productId, productQuantity);
   }, [productQuantity]);
 
   const addQuantity = () => {
-    const finalQuantity = productQuantity + 1;
+    const finalQuantity = quantity + 1;
     setProductQuantity(finalQuantity);
   };
   const removeQuantity = () => {
-    const finalQuantity = productQuantity - 1;
+    const finalQuantity = quantity - 1;
     if (finalQuantity < 1) {
       return;
     }
@@ -82,7 +82,7 @@ const ItemShowDetails = ({
   };
 
   const calcTotalValue = () => {
-    const total = productValue * productQuantity;
+    const total = productValue * quantity;
     setTotalValue(total);
   };
 
@@ -124,7 +124,7 @@ const ItemShowDetails = ({
           <RemoveIcon fontSize="small"></RemoveIcon>
         </IconButton>
         <Typography component="span" color="textSecondary">
-          {productQuantity}
+          {quantity}
         </Typography>
         <IconButton onClick={addQuantity}>
           <AddIcon fontSize="small"></AddIcon>
