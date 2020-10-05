@@ -84,6 +84,8 @@ function SignUpScreen() {
   const email = useField("email", form);
   const password = useField("password", form);
   const confirmarPassword = useField("confirmarPassword", form);
+  const seller = useField("seller", form)
+  const palavrasChaves = useField("palavrasChaves", form)
 
   
   const handleImage = (base64:any) => {
@@ -142,6 +144,7 @@ function SignUpScreen() {
                         fullWidth
                         margin="dense"
                         id="zap"
+                        type="number"
                         error={zap.meta.touched && zap.meta.invalid}
                         helperText={
                           zap.meta.touched && zap.meta.invalid && zap.meta.error
@@ -160,7 +163,7 @@ function SignUpScreen() {
                     Dados de login:
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                   <TextField
                     {...email.input}
                     label="Email"
@@ -176,7 +179,17 @@ function SignUpScreen() {
                     }
                   ></TextField>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
+                  <TextField
+                    {...palavrasChaves.input}
+                    label="Palavras Chaves"
+                    variant="outlined"
+                    fullWidth
+                    margin="dense"
+                    id="palavrasChaves"
+                  ></TextField>
+                </Grid>
+                <Grid item xs={3}>
                   <TextField
                     {...password.input}
                     label="Senha"
@@ -193,7 +206,7 @@ function SignUpScreen() {
                     }
                   ></TextField>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                   <TextField
                     {...confirmarPassword.input}
                     label="Confirmar senha"
@@ -213,7 +226,7 @@ function SignUpScreen() {
                   ></TextField>
                 </Grid>
                 <Grid item xs="auto">
-                <FormControlLabel control={<Checkbox />} label="Quero vender" />
+                <FormControlLabel control={<Checkbox {...seller.input} />} label="Quero vender" />
               </Grid>
                 <Grid item xs="auto">
                   <Button

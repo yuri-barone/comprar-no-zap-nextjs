@@ -45,6 +45,7 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
         <Typography color="textSecondary">{product.descricao}</Typography>
         <br />
         <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor,"R$")}</Typography>
+  <Typography color="textSecondary">{product["perfil.nome"]}</Typography>
       </CardContent>
       <CardActions>
         <Grid container justify="flex-end">

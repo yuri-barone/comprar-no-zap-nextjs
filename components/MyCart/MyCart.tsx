@@ -8,8 +8,8 @@ import ProductCart from "../ProductCart/ProductCart";
 export type MyCartProps = {
   cartProducts: Array<any>;
   totalValue: number;
-  changeItemQuantity: () => void;
-  removeItem: () => void;
+  changeItemQuantity: (id:number, quantity:number) => void;
+  removeItem: (id:number) => void;
   removeAll: () => void;
 };
 

@@ -11,7 +11,7 @@ const save = async (data: object) => {
 
 const find = async (filter:string) => {
   try {
-    const response = await api.get(`/products?titulo[$iLike]=%${filter}%`);
+    const response = await api.get(`/products?titulo[$iLike]=%${filter.trim().replace(/\s/g, "+")}%`);
     return { data: response.data };
   } catch (error) {
     console.log(error);

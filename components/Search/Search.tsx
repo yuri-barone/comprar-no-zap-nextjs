@@ -1,50 +1,69 @@
-import { makeStyles, TextField, fade } from "@material-ui/core";
+import { makeStyles, TextField, fade, InputBase } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 
 export type SearchProps = {
-  onSearch: (filter: string) => void;
+  onChange?: (e:any) => void;
+  onEnter?: () => void;
+  value?: string;
 };
 
 const useStyles = makeStyles((theme) => ({
   searchDiv: {
+    position: "relative",
     display: "flex",
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-  },
-  searchInput: {
-    margin: 5,
+    borderRadius: 250,
+    border: "1px" + " " + "solid" + " " + fade(theme.palette.common.black, 0.4),
+    "&:hover": {
+      border: "1px" + " " + "solid" + " " + theme.palette.common.black,
+    },
     width: "100%",
   },
   searchIcon: {
-    alignSelf: "flex-end",
-    marginBottom: 5,
-    marginLeft: 5,
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: "inherit",
+    width: '100%',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    height: theme.spacing(4)
   },
 }));
 
-function Search({ onSearch }: SearchProps) {
+function Search({onEnter, value, onChange }: SearchProps) {
   const classes = useStyles();
-  const [filter, setFilter] = useState("");
-  const handleSearchChange = (e: any) => {
-    setFilter(e.target.value);
-  };
-  useEffect(() => {
-    const searchTimeout = setTimeout(() => {
-      onSearch(filter);
-    }, 500);
-    return () => {
-      clearInterval(searchTimeout);
-    };
-  }, [filter]);
+  const handleKeyDown = (e:any) => {
+    if (e.keyCode == 13) {
+      onEnter()
+    }
+  }
 
   return (
     <div className={classes.searchDiv}>
-      <SearchIcon className={classes.searchIcon} />
-      <TextField
-        onChange={handleSearchChange}
-        className={classes.searchInput}
-        label="Pesquisar por produtos ou empresas"
-        variant="standard"
+      <div className={classes.searchIcon}>
+      <SearchIcon />
+      </div>
+      <InputBase
+        placeholder="Pesquisar por produtos ou empresas"
+        onChange={onChange}
+        onKeyDown={handleKeyDown}
+        value={value}
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput,
+        }}
       />
     </div>
   );

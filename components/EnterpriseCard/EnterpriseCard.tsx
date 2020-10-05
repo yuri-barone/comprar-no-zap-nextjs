@@ -19,15 +19,13 @@ export type EnterpriseCardProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-  
-  },
+  root: {},
   avatarSize: {
-    width: theme.spacing(20),
-    height: theme.spacing(20),
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   maxHeigth: {
-    height:"100%",
+    height: "100%",
   },
 }));
 const EnterpriseCard = ({ src, name, zap, endereco }: EnterpriseCardProps) => {
@@ -36,33 +34,24 @@ const EnterpriseCard = ({ src, name, zap, endereco }: EnterpriseCardProps) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Grid container>
-          <Grid item xs={5}>
-            <Grid container justify="center">
-              <Grid item xs>
-                <Avatar
-                  alt="Remy Sharp"
-                  src={src}
-                  className={classes.avatarSize}
-                />
-              </Grid>
-            </Grid>
+        <Grid container alignItems="center">
+          <Grid item xs={2}>
+            <Avatar src={src} className={classes.avatarSize} />
           </Grid>
-          <Grid item xs={7}>
-            <Grid container spacing={2} alignContent="center" className={classes.maxHeigth}>
+          <Grid item xs>
+            <Grid container>
               <Grid item xs={12}>
                 <Typography variant="h6">{name}</Typography>
               </Grid>
               <Grid item xs={12}>
-                <Typography color="primary">{zap}</Typography>
-              </Grid>
-              <Grid item xs={12}>
                 <Typography color="textSecondary">{endereco}</Typography>
               </Grid>
-              <Grid item xs={12}>
-                <Button variant="outlined" color="primary">Ver produtos</Button>
-              </Grid>
             </Grid>
+          </Grid>
+          <Grid item xs="auto">
+            <Button variant="contained" color="secondary">
+              Enviar Mensagem
+            </Button>
           </Grid>
         </Grid>
       </CardContent>

@@ -13,11 +13,9 @@ import {
   RadioGroup,
   TextField,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React, { useMemo, useState } from "react";
 import ItemShowDetails from "../ItemShowDetails/ItemShowDetails";
-import { green } from "@material-ui/core/colors";
 import { formatNumberToMoneyWithSymbol } from "../../formatters";
 import { useForm, useField } from "react-final-form-hooks";
 import * as yup from "yup";
@@ -48,16 +46,6 @@ const useStyles = makeStyles({
     width: "100%",
   },
 });
-
-const ButtonColor = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(green[600]),
-    backgroundColor: green[600],
-    "&:hover": {
-      backgroundColor: green[800],
-    },
-  },
-}))(Button);
 
 export type CartDetailsProps = {
   cartProductsData: Array<any>;
@@ -251,9 +239,9 @@ const CartDetails = ({
         <Grid item xs={6} sm={6}>
           <Grid container justify="flex-end">
             <Grid item xs="auto">
-              <ButtonColor type="submit" variant="contained" color="primary">
+              <Button type="submit" variant="contained" color="primary">
                 Pedir no zap
-              </ButtonColor>
+              </Button>
             </Grid>
           </Grid>
         </Grid>
