@@ -11,6 +11,7 @@ export type MyCartProps = {
   changeItemQuantity: (id:number, quantity:number) => void;
   removeItem: (id:number) => void;
   removeAll: () => void;
+  value: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, removeItem }: MyCartProps) => {
+const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, removeItem, value }: MyCartProps) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -93,7 +94,7 @@ const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, remov
     </Grid>
 
     <Modal open={open} onClose={handleClose}>
-              <MyCartDetails cartProductsData={cartProducts} onContinuarComprando={handleClose} changeItemQuantity={changeItemQuantity} removeAll={removeAll} removeItem={removeItem}/>
+              <MyCartDetails value={value} cartProductsData={cartProducts} onContinuarComprando={handleClose} changeItemQuantity={changeItemQuantity} removeAll={removeAll} removeItem={removeItem}/>
       </Modal>
     </>
   );

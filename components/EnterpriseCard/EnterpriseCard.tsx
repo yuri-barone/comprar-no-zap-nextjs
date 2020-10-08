@@ -8,7 +8,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { Height } from "@material-ui/icons";
+import { useRouter } from "next/router";
 import React from "react";
 
 export type EnterpriseCardProps = {
@@ -16,6 +16,8 @@ export type EnterpriseCardProps = {
   name: string;
   zap: string;
   endereco: string;
+  id: number;
+  onNavigate: (store:any) => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -28,8 +30,16 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
 }));
-const EnterpriseCard = ({ src, name, zap, endereco }: EnterpriseCardProps) => {
+const EnterpriseCard = ({ src, name, zap, endereco, id, onNavigate }: EnterpriseCardProps) => {
   const classes = useStyles();
+  const handleOnSeeProducts = () => {
+    onNavigate({src, name, zap, endereco, id})
+  }
+  const handleSendMessage = () => {
+    const link = `https://api.whatsapp.com/send?phone=${zap}&text=Olá,%20te%20encontrei%20no%20*Comprar%20no%20zap.*`
+    const win = window.open(link, "_blank");
+    win.focus();
+  }
 
   return (
     <Card className={classes.root}>
@@ -38,7 +48,7 @@ const EnterpriseCard = ({ src, name, zap, endereco }: EnterpriseCardProps) => {
           <Grid item xs={2}>
             <Avatar src={src} className={classes.avatarSize} />
           </Grid>
-          <Grid item xs>
+          <Grid item xs={6}>
             <Grid container>
               <Grid item xs={12}>
                 <Typography variant="h6">{name}</Typography>
@@ -48,10 +58,19 @@ const EnterpriseCard = ({ src, name, zap, endereco }: EnterpriseCardProps) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs="auto">
-            <Button variant="contained" color="secondary">
-              Enviar Mensagem
-            </Button>
+          <Grid item xs={4}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Button variant="outlined" color="secondary" onClick={handleOnSeeProducts} fullWidth>
+                  Ver produtos
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" color="secondary" fullWidth onClick={handleSendMessage}>
+                  Enviar mensagem
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </CardContent>

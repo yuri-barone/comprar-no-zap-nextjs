@@ -17,8 +17,8 @@ import * as yup from "yup";
 import { ValidationErrors } from "final-form";
 
 export type loginScreenProps = {
-  onLogin: (loginData:any) => void; 
-}
+  onLogin: (loginData: any) => void;
+};
 
 yup.setLocale({
   mixed: {
@@ -48,15 +48,18 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     width: "25%",
   },
-  imgDiv:{
-    height: "100vh"
+  imgDiv: {
+    height: "100vh",
   },
-  img:{
-    objectFit:"cover",
-  }
+  img: {
+    objectFit: "cover",
+  },
+  logo: {
+    maxWidth: "100%",
+  },
 }));
 
-function LoginScreen({onLogin}:loginScreenProps) {
+function LoginScreen({ onLogin }: loginScreenProps) {
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
@@ -71,7 +74,7 @@ function LoginScreen({onLogin}:loginScreenProps) {
   };
 
   const { form, handleSubmit, pristine, submitting } = useForm({
-    onSubmit:onLogin, // the function to call with your form values upon valid submit
+    onSubmit: onLogin, // the function to call with your form values upon valid submit
     validate,
   });
 
@@ -85,6 +88,13 @@ function LoginScreen({onLogin}:loginScreenProps) {
           <Box p={2}>
             <Grid container justify="center" spacing={2}>
               <Grid item xs={12}>
+                <img
+                  alt=""
+                  src="/comprar-no-zap.svg"
+                  className={classes.logo}
+                ></img>
+              </Grid>
+              <Grid item xs={12}>
                 <Typography variant="h4" color="textSecondary">
                   Fazer login
                 </Typography>
@@ -95,7 +105,10 @@ function LoginScreen({onLogin}:loginScreenProps) {
                   variant="outlined"
                   label="E-mail"
                   error={email.meta.touched && email.meta.invalid}
-                  helperText={email.meta.touched && email.meta.invalid && email.meta.error}
+                  helperText={
+                    email.meta.touched && email.meta.invalid && email.meta.error
+                  }
+                  fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
@@ -105,27 +118,55 @@ function LoginScreen({onLogin}:loginScreenProps) {
                   label="Senha"
                   type="password"
                   error={password.meta.touched && password.meta.invalid}
-                  helperText={password.meta.touched && password.meta.invalid && password.meta.error}
+                  helperText={
+                    password.meta.touched &&
+                    password.meta.invalid &&
+                    password.meta.error
+                  }
+                  fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
-                <IconButton type="submit" disabled={pristine || submitting}>
-                  <ArrowForwardIcon fontSize="large" />
-                </IconButton>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="secondary"
+                  href="/cadastro"
+                  fullWidth
+                >
+                  Criar conta
+                </Button>
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="caption">
-                  <Link color="inherit">Problemas com login?</Link>
-                </Typography>
-                <br />
-                <Button variant="contained" color="secondary" href="/cadastro">Criar conta</Button>
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  disabled={pristine || submitting}
+                  startIcon={<ArrowForwardIcon />}
+                  size="large"
+                  fullWidth
+                >
+                  Entrar
+                </Button>
+                <Grid item xs={12}>
+                  <Typography variant="caption">
+                    <Link color="inherit">Problemas com login?</Link>
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
           </Box>
         </form>
       </div>
       <div className={classes.imgDiv}>
-        <img alt="" src="/pedir-no-zap-wallpaper.jpg" className={classes.img} height="100%" width="100%"></img>
+        <img
+          alt=""
+          src="/pedir-no-zap-wallpaper.png"
+          className={classes.img}
+          height="100%"
+          width="100%"
+        ></img>
       </div>
     </div>
   );

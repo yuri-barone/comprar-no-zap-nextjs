@@ -9,6 +9,7 @@ export type ImageUploadProps = {
   onChangeImage?: (imgBase64: any) => void;
   rounded?: boolean;
   size?: number;
+  configureActions?: (actions:any) => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +54,7 @@ function ImageUpload({
   onChangeImage,
   rounded,
   size,
+  configureActions
 }: ImageUploadProps) {
   const classes = useStyles({ rounded, size });
   const fileInput: any = useRef(null);
@@ -65,6 +67,11 @@ function ImageUpload({
     setImgB64(imgResized);
     (onChangeImage || noop)(imgResized);
   };
+  const clear = () => {
+    setImgB64(defaultImage)
+  }
+
+  configureActions({clear})
 
   return (
     <div className={clsx(rounded && classes.rounded, classes.root)}>

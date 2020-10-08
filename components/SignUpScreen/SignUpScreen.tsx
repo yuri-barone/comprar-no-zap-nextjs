@@ -2,13 +2,18 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   FormControlLabel,
   Grid,
 
+  Link,
+
   makeStyles,
+  Snackbar,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { ValidationErrors } from "final-form";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -31,7 +36,7 @@ yup.setLocale({
 
 const schema = yup.object().shape({
   nome: yup.string().required(),
-  zap: yup.string().min(12).required(),
+  zap: yup.string().min(10).required(),
   endereco: yup.string().min(3).required(),
   email: yup.string().email().required(),
   password: yup.string().min(8).required(),
@@ -46,21 +51,43 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100vh",
     display: "flex",
   },
-  
-
+  link: {
+    "& > * + *": {
+      marginLeft: theme.spacing(2),
+    },
+  },
 }));
 
 function SignUpScreen() {
+  const [open, setOpen] = useState(false);
+  const imgActions:any = {}
+  const openSnackBar = () => {
+    setOpen(true);
+  };
+  const handleClose = (event: any, reason: any) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   const classes = useStyles();
   const [img64, setImg64] = useState<string>("")
   const router = useRouter();
-  const onSubmit = (values: any) => {
+
+  const onSubmit = async (values: any) => {
     values["imgBase64"] = img64;
     delete values.confirmarSenha;
     values.email = values.email.toLowerCase()
-    perfisService.save(values)
-    router.push("/entrar")
+
+    const response = await perfisService.save(values)
+    if (response.ok) {
+      router.push("/entrar")
+    } else {
+      openSnackBar();
+    }
   };
+
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
@@ -91,8 +118,28 @@ function SignUpScreen() {
   const handleImage = (base64:any) => {
     setImg64(base64);
   }
+  const configureActions = (actions: any) => {
+    imgActions;
+  };
 
   return (
+    <>
+    <Grid container spacing={2}>
+        <Grid item xs></Grid>
+        <Grid item xs="auto">
+          <Box p={2}>
+            <Typography className={classes.link}>
+              <Link href="/" color="inherit">
+                Ir para a página inicial
+              </Link>
+              <Link href="/entrar" color="inherit">
+                Entrar em minha conta
+              </Link>
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
+      <Divider />
     <div className={classes.root}>
       <Box p={2}>
         <form onSubmit={handleSubmit}>
@@ -100,7 +147,7 @@ function SignUpScreen() {
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={3}>
-                  <ImageUpload onChangeImage={handleImage} rounded={true}/>
+                  <ImageUpload onChangeImage={handleImage} rounded={true} configureActions={configureActions}/>
                 </Grid>
                 <Grid item xs={9}>
                   <Grid container spacing={1}>
@@ -180,6 +227,8 @@ function SignUpScreen() {
                   ></TextField>
                 </Grid>
                 <Grid item xs={3}>
+                  <Grid container>
+                    <Grid item xs={12}>
                   <TextField
                     {...palavrasChaves.input}
                     label="Palavras Chaves"
@@ -188,6 +237,13 @@ function SignUpScreen() {
                     margin="dense"
                     id="palavrasChaves"
                   ></TextField>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="caption">
+                      Descreva com palavras chaves aquilo que se encontrará na sua loja, assim as pessoas vão te encontrar mais facilmente
+                    </Typography>
+                  </Grid>
+                  </Grid>
                 </Grid>
                 <Grid item xs={3}>
                   <TextField
@@ -243,7 +299,13 @@ function SignUpScreen() {
           </Grid>
         </form>
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          Seu cadastro não pode ser finalizado.
+        </Alert>
+      </Snackbar>
     </div>
+    </>
   );
 }
 

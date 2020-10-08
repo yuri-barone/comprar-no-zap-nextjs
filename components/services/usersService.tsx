@@ -3,9 +3,10 @@ import {mainApi as api} from "./Api"
 const login = async (data:object) => {
     try{
         const response = await api.post("/authentication", data);
-        return { token: response.data.accessToken }
+        return { ok: true, data: response.data.accessToken }
     } catch(error){
-        console.log(error)
+        return {ok:false, erro: "Login ou senha inválido"}
+
     }
 }
 

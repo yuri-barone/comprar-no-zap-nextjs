@@ -49,14 +49,16 @@ const useStyles = makeStyles({
 
 export type CartDetailsProps = {
   cartProductsData: Array<any>;
-  changeItemQuantity: () => void;
-  removeItem: () => void;
+  changeItemQuantity: (id:number, quantity:number) => void;
+  removeItem: (id:number) => void;
+  value: string;
 };
 
 const CartDetails = ({
   cartProductsData,
   changeItemQuantity,
   removeItem,
+  value,
 }: CartDetailsProps) => {
   const classes = useStyles();
 
@@ -72,7 +74,6 @@ const CartDetails = ({
     values["products"] = cartProductsData;
     const link = generateZapLink(
       Number(values.products[0].product["perfil.zap"]),
-      "Cliente Gordo",
       values.products,
       values.metodoPagamento,
       values.endereco,
@@ -84,7 +85,6 @@ const CartDetails = ({
 
   const generateZapLink = (
     zap: number,
-    userName: string,
     products: Array<any>,
     metodoPagamento: string,
     endereco: string,
@@ -101,7 +101,7 @@ const CartDetails = ({
       }
     };
     const validateTroco = () => {
-      if(!!troco) {
+      if(!!troco && metodoPagamento === "Dinheiro") {
         return `(Troco para ${formatNumberToMoneyWithSymbol(troco, "R$")})`;
       } else {
         return ""
@@ -109,7 +109,7 @@ const CartDetails = ({
     }
     const temTroco = validateTroco();
     const formaDeReceber = validateEntrega();
-    const link = `https://api.whatsapp.com/send?phone=${zap}&text=%20*${userName}*%20pede%20no%20zap.%0a%0a*Pedido*%0a${stringProducts.join(
+    const link = `https://api.whatsapp.com/send?phone=${zap}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
       ""
     )}%0a*Forma%20de%20pagamento*%0a${metodoPagamento}${temTroco}${formaDeReceber}`;
     return link;
@@ -180,6 +180,7 @@ const CartDetails = ({
                   }
                   {...endereco.input}
                   label="Endereço de entrega"
+                  value={value}
                   fullWidth
                 ></TextField>
               </Collapse>

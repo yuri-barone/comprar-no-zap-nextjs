@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import { useForm, useField } from "react-final-form-hooks";
 import { ValidationErrors } from "final-form";
+import ResetOnSubmitSuccess from "../clearForm"
 import * as yup from "yup";
 
 export type ProductRegisterProps = {
@@ -38,7 +39,6 @@ const schema = yup.object().shape({
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: "250px",
   },
   input: {
     display: "none",
@@ -51,10 +51,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+
 function ProductRegister({onSave}:ProductRegisterProps) {
   const [img64, setImg64] = useState<string>("");
   const classes = useStyles();
-
+  const imgActions:any = {}
+  
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
@@ -79,14 +83,24 @@ function ProductRegister({onSave}:ProductRegisterProps) {
     setImg64(base64);    
   };
 
+  const configureActions = (actions:any) => {
+    imgActions.clear = actions.clear
+  }
+
+  const onSubmitSuccess = () => {
+    form.reset()
+    imgActions.clear()
+  }
+
+
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <ImageUpload onChangeImage={handleImage} />
+        <ImageUpload onChangeImage={handleImage} configureActions={configureActions}  />
       </CardActionArea>
-      <form onSubmit={handleSubmit}></form>
       <CardContent>
         <form onSubmit={handleSubmit}>
+        <ResetOnSubmitSuccess form={form} onSubmitSuccess={onSubmitSuccess} />
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -95,10 +109,11 @@ function ProductRegister({onSave}:ProductRegisterProps) {
                 variant="outlined"
                 fullWidth
                 {...titulo.input}
-                error={titulo.meta.touched && titulo.meta.invalid}
+                error={titulo.meta.touched && submitting && titulo.meta.invalid }
                 helperText={
                   titulo.meta.touched &&
                   titulo.meta.invalid &&
+                  submitting &&
                   titulo.meta.error
                 }
               />
@@ -106,10 +121,11 @@ function ProductRegister({onSave}:ProductRegisterProps) {
             <Grid item xs={12}>
               <TextField
                 {...descricao.input}
-                error={descricao.meta.touched && descricao.meta.invalid}
+                error={descricao.meta.touched && submitting && descricao.meta.invalid}
                 helperText={
                   descricao.meta.touched &&
                   descricao.meta.invalid &&
+                  submitting &&
                   descricao.meta.error
                 }
                 id="descricao"
@@ -122,9 +138,9 @@ function ProductRegister({onSave}:ProductRegisterProps) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error={valor.meta.touched && valor.meta.invalid}
+                error={valor.meta.touched && submitting && valor.meta.invalid}
                 helperText={
-                  valor.meta.touched && valor.meta.invalid && valor.meta.error
+                  valor.meta.touched && valor.meta.invalid && submitting && valor.meta.error
                 }
                 {...valor.input}
                 id="valor"
@@ -136,6 +152,7 @@ function ProductRegister({onSave}:ProductRegisterProps) {
                 }}
                 type="number"
                 variant="outlined"
+                fullWidth
               />
             </Grid>
             <Grid item xs={12}>

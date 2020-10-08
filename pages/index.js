@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   Divider,
   Grid,
   Link,
@@ -10,9 +9,8 @@ import {
 } from "@material-ui/core";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { ThemeProvider } from "@material-ui/core/styles";
-import PedirNoZapTheme from "../styles/PedirNoZapTheme";
 import Search from "../components/Search/Search";
+import useSession from "../components/useSession";
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -34,14 +32,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-  const router = useRouter();
-  const [filter, setFilter] = useState("")
+  const Router = useRouter();
+  const [filter, setFilter] = useState("");
+  const session = useSession(false);
 
   const handleProductSearch = () => {
-    router.push(`/search?tipo=0&termo=${filter}`)
+    Router.push(`/search?tipo=0&perfilId=null&termo=${filter}`)
   }
   const handlePlacesSearch = () => {
-    router.push(`/search?tipo=1&termo=${filter}`)
+    Router.push(`/search?tipo=1&perfilId=null&termo=${filter}`)
   }
   const storeFilter = (e) => {
     setFilter(e.target.value)
@@ -49,24 +48,39 @@ export default function Home() {
   
 
   return (
-    <ThemeProvider theme={PedirNoZapTheme}>
+    <>
       <Grid container className={classes.containerHeight}>
         <Grid item xs={12}>
-          <Grid container spacing={2}>
+          {session.isAutheticated && <Grid container spacing={2}>
+            <Grid item xs></Grid>
+            <Grid item xs="auto">
+              <Box p={2}>
+              <Typography className={classes.link}>
+                <Link href="/produtos"  color="inherit">
+                Meus produtos
+                </Link>
+                <Link href="/editPerfil" color="inherit">
+                  Editar meu perfil
+                </Link>
+                </Typography>
+                </Box>
+            </Grid>
+          </Grid>}
+          {!session.isAutheticated && <Grid container spacing={2}>
             <Grid item xs></Grid>
             <Grid item xs="auto">
               <Box p={2}>
               <Typography className={classes.link}>
                 <Link href="/cadastro"  color="inherit">
-                Cadastrar meu estabelecimento
+                Cadastrar-me
                 </Link>
-                <Link href="/cadastro" color="inherit">
-                  Cadastrar-me
+                <Link href="/entrar" color="inherit">
+                  Logar-me
                 </Link>
                 </Typography>
                 </Box>
             </Grid>
-          </Grid>
+          </Grid>}
           <Grid item xs={12}>
             <Divider/>
           </Grid>
@@ -121,6 +135,6 @@ export default function Home() {
           </Grid>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 }

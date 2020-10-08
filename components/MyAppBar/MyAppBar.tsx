@@ -69,10 +69,10 @@ const MyAppBar = ({ value, onChange }: MyAppBarProps) => {
             <Box p={2}>
               <Typography className={classes.link}>
                 <Link href="/cadastro" color="inherit">
-                  Cadastrar meu estabelecimento
-                </Link>
-                <Link href="/cadastro" color="inherit">
                   Cadastrar-me
+                </Link>
+                <Link href="/entrar" color="inherit">
+                  Logar-me
                 </Link>
               </Typography>
             </Box>

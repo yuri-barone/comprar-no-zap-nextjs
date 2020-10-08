@@ -13,9 +13,10 @@ import CartDetails from "../CartDetails/CartDetails";
 export type MyCartDetailsProps = {
   cartProductsData: Array<any>;
   onContinuarComprando: () => void;
-  changeItemQuantity: () => void;
-  removeItem: () => void;
+  changeItemQuantity: (id:number, quantity:number) => void;
+  removeItem: (id:number) => void;
   removeAll: () => void;
+  value: string;
 };
 
 const useStyles = makeStyles({
@@ -30,6 +31,7 @@ const MyCartDetails = ({
   changeItemQuantity,
   removeItem,
   removeAll,
+  value,
 }: MyCartDetailsProps) => {
   const classes = useStyles();
   const [cartSellers, setCartSellers] = useState([]);
@@ -99,6 +101,7 @@ const MyCartDetails = ({
                         cartProductsData={item.items}
                         changeItemQuantity={changeItemQuantity}
                         removeItem={removeItem}
+                        value={value}
                       />
                     </Box>
                   </Paper>
