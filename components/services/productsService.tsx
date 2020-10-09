@@ -23,7 +23,27 @@ const find = async (filter: string, id?:number) => {
   }
 };
 
+const deleteProduct = async (id:number) => {
+  try {
+    const response = await api.delete(`/products/${id}`)
+    return {ok: true, data: response.data}
+  } catch (error) {
+    return {ok:false, erro:"Não foi possível excluir seu produto"}
+  }
+}
+
+const edit = async (id:number, data:any) => {
+  try {
+    const response = await api.patch(`/products/${id}`, data)
+    return {ok: true, data: response.data}
+  } catch (error) {
+    return {ok:false, erro:"Não foi possível editar seu produto"}
+  }
+}
+
 export default {
   save,
   find,
+  deleteProduct,
+  edit,
 };

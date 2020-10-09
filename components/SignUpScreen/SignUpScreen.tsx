@@ -21,6 +21,8 @@ import { useForm, useField } from "react-final-form-hooks";
 import * as yup from "yup";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import perfisService from '../services/perfisService';
+import usersService from "../services/usersService";
+import { keepSession } from "../useSession";
 
 yup.setLocale({
   mixed: {
@@ -82,7 +84,15 @@ function SignUpScreen() {
 
     const response = await perfisService.save(values)
     if (response.ok) {
-      router.push("/entrar")
+      let loginValues:any = {}
+      loginValues["strategy"] = "local";
+      loginValues["email"] = values.email.toLowerCase()
+      loginValues["password"] = values.password
+      const response = await usersService.login(loginValues);
+      if (response.ok) {
+        keepSession(values.email.split("@")[0], response.data);
+        router.push("/produtos");
+      }
     } else {
       openSnackBar();
     }

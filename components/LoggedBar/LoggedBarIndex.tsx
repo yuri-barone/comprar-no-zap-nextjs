@@ -1,31 +1,23 @@
 import {
-  AppBar,
   Avatar,
   Box,
   Button,
-  Container,
   Grid,
   Link,
   makeStyles,
   Popover,
-  Toolbar,
   Typography,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
 import red from '@material-ui/core/colors/red'
 import { useRouter } from "next/router";
-import Search from "../Search/Search";
+import React from "react";
 
-export type MyAppBarLoggedProps = {
-  onSearch: (filter: string) => void;
-  searchDefaultValue?: string;
-  value?: string;
-  onChange: (filter: string) => void;
-  src?: string;
-  name: string;
-  zap: string;
-};
+export type LoggedBarIndexProps = {
+    src: string;
+    name: string;
+    zap: string;
+}
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -38,79 +30,44 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: "#fff",
-    width: "100%",
-  },
-  title: {},
-  imgDiv: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 10,
-    width: 40,
-  },
-  img: {
-    objectFit: "cover",
-    borderRadius: 200,
-  },
-  link: {
-    "& > * + *": {
-      marginLeft: theme.spacing(2),
+    img: {
+      objectFit: "cover",
+      borderRadius: 200,
     },
-  },
-  imgPopover: {
-    display: "flex",
-    width: theme.spacing(15),
-    height: theme.spacing(15),
-  },
-  avatarClick: {
-    cursor: "pointer",
-  },
-}));
+    link: {
+      "& > * + *": {
+        marginLeft: theme.spacing(2),
+      },
+    },
+    imgPopover: {
+      display: "flex",
+      width: theme.spacing(15),
+      height: theme.spacing(15),
+    },
+    avatarClick: {
+      cursor: "pointer",
+    },
+  }));
 
-const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps) => {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const Router = useRouter()
-  const handleOnClick = () => {
-    localStorage.clear()
-    Router.push("/")
-  }
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-
+const LoggedBarIndex = ({src, name, zap}:LoggedBarIndexProps) => {
+    const classes = useStyles()
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const handleOnClick = () => {
+      localStorage.clear()
+      window.location.reload(true)
+    }
+    const handleClick = (event: any) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const open = Boolean(anchorEl);
   return (
-    <div className={classes.root}>
-      <Container>
-        <Box p={2}>
+    <Box p={2}>
           <Grid container alignItems="center" spacing={2}>
-            <Grid item xs="auto">
-              <div className={classes.imgDiv}>
-                <img
-                  alt=""
-                  src="/comprar-no-zap-logo.svg"
-                  className={classes.img}
-                  height="100%"
-                  width="100%"
-                ></img>
-              </div>
-            </Grid>
-            <Grid item xs={6}>
-              <Search
-                value={value}
-                onEnter={() => null}
-                onChange={onChange}
-              ></Search>
-            </Grid>
             <Grid item xs></Grid>
             <Grid item xs="auto">
               <Typography className={classes.link} component="span">
@@ -186,10 +143,13 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
               </Popover>
             </Grid>
           </Grid>
-        </Box>
-      </Container>
-    </div>
+    </Box>
   );
 };
 
-export default MyAppBarLogged;
+LoggedBarIndex.defaultProps = {
+  src:
+    "/empty-profile.png",
+};
+
+export default LoggedBarIndex;

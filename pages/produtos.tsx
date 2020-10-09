@@ -17,6 +17,7 @@ import productsService from "../components/services/productsService";
 import useSession from "../components/useSession";
 import jwt_decode from "jwt-decode";
 import perfisService from "../components/services/perfisService";
+import LoggedBarProducts from "../components/LoggedBar/LoggedBarProducts";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -30,32 +31,66 @@ const produtos = () => {
   const classes = useStyles();
   const [productsData, setProductsData] = useState([]);
   const session = useSession(true);
-  const [openDanger, setOpenDanger] = useState(false);
-  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openCadastroDanger, setOpenCadastroDanger] = useState(false);
+  const [openCadastroSuccess, setOpenCadastroSuccess] = useState(false);
+  const [openDeleteDanger, setOpenDeleteDanger] = useState(false);
+  const [openEditDanger, setOpenEditDanger] = useState(false);
+  const [openDeleteSuccess, setOpenDeleteSuccess] = useState(false);
   const [perfil, setPerfil] = useState<any>({});
   useEffect(() => {
     searchProducts();
   }, []);
 
   const openSnackBarDanger = () => {
-    setOpenDanger(true);
+    setOpenCadastroDanger(true);
   };
-  const handleDangerClose = (event: any, reason: any) => {
+  const handleCadastroDangerClose = (event: any, reason: any) => {
     if (reason === "clickaway") {
       return;
     }
 
-    setOpenDanger(false);
+    setOpenCadastroDanger(false);
   };
   const openSnackBarSuccess = () => {
-    setOpenSuccess(true);
+    setOpenCadastroSuccess(true);
   };
-  const handleSuccessClose = (event: any, reason: any) => {
+  const handleCadastroSuccessClose = (event: any, reason: any) => {
     if (reason === "clickaway") {
       return;
     }
 
-    setOpenSuccess(false);
+    setOpenCadastroSuccess(false);
+  };
+
+  const openSnackBarDeleteDanger = () => {
+    setOpenDeleteDanger(true);
+  };
+  const handleDeleteDangerClose = (event: any, reason: any) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenDeleteDanger(false);
+  };
+  const openSnackBarEditDanger = () => {
+    setOpenEditDanger(true);
+  };
+  const handleEditDangerClose = (event: any, reason: any) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenEditDanger(false);
+  };
+  const openSnackBarDeleteSuccess = () => {
+    setOpenDeleteSuccess(true);
+  };
+  const handleDeleteSuccessClose = (event: any, reason: any) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenDeleteSuccess(false);
   };
 
   const searchProducts = async () => {
@@ -93,18 +128,13 @@ const produtos = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs></Grid>
-        <Grid item xs="auto">
-          <Box p={2}>
-            <Typography className={classes.link}>
-              <Link href="/" color="inherit">
-                Ir para a página inicial
-              </Link>
-              <Link href="/editPerfil" color="inherit">
-                Editar meu perfil
-              </Link>
-            </Typography>
-          </Box>
-        </Grid>
+        {session.isAutheticated && (
+          <LoggedBarProducts
+            src={session.profile["picture.imgBase64"]}
+            name={session.profile.nome}
+            zap={session.profile.zap}
+          />
+        )}
       </Grid>
       <Divider />
       <Container>
@@ -117,20 +147,27 @@ const produtos = () => {
                   sejam apresentados clique{" "}
                   <Link href="/editPerfil">
                     <strong>aqui</strong>
-                  </Link>
-                  {" "}e mude a opção <strong>"Quero vender"</strong>.
+                  </Link>{" "}
+                  e mude a opção <strong>"Quero vender"</strong>.
                 </Alert>
               </Grid>
             )}
 
             <Grid item xs={3}>
-              <ProductRegister onSave={salvarProduto}></ProductRegister>
+              <ProductRegister key="new-products" onSave={salvarProduto}></ProductRegister>
             </Grid>
             {productsData &&
               productsData.map((item) => {
                 return (
                   <Grid item xs={12} sm={3} key={item.id}>
-                    <ProductCardShow product={item} />
+                    <ProductCardShow
+                      onEditError={openSnackBarEditDanger}
+                      product={item}
+                      onDelete={searchProducts}
+                      onDeleteSuccess={openSnackBarDeleteSuccess}
+                      onDeleteError={openSnackBarDeleteDanger}
+                      
+                    />
                   </Grid>
                 );
               })}
@@ -140,11 +177,11 @@ const produtos = () => {
               vertical: "bottom",
               horizontal: "left",
             }}
-            open={openDanger}
+            open={openCadastroDanger}
             autoHideDuration={6000}
-            onClose={handleDangerClose}
+            onClose={handleCadastroDangerClose}
           >
-            <Alert onClose={handleDangerClose} severity="error">
+            <Alert onClose={handleCadastroDangerClose} severity="error">
               Não foi possível cadastrar seu produto
             </Alert>
           </Snackbar>
@@ -153,12 +190,52 @@ const produtos = () => {
               vertical: "bottom",
               horizontal: "left",
             }}
-            open={openSuccess}
+            open={openCadastroSuccess}
             autoHideDuration={6000}
-            onClose={handleSuccessClose}
+            onClose={handleCadastroSuccessClose}
           >
-            <Alert onClose={handleSuccessClose} severity="success">
+            <Alert onClose={handleCadastroSuccessClose} severity="success">
               Produto cadastrado com sucesso
+            </Alert>
+          </Snackbar>
+
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            open={openDeleteDanger}
+            autoHideDuration={6000}
+            onClose={handleDeleteDangerClose}
+          >
+            <Alert onClose={handleDeleteDangerClose} severity="error">
+              Houve um problema ao deletar seu produto.
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            open={openDeleteSuccess}
+            autoHideDuration={6000}
+            onClose={handleDeleteSuccessClose}
+          >
+            <Alert onClose={handleDeleteSuccessClose} severity="success">
+              Produto deletado com sucesso
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            open={openEditDanger}
+            autoHideDuration={6000}
+            onClose={handleEditDangerClose}
+          >
+            <Alert onClose={handleEditDangerClose} severity="error">
+              Houve um problema ao editar seu produto.
             </Alert>
           </Snackbar>
         </Box>

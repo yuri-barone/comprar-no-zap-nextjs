@@ -43,6 +43,7 @@ const edit = async (data: object, id:number) => {
 const getPerfilByUserId = async (id: number) => {
   try {
     const response = await api.get(`/perfis/?userId=${id}`);
+    console.log(response)
     return { data: response.data };
   } catch (error) {
     console.log(error)

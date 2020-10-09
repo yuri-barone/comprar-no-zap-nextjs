@@ -100,7 +100,7 @@ function PerfilScreen({
   };
   const onSubmit = async (values: any) => {
     session;
-    values["base64"] = img64;
+    values["imgBase64"] = img64;
     const response = await perfisService.edit(values, id);
     if (response.ok) {
       searchNewPerfil();

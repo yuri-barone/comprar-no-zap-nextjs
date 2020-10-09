@@ -22,6 +22,7 @@ import productsService from "../components/services/productsService";
 import { ThemeProvider } from "@material-ui/core/styles";
 import PedirNoZapTheme from "../styles/PedirNoZapTheme";
 import useSession from "../components/useSession";
+import useNavigation from "../components/useNavigation";
 import jwt_decode from "jwt-decode";
 
 const useStyles = makeStyles((theme) => ({
@@ -60,18 +61,8 @@ export default function Home() {
   const [searchInput, setSearchInput] = useState<string | undefined>();
   const [currentStoreToShow, setCurrentStoreToShow] = useState<any>(null);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>()
-  const [loggedProfile, setLoggedProfile] = useState<any>()
   const session:any = useSession(false)
-  const getUrlParams = () => {
-    const url = new URL(window.location.href);
-    var urlParams = new URLSearchParams(url.search);
-    const params = {
-      tipo: urlParams.get("tipo"),
-      termo: urlParams.get("termo"),
-      perfilId: urlParams.get("perfilId"),
-    };
-    return params;
-  };
+  const navigation:any = useNavigation()
 
   useEffect(() => {
     Router.events.on("routeChangeComplete", handleUrlChange);
@@ -89,7 +80,7 @@ export default function Home() {
   }, [cartProducts]);
 
   useEffect(() => {
-    const params = getUrlParams();
+    const params = navigation.getUrlParams();
     const searchTimeout = setTimeout(() => {
       buscar(params.termo, tabValue, parseInt(params.perfilId));
       setTabValue(parseInt(params.tipo));
@@ -104,10 +95,9 @@ export default function Home() {
     if(!value  || value.trim().length == 0){
       return;
     }
-
-    const params = getUrlParams();
-    const query:any = {tipo: parseInt(params.tipo), termo: value};
-    
+    const params = navigation.getUrlParams();
+    const query:any = navigation.generateQueryUrl(params.tipo, value)
+    console.log(currentStoreToShow)
     if(parseInt(params.perfilId)){
       query.perfilId = params.perfilId;
     }   
@@ -116,12 +106,11 @@ export default function Home() {
       pathname: "/search",
       query
     })
-
   }
 
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
-      const params = getUrlParams();
+      const params = navigation.getUrlParams();
       if(params.termo !== searchInput){
         addSearchToUrl(searchInput)
       }
@@ -136,7 +125,7 @@ export default function Home() {
   }, [session.profile.loaded])
 
   const handleUrlChange = () => {
-    const params = getUrlParams();
+    const params = navigation.getUrlParams();
     const lojaId = parseInt(params.perfilId) 
     setSearchInput(params.termo);
     setTabValue(parseInt(params.tipo));
@@ -185,13 +174,11 @@ export default function Home() {
   };
 
   const handleChangeTab = (e: any, value: number) => {
-    const params = getUrlParams()
+    const params = navigation.getUrlParams()
+    const query = navigation.generateQueryUrl(value.toString(), params.termo)
     Router.push({
       pathname: "/search",
-      query: {
-        tipo: value,
-        termo: params.termo,
-      },
+      query
     });
   };
 
@@ -236,27 +223,21 @@ export default function Home() {
 
   const searchOnChange = (e: any) => {
     setSearchInput(e.target.value);
-    console.log(loggedProfile)
   };
 
   const currentStore = (store: any) => {
+    const query = navigation.generateQueryUrl("0", undefined, store.id.toString())
     Router.push({
       pathname: "/search",
-      query: {
-        tipo: 0,
-        termo: "",
-        perfilId: store.id, 
-      },
+      query
     });
   };
 
   const removeStore = () => {
+    const query = navigation.generateQueryUrl("0", searchInput)
     Router.push({
       pathname:"/search",
-      query: {
-        tipo:0,
-        termo: searchInput,
-      }
+      query
     })
   }
   return (
@@ -266,6 +247,8 @@ export default function Home() {
         onChange={searchOnChange}
         onSearch={buscar}
         src={session.isAutheticated && session.profile["picture.imgBase64" ]}
+        name={session.isAutheticated && session.profile.nome}
+        zap={session.isAutheticated && session.profile.zap}
       ></MyAppBarLogged>}
       {!session.isAutheticated && <MyAppBar
         value={searchInput}

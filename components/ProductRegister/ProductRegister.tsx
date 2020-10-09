@@ -17,6 +17,9 @@ import * as yup from "yup";
 
 export type ProductRegisterProps = {
   onSave: (productData:any) => void;
+  initialValues?: any;
+  defaultImage?: string;
+  onCancel?: () => void;
 }
 
 yup.setLocale({
@@ -54,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function ProductRegister({onSave}:ProductRegisterProps) {
+function ProductRegister({onSave, initialValues, defaultImage, onCancel}:ProductRegisterProps) {
   const [img64, setImg64] = useState<string>("");
   const classes = useStyles();
   const imgActions:any = {}
@@ -74,6 +77,7 @@ function ProductRegister({onSave}:ProductRegisterProps) {
   const { form, handleSubmit, pristine, submitting } = useForm({
     onSubmit: (values) => onSave({...values, imgBase64: img64}),
     validate,
+    initialValues,
   });
   const titulo = useField("titulo", form);
   const descricao = useField("descricao", form);
@@ -92,11 +96,10 @@ function ProductRegister({onSave}:ProductRegisterProps) {
     imgActions.clear()
   }
 
-
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <ImageUpload onChangeImage={handleImage} configureActions={configureActions}  />
+        <ImageUpload defaultImage={defaultImage} onChangeImage={handleImage} configureActions={configureActions}  />
       </CardActionArea>
       <CardContent>
         <form onSubmit={handleSubmit}>
@@ -156,7 +159,16 @@ function ProductRegister({onSave}:ProductRegisterProps) {
               />
             </Grid>
             <Grid item xs={12}>
-              <Grid container justify="flex-end">
+              <Grid container justify="flex-end" spacing={2}>
+              {initialValues && <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={onCancel}
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>}
                 <Grid item>
                   <Button
                     variant="contained"

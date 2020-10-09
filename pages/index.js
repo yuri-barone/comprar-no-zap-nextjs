@@ -9,7 +9,9 @@ import {
 } from "@material-ui/core";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import LoggedBarIndex from "../components/LoggedBar/LoggedBarIndex";
 import Search from "../components/Search/Search";
+import useNavigation from "../components/useNavigation";
 import useSession from "../components/useSession";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,12 +37,21 @@ export default function Home() {
   const Router = useRouter();
   const [filter, setFilter] = useState("");
   const session = useSession(false);
+  const navigation = useNavigation()
 
   const handleProductSearch = () => {
-    Router.push(`/search?tipo=0&perfilId=null&termo=${filter}`)
+    const query = navigation.generateQueryUrl("0", filter)
+    Router.push({
+      pathname: "/search",
+      query
+    })
   }
   const handlePlacesSearch = () => {
-    Router.push(`/search?tipo=1&perfilId=null&termo=${filter}`)
+    const query = navigation.generateQueryUrl("1", filter)
+    Router.push({
+      pathname: "/search",
+      query
+    })
   }
   const storeFilter = (e) => {
     setFilter(e.target.value)
@@ -51,21 +62,11 @@ export default function Home() {
     <>
       <Grid container className={classes.containerHeight}>
         <Grid item xs={12}>
-          {session.isAutheticated && <Grid container spacing={2}>
-            <Grid item xs></Grid>
-            <Grid item xs="auto">
-              <Box p={2}>
-              <Typography className={classes.link}>
-                <Link href="/produtos"  color="inherit">
-                Meus produtos
-                </Link>
-                <Link href="/editPerfil" color="inherit">
-                  Editar meu perfil
-                </Link>
-                </Typography>
-                </Box>
-            </Grid>
-          </Grid>}
+          {session.isAutheticated && <LoggedBarIndex 
+            src={session.profile["picture.imgBase64"]}
+            name={session.profile.nome}
+            zap={session.profile.zap}
+          />}
           {!session.isAutheticated && <Grid container spacing={2}>
             <Grid item xs></Grid>
             <Grid item xs="auto">

@@ -54,12 +54,13 @@ function ImageUpload({
   onChangeImage,
   rounded,
   size,
-  configureActions
+  configureActions,
 }: ImageUploadProps) {
   const classes = useStyles({ rounded, size });
   const fileInput: any = useRef(null);
   const [imgB64, setImgB64] = useState<any>(defaultImage);
   const noop = () => {};
+ 
   const handleFiles = async () => {
     const file = fileInput.current.files[0];
     const img = await getBase64(file);
@@ -67,17 +68,20 @@ function ImageUpload({
     setImgB64(imgResized);
     (onChangeImage || noop)(imgResized);
   };
+
   const clear = () => {
     setImgB64(defaultImage)
   }
 
   configureActions({clear})
 
+  const uploaderKey = Math.random().toString(36).substr(2, 5);
+
   return (
     <div className={clsx(rounded && classes.rounded, classes.root)}>
       <input
         accept="image/*"
-        id="icon-button-file"
+        id={`icon-button-file-${uploaderKey}`}
         type="file"
         className={classes.input}
         onChange={handleFiles}
@@ -85,12 +89,12 @@ function ImageUpload({
       />
       <img
         alt=""
-        src={imgB64}
+        src={imgB64 || defaultImage || "empty-img.jpg" }
         className={classes.img}
         width="100%"
         height="100%"
       ></img>
-      <label htmlFor="icon-button-file" className={classes.clickableLabel}>
+      <label htmlFor={`icon-button-file-${uploaderKey}`} className={classes.clickableLabel}>
       </label>
       <PhotoCamera className={classes.icon} />
     </div>
