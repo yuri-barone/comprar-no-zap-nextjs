@@ -36,9 +36,7 @@ const schema = yup.object().shape({
   endereco: yup
     .string()
     .when("entrega", { is: true, then: yup.string().min(3).required() }),
-  metodoPagamento: yup
-    .string()
-    .required("Selecione o pagamento"),
+  metodoPagamento: yup.string().required("Selecione o pagamento"),
 });
 
 const useStyles = makeStyles({
@@ -49,16 +47,16 @@ const useStyles = makeStyles({
 
 export type CartDetailsProps = {
   cartProductsData: Array<any>;
-  changeItemQuantity: (id:number, quantity:number) => void;
-  removeItem: (id:number) => void;
-  value: string;
+  changeItemQuantity: (id: number, quantity: number) => void;
+  removeItem: (id: number) => void;
+  initialValues: any;
 };
 
 const CartDetails = ({
   cartProductsData,
   changeItemQuantity,
   removeItem,
-  value,
+  initialValues,
 }: CartDetailsProps) => {
   const classes = useStyles();
 
@@ -101,15 +99,21 @@ const CartDetails = ({
       }
     };
     const validateTroco = () => {
-      if(!!troco && metodoPagamento === "Dinheiro") {
+      if (!!troco && metodoPagamento === "Dinheiro") {
         return `(Troco para ${formatNumberToMoneyWithSymbol(troco, "R$")})`;
       } else {
-        return ""
+        return "";
+      }
+    };
+    const validateZap = () => {
+      const numero = zap.toString()
+      if (!numero.startsWith("55")) {
+        return `55${numero}`
       }
     }
     const temTroco = validateTroco();
     const formaDeReceber = validateEntrega();
-    const link = `https://api.whatsapp.com/send?phone=${zap}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
+    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
       ""
     )}%0a*Forma%20de%20pagamento*%0a${metodoPagamento}${temTroco}${formaDeReceber}`;
     return link;
@@ -130,6 +134,7 @@ const CartDetails = ({
   const { form, handleSubmit, values, pristine, submitting } = useForm({
     onSubmit, // the function to call with your form values upon valid submit
     validate, // a record-level validation function to check all form values
+    initialValues
   });
   const endereco = useField("endereco", form);
   const troco = useField("troco", form);
@@ -180,7 +185,6 @@ const CartDetails = ({
                   }
                   {...endereco.input}
                   label="Endereço de entrega"
-                  value={value}
                   fullWidth
                 ></TextField>
               </Collapse>

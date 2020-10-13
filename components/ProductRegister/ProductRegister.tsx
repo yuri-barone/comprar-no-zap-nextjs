@@ -27,16 +27,21 @@ yup.setLocale({
     default: "Não é válido",
     required: "O campo precisa estar preenchido",
   },
-  number: {},
+  string:{
+    min: "O mínimo de caracteres é ${min}",
+    max: "O valor máximo de caracteres é ${max}"
+  },
+  number: {max:"O valor máximo permitido é R$${max},00", positive:"O valor precisa ser positivo"},
 });
 
 const schema = yup.object().shape({
-  titulo: yup.string().min(5).required(),
-  descricao: yup.string(),
+  titulo: yup.string().min(5).max(100).required(),
+  descricao: yup.string().max(244),
   valor: yup
     .number()
     .typeError("Valor precisa ser um número")
     .positive()
+    .max(100000)
     .required(),
 });
 
@@ -58,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function ProductRegister({onSave, initialValues, defaultImage, onCancel}:ProductRegisterProps) {
-  const [img64, setImg64] = useState<string>("");
+  const [img64, setImg64] = useState<string>(defaultImage);
   const classes = useStyles();
   const imgActions:any = {}
   
@@ -94,6 +99,10 @@ function ProductRegister({onSave, initialValues, defaultImage, onCancel}:Product
   const onSubmitSuccess = () => {
     form.reset()
     imgActions.clear()
+    setImg64(defaultImage)
+    form.resetFieldState("titulo")
+    form.resetFieldState("descricao")
+    form.resetFieldState("valor")
   }
 
   return (
@@ -112,11 +121,10 @@ function ProductRegister({onSave, initialValues, defaultImage, onCancel}:Product
                 variant="outlined"
                 fullWidth
                 {...titulo.input}
-                error={titulo.meta.touched && submitting && titulo.meta.invalid }
+                error={titulo.meta.touched && titulo.meta.invalid }
                 helperText={
                   titulo.meta.touched &&
                   titulo.meta.invalid &&
-                  submitting &&
                   titulo.meta.error
                 }
               />
@@ -124,11 +132,10 @@ function ProductRegister({onSave, initialValues, defaultImage, onCancel}:Product
             <Grid item xs={12}>
               <TextField
                 {...descricao.input}
-                error={descricao.meta.touched && submitting && descricao.meta.invalid}
+                error={descricao.meta.touched && descricao.meta.invalid}
                 helperText={
                   descricao.meta.touched &&
                   descricao.meta.invalid &&
-                  submitting &&
                   descricao.meta.error
                 }
                 id="descricao"
@@ -141,9 +148,9 @@ function ProductRegister({onSave, initialValues, defaultImage, onCancel}:Product
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error={valor.meta.touched && submitting && valor.meta.invalid}
+                error={valor.meta.touched && valor.meta.invalid}
                 helperText={
-                  valor.meta.touched && valor.meta.invalid && submitting && valor.meta.error
+                  valor.meta.touched && valor.meta.invalid && valor.meta.error
                 }
                 {...valor.input}
                 id="valor"
@@ -173,7 +180,7 @@ function ProductRegister({onSave, initialValues, defaultImage, onCancel}:Product
                   <Button
                     variant="contained"
                     color="primary"
-                    disabled={pristine || submitting}
+                    disabled={(pristine && img64 === defaultImage) || submitting }
                     type="submit"
                   >
                     Salvar

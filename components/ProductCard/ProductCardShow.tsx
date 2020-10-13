@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -9,6 +10,7 @@ import {
   IconButton,
   makeStyles,
   Modal,
+  Paper,
   Snackbar,
   Typography,
   withStyles,
@@ -28,11 +30,15 @@ export type ProductCardProps = {
   onDeleteSuccess: () => void;
   onDeleteError: () => void;
   onEditError: () => void;
+  onEditSuccess: () => void;
 };
-
+const imgHeight = 176;
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
+  },
+  content: {
+    height: `calc(100% - ${imgHeight + theme.spacing(4)}px)`
   },
   atEnd: {
     alignSelf: "flex-end",
@@ -45,6 +51,25 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(2, 4, 3),
+  },
+  imgDiv: {
+    height: imgHeight,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    width: "100%",
+  },
+  imgRoot: {
+    position: "absolute",
+    objectFit: "cover",
+  },
+  hideName: {
+    maxWidth: theme.spacing(10),
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    color: 'black',
+    
   },
 }));
 
@@ -64,6 +89,7 @@ function ProductCard({
   onDeleteSuccess,
   onDeleteError,
   onEditError,
+  onEditSuccess,
 }: ProductCardProps) {
   const classes = useStyles();
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -88,69 +114,89 @@ function ProductCard({
     }
   };
 
-  const saveEditProduct = async (values:any) => {
-    const response = await productsService.edit(product.id, values)
-    if(response.ok) {
-      setIsEditing(false)
-      product.titulo = response.data.titulo
-      product["picture.imgBase64"] = response.data["picture.imgBase64"]
-      product.descricao = response.data.descricao
-      product.valor = response.data.valor
+  const saveEditProduct = async (values: any) => {
+    const response = await productsService.edit(product.id, values);
+    if (response.ok) {
+      setIsEditing(false);
+      product.titulo = response.data.titulo;
+      product["picture.imgBase64"] = response.data["picture.imgBase64"];
+      product.descricao = response.data.descricao;
+      product.valor = response.data.valor;
+      onEditSuccess();
     } else {
-      onEditError()
+      onEditError();
     }
-  }
+  };
 
-  if(isEditing) {
+  if (isEditing) {
     return (
-      <ProductRegister defaultImage={product["picture.imgBase64"]} onSave={saveEditProduct} initialValues={product} onCancel={()=>setIsEditing(false)}></ProductRegister>
-    )
+      <ProductRegister
+        defaultImage={product["picture.imgBase64"]}
+        onSave={saveEditProduct}
+        initialValues={product}
+        onCancel={() => setIsEditing(false)}
+      ></ProductRegister>
+    );
   }
   return (
     <>
-      <Card className={classes.root}>
-        <CardMedia
-          component="img"
-          height="200"
-          image={product["picture.imgBase64"]}
-          title={product.titulo}
-        />
-        <CardContent>
-          <Grid container spacing={1}>
+      <Paper className={classes.root}>
+        <div className={classes.imgDiv}>
+          <img
+            src={product["picture.imgBase64"]}
+            alt={product.titulo}
+            height="100%"
+            width="100%"
+            className={classes.imgRoot}
+          ></img>
+        </div>
+        <Box p={2} className={classes.content}>
+          <Grid container alignContent="space-between" className={classes.root}>
             <Grid item xs={12}>
-              <Typography variant="h5">{product.titulo}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography color="textSecondary">{product.descricao}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography color="textSecondary" variant="caption">
-                Vendido por {product["perfil.nome"]}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" color="primary">
-                {formatNumberToMoneyWithSymbol(product.valor, "R$")}
-              </Typography>
-            </Grid>
-            
-          </Grid>
-        </CardContent>
-        <CardActions>
-
-          <Grid container justify="flex-end" >
-            <Grid item xs="auto">
-            <Button variant="outlined" color="secondary" onClick={handleOpenDelete}>
-                 Deletar
-              </Button>
-              {" "}
-              <Button variant="contained" color="primary" onClick={()=>setIsEditing(true)}>
-                 Editar
-              </Button>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">{product.titulo}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography color="textSecondary">
+                    {product.descricao}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography color="textSecondary" variant="caption">
+                    Vendido por {product["perfil.nome"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1" color="primary">
+                    {formatNumberToMoneyWithSymbol(product.valor, "R$")}
+                  </Typography>
+                </Grid>
               </Grid>
+            </Grid>
+            <Grid item xs={12}>
+            <Grid container justify="flex-end">
+            <Grid item xs="auto">
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleOpenDelete}
+              >
+                Deletar
+              </Button>{" "}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setIsEditing(true)}
+              >
+                Editar
+              </Button>
+            </Grid>
           </Grid>
-        </CardActions>
-      </Card>
+            </Grid>
+          </Grid>
+        </Box>
+      </Paper>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -174,10 +220,10 @@ function ProductCard({
             <CardContent>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
-                  <Typography variant="h5">{product.titulo}</Typography>
+                  <Typography variant="h5" className={classes.hideName} noWrap>{product.titulo}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className={classes.hideName} noWrap>
                     {product.descricao}
                   </Typography>
                 </Grid>

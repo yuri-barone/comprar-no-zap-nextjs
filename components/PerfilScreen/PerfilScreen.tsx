@@ -32,14 +32,14 @@ yup.setLocale({
 });
 
 const schema = yup.object().shape({
-  name: yup.string().min(5).required(),
+  nome: yup.string().min(5).required(),
   zap: yup.string().min(10).required(),
   endereco: yup.string().min(3).required(),
 });
 
 export type PerfilScreenProps = {
   src?: string;
-  name: string;
+  nome: string;
   zap: string;
   endereco: string;
   id: number;
@@ -66,14 +66,14 @@ const useStyles = makeStyles((theme) => ({
 
 function PerfilScreen({
   src,
-  name,
+  nome,
   zap,
   endereco,
   id,
   searchNewPerfil,
   seller,
 }: PerfilScreenProps) {
-  const [img64, setImg64] = useState<any>({ src });
+  const [img64, setImg64] = useState<any>(src);
   const imgActions: any = {};
   const [openDanger, setOpenDanger] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -101,7 +101,7 @@ function PerfilScreen({
   const onSubmit = async (values: any) => {
     session;
     values["imgBase64"] = img64;
-    const response = await perfisService.edit(values, id);
+    const response = await perfisService.edit(id, values);
     if (response.ok) {
       searchNewPerfil();
       openSnackBarSuccess();
@@ -127,12 +127,12 @@ function PerfilScreen({
     onSubmit,
     validate,
     initialValues: {
-      name,
+      nome,
       zap,
       endereco,
     },
   });
-  const nameInput = useField("name", form);
+  const nomeInput = useField("nome", form);
   const zapInput = useField("zap", form);
   const enderecoInput = useField("endereco", form);
   const sellerBox = useField("seller", form)
@@ -179,17 +179,17 @@ function PerfilScreen({
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
-                      {...nameInput.input}
-                      id="name"
+                      {...nomeInput.input}
+                      id="nome"
                       label="Nome da empresa"
                       variant="outlined"
-                      error={nameInput.meta.touched && nameInput.meta.invalid}
+                      error={nomeInput.meta.touched && nomeInput.meta.invalid}
                       helperText={
-                        nameInput.meta.touched &&
-                        nameInput.meta.invalid &&
-                        nameInput.meta.error
+                        nomeInput.meta.touched &&
+                        nomeInput.meta.invalid &&
+                        nomeInput.meta.error
                       }
-                      defaultValue={name}
+                      defaultValue={nome}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -271,7 +271,7 @@ function PerfilScreen({
 PerfilScreen.defaultProps = {
   src:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg/1200px-Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg",
-  name: "Marcos Zuck e Berg",
+  nome: "Marcos Zuck e Berg",
   endereco: "California Windows State",
   zap: "+554433221100",
 };

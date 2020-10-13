@@ -31,12 +31,12 @@ const find = async (filter: string) => {
   }
 };
 
-const edit = async (data: object, id:number) => {
+const edit = async (id:number, data: object) => {
   try {
     const response = await api.patch(`/perfis/${id}`, data);
     return {ok:true, data: response.data };
   } catch (error) {
-    return {ok:false, erro:"Ocorreu um erro ao atualizar seu perfil"}
+    return {ok:false, erro:error}
   }
 }
 

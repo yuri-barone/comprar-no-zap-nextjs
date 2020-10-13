@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: theme.spacing(10),
     textOverflow: "ellipsis",
     overflow: "hidden",
+    color: 'black',
   },
 }));
 

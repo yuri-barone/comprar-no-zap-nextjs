@@ -18,6 +18,7 @@ import useSession from "../components/useSession";
 import jwt_decode from "jwt-decode";
 import perfisService from "../components/services/perfisService";
 import LoggedBarProducts from "../components/LoggedBar/LoggedBarProducts";
+import { getBase64, resizeImage } from "../images/base64ImageManipulator";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -115,6 +116,10 @@ const produtos = () => {
 
   const salvarProduto = async (values: any) => {
     session;
+    if (!values.imgBase64) {
+      const resized = await resizeImage("/empty-img.jpg")
+      values.imgBase64 = resized
+    }
     const response = await productsService.save(values);
     if (response.ok) {
       searchProducts();
@@ -166,6 +171,7 @@ const produtos = () => {
                       onDelete={searchProducts}
                       onDeleteSuccess={openSnackBarDeleteSuccess}
                       onDeleteError={openSnackBarDeleteDanger}
+                      onEditSuccess={searchProducts}
                       
                     />
                   </Grid>

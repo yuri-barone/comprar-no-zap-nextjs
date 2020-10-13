@@ -92,10 +92,7 @@ export default function Home() {
   }, [tabValue]);
 
   const addSearchToUrl = (value:string) => {
-    if(!value  || value.trim().length == 0){
-      return;
-    }
-    const params = navigation.getUrlParams();
+        const params = navigation.getUrlParams();
     const query:any = navigation.generateQueryUrl(params.tipo, value)
     console.log(currentStoreToShow)
     if(parseInt(params.perfilId)){
@@ -147,10 +144,10 @@ export default function Home() {
   }
 
   const buscar = (term: string | undefined, wich?:number, storeId?: number,) => {
-    if (wich === 0 && (!!term || storeId > 0)) {
+    if (wich === 0) {
       getProducts(term, storeId);
     }
-    if (wich == 1 && !!term) {
+    if (wich == 1) {
       getLocais(term);
     }
   };
@@ -255,8 +252,9 @@ export default function Home() {
         onChange={searchOnChange}
         onSearch={buscar}
       ></MyAppBar>}
-      <Container>
-        <Grid container spacing={4}>
+      <Box style={{backgroundColor:'white'}}>
+      <Container >
+        <Grid container>
           <Grid item xs="auto">
             <Tabs
               value={tabValue}
@@ -272,6 +270,7 @@ export default function Home() {
           <Grid item xs></Grid>
         </Grid>
       </Container>
+      </Box>
       <Divider />
       <Container>
         <Grid
@@ -325,7 +324,7 @@ export default function Home() {
           </Grid>
         </Grid>
         <Slide direction="up" in={showingCart}>
-          <AppBar position="fixed" className={classes.appBar}>
+          <AppBar position="fixed" className={classes.appBar} style={{backgroundColor:'#ece5dd'}}>
             <Box p={2}>
               <Container>
                 <MyCart
@@ -334,7 +333,7 @@ export default function Home() {
                   changeItemQuantity={changeItemQuantity}
                   removeItem={removeItem}
                   removeAll={removeAll}
-                  value={inputEndereco}
+                  initialEndereco={inputEndereco}
                 ></MyCart>
               </Container>
             </Box>

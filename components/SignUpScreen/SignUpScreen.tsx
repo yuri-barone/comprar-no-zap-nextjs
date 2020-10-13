@@ -32,16 +32,17 @@ yup.setLocale({
   string: {
     // eslint-disable-next-line no-template-curly-in-string
     min: "O mínimo de caracteres é ${min}",
+    max: "O máximo de caracteres é ${max}",
     email: "Precisa ser um email válido",
   },
 });
 
 const schema = yup.object().shape({
-  nome: yup.string().required(),
-  zap: yup.string().min(10).required(),
-  endereco: yup.string().min(3).required(),
-  email: yup.string().email().required(),
-  password: yup.string().min(8).required(),
+  nome: yup.string().max(100).required(),
+  zap: yup.string().min(10).max(15).required(),
+  endereco: yup.string().max(100).min(3).required(),
+  email: yup.string().email().max(100).required(),
+  password: yup.string().min(4).max(20).required(),
   confirmarPassword: yup
     .string()
     .oneOf([yup.ref("password")], "As senhas não são as mesmas"),

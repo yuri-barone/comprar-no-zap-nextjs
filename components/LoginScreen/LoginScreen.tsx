@@ -34,7 +34,7 @@ yup.setLocale({
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
-  password: yup.string().min(8).required(),
+  password: yup.string().min(4).required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -149,11 +149,6 @@ function LoginScreen({ onLogin }: loginScreenProps) {
                 >
                   Entrar
                 </Button>
-                <Grid item xs={12}>
-                  <Typography variant="caption">
-                    <Link color="inherit">Problemas com login?</Link>
-                  </Typography>
-                </Grid>
               </Grid>
             </Grid>
           </Box>

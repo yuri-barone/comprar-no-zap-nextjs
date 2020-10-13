@@ -11,7 +11,7 @@ export type MyCartProps = {
   changeItemQuantity: (id:number, quantity:number) => void;
   removeItem: (id:number) => void;
   removeAll: () => void;
-  value: string;
+  initialEndereco: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, removeItem, value }: MyCartProps) => {
+const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, removeItem, initialEndereco }: MyCartProps) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -84,8 +84,13 @@ const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, remov
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Button color="primary" variant="contained" onClick={handleOpen}>
+            <Button color="primary" variant="contained" onClick={handleOpen} fullWidth>
               Pedir no zap
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button color="secondary" variant="outlined" onClick={removeAll} fullWidth>
+              Limpar carrinho
             </Button>
           </Grid>
         </Grid>
@@ -94,7 +99,7 @@ const MyCart = ({ cartProducts, totalValue, changeItemQuantity, removeAll, remov
     </Grid>
 
     <Modal open={open} onClose={handleClose}>
-              <MyCartDetails value={value} cartProductsData={cartProducts} onContinuarComprando={handleClose} changeItemQuantity={changeItemQuantity} removeAll={removeAll} removeItem={removeItem}/>
+              <MyCartDetails initialEndereco={initialEndereco} cartProductsData={cartProducts} onContinuarComprando={handleClose} changeItemQuantity={changeItemQuantity} removeAll={removeAll} removeItem={removeItem}/>
       </Modal>
     </>
   );

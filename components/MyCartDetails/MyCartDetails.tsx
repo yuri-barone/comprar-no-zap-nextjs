@@ -16,7 +16,7 @@ export type MyCartDetailsProps = {
   changeItemQuantity: (id:number, quantity:number) => void;
   removeItem: (id:number) => void;
   removeAll: () => void;
-  value: string;
+  initialEndereco: string;
 };
 
 const useStyles = makeStyles({
@@ -31,7 +31,8 @@ const MyCartDetails = ({
   changeItemQuantity,
   removeItem,
   removeAll,
-  value,
+  initialEndereco,
+
 }: MyCartDetailsProps) => {
   const classes = useStyles();
   const [cartSellers, setCartSellers] = useState([]);
@@ -101,7 +102,7 @@ const MyCartDetails = ({
                         cartProductsData={item.items}
                         changeItemQuantity={changeItemQuantity}
                         removeItem={removeItem}
-                        value={value}
+                        initialValues={{endereco: initialEndereco}}
                       />
                     </Box>
                   </Paper>

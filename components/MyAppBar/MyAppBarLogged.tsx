@@ -55,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
     borderRadius: 200,
   },
+  logo: {
+    objectFit: "cover",
+  },
   link: {
     "& > * + *": {
       marginLeft: theme.spacing(2),
@@ -93,12 +96,12 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
       <Container>
         <Box p={2}>
           <Grid container alignItems="center" spacing={2}>
-            <Grid item xs="auto">
+            <Grid item xs={"auto"}>
               <div className={classes.imgDiv}>
                 <img
                   alt=""
                   src="/comprar-no-zap-logo.svg"
-                  className={classes.img}
+                  className={classes.logo}
                   height="100%"
                   width="100%"
                 ></img>

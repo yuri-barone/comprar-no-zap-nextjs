@@ -36,7 +36,13 @@ const EnterpriseCard = ({ src, name, zap, endereco, id, onNavigate }: Enterprise
     onNavigate({src, name, zap, endereco, id})
   }
   const handleSendMessage = () => {
-    const link = `https://api.whatsapp.com/send?phone=${zap}&text=Olá,%20te%20encontrei%20no%20*Comprar%20no%20zap.*`
+    const validateZap = () => {
+      const numero = zap.toString()
+      if (!numero.startsWith("55")) {
+        return `55${numero}`
+      }
+    }
+    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=Olá,%20te%20encontrei%20no%20*comprarnozap.com*`
     const win = window.open(link, "_blank");
     win.focus();
   }

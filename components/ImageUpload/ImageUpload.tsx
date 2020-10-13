@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icon:{
     zIndex: 99,
+    pointerEvents: 'none',
   },
 }));
 

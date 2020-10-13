@@ -1,16 +1,22 @@
 import { useRouter } from "next/router";
 
-  const onSucces = (response:any) => response
+  const onSuccess = (response:any) => {
+    debugger
+     return response
+    }
 
   const onError = (error:any) => {
-    const router = useRouter()
-    if (error === 401){
-        router.push("/entrar")
+    debugger
+    if (401 === error.response.status) {
+      window.location.replace("/entrar")
+    } else {
+        return Promise.reject(error);
     }
     return Promise.reject(error);
   }
 
-  const addResponseErrorMidleware = (api:any) => {
-    api.interceptors.response.use(onSucces, onError)
-}
+  const addResponseErrorMidleware = (mainApi:any) => {
+    mainApi.interceptors.response.use(onSuccess, onError)
+  }
+
 export default addResponseErrorMidleware

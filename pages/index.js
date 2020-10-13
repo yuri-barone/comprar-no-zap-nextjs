@@ -108,12 +108,12 @@ export default function Home() {
             <Grid item xs={4} />
             <Grid item xs={2}>
               <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth>
-                Pesquisar produtos
+                Ver produtos
               </Button>
             </Grid>
             <Grid item xs={2}>
               <Button color="secondary" variant="outlined" onClick={handlePlacesSearch} fullWidth>
-                Pesquisar lugares
+                Ver lugares
               </Button>
             </Grid>
             <Grid item xs={4} />

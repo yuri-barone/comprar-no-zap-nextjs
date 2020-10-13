@@ -36,7 +36,7 @@ const editPerfil = () => {
         <PerfilScreen
           src={perfil["picture.imgBase64"]}
           zap={perfil.zap}
-          name={perfil.nome}
+          nome={perfil.nome}
           endereco={perfil.endereco}
           id={perfil.id}
           searchNewPerfil={searchPerfil}
