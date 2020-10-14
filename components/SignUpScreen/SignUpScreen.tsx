@@ -335,7 +335,7 @@ function SignUpScreen() {
           </form>
         </Box>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="error">
+          <Alert severity="error">
             Seu cadastro não pode ser finalizado.
           </Alert>
         </Snackbar>

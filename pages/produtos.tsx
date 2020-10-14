@@ -180,7 +180,7 @@ const produtos = () => {
             autoHideDuration={6000}
             onClose={handleCadastroDangerClose}
           >
-            <Alert onClose={handleCadastroDangerClose} severity="error">
+            <Alert severity="error">
               Não foi possível cadastrar seu produto
             </Alert>
           </Snackbar>
@@ -193,7 +193,7 @@ const produtos = () => {
             autoHideDuration={6000}
             onClose={handleCadastroSuccessClose}
           >
-            <Alert onClose={handleCadastroSuccessClose} severity="success">
+            <Alert severity="success">
               Produto cadastrado com sucesso
             </Alert>
           </Snackbar>
@@ -207,7 +207,7 @@ const produtos = () => {
             autoHideDuration={6000}
             onClose={handleDeleteDangerClose}
           >
-            <Alert onClose={handleDeleteDangerClose} severity="error">
+            <Alert severity="error">
               Houve um problema ao deletar seu produto.
             </Alert>
           </Snackbar>
@@ -220,7 +220,7 @@ const produtos = () => {
             autoHideDuration={6000}
             onClose={handleDeleteSuccessClose}
           >
-            <Alert onClose={handleDeleteSuccessClose} severity="success">
+            <Alert severity="success">
               Produto deletado com sucesso
             </Alert>
           </Snackbar>
@@ -233,7 +233,7 @@ const produtos = () => {
             autoHideDuration={6000}
             onClose={handleEditDangerClose}
           >
-            <Alert onClose={handleEditDangerClose} severity="error">
+            <Alert severity="error">
               Houve um problema ao editar seu produto.
             </Alert>
           </Snackbar>

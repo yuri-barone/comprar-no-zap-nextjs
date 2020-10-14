@@ -44,7 +44,7 @@ const entrar = () => {
         autoHideDuration={6000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="error">
+        <Alert severity="error">
           Login ou senha inválidos.
         </Alert>
       </Snackbar>
