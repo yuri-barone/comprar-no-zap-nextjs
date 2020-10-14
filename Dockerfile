@@ -12,4 +12,6 @@ COPY . .
 RUN yarn run build
 
 # Running the app
+EXPOSE 3000
+
 CMD [ "yarn", "start" ]
