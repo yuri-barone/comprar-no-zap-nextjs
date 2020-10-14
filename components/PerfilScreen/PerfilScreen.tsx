@@ -10,24 +10,25 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import { ValidationErrors } from "final-form";
-import React, { SyntheticEvent, useState } from "react";
-import { useForm, useField } from "react-final-form-hooks";
-import * as yup from "yup";
-import ImageUpload from "../ImageUpload/ImageUpload";
-import perfisService from "../services/perfisService";
-import useSession from "../useSession";
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ValidationErrors } from 'final-form';
+import React, { useState } from 'react';
+import { useForm, useField } from 'react-final-form-hooks';
+import * as yup from 'yup';
+import ImageUpload from '../ImageUpload/ImageUpload';
+import perfisService from '../services/perfisService';
+import useSession from '../useSession';
 
 yup.setLocale({
   mixed: {
-    default: "Não é válido",
-    required: "O campo precisa estar preenchido",
+    default: 'Não é válido',
+    required: 'O campo precisa estar preenchido',
   },
   string: {
     // eslint-disable-next-line no-template-curly-in-string
-    min: "O mínimo de caracteres é ${min}",
+    min: 'O mínimo de caracteres é ${min}',
   },
 });
 
@@ -50,15 +51,15 @@ export type PerfilScreenProps = {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.grey[200],
-    minHeight: "100%",
-    display: "flex",
+    minHeight: '100%',
+    display: 'flex',
   },
   avatarSize: {
     width: theme.spacing(14),
     height: theme.spacing(14),
   },
   link: {
-    "& > * + *": {
+    '& > * + *': {
       marginLeft: theme.spacing(2),
     },
   },
@@ -74,15 +75,14 @@ function PerfilScreen({
   seller,
 }: PerfilScreenProps) {
   const [img64, setImg64] = useState<any>(src);
-  const imgActions: any = {};
   const [openDanger, setOpenDanger] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
-  const session = useSession(true)
+  const session = useSession(true);
   const openSnackBarDanger = () => {
     setOpenDanger(true);
   };
-  const handleDangerClose = (event: SyntheticEvent<Element, Event>, reason: any) => {
-    if (reason === "clickaway") {
+  const handleDangerClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -91,17 +91,19 @@ function PerfilScreen({
   const openSnackBarSuccess = () => {
     setOpenSuccess(true);
   };
-  const handleSuccessClose = (event: SyntheticEvent<Element, Event>, reason: any) => {
-    if (reason === "clickaway") {
+  const handleSuccessClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
       return;
     }
 
     setOpenSuccess(false);
   };
   const onSubmit = async (values: any) => {
+    const params:any = values;
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     session;
-    values["imgBase64"] = img64;
-    const response = await perfisService.edit(id, values);
+    params.imgBase64 = img64;
+    const response = await perfisService.edit(id, params);
     if (response.ok) {
       searchNewPerfil();
       openSnackBarSuccess();
@@ -109,17 +111,17 @@ function PerfilScreen({
       openSnackBarDanger();
     }
   };
+  // eslint-disable-next-line consistent-return
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
     } catch (errors) {
-      let formErrors: any = {};
+      const formErrors: any = {};
       errors.inner.forEach((erro: ValidationErrors) => {
         formErrors[erro.path] = erro.message;
       });
       return formErrors;
     }
-    return;
   };
 
   const classes = useStyles();
@@ -132,23 +134,19 @@ function PerfilScreen({
       endereco,
     },
   });
-  const nomeInput = useField("nome", form);
-  const zapInput = useField("zap", form);
-  const enderecoInput = useField("endereco", form);
-  const sellerBox = useField("seller", form)
+  const nomeInput = useField('nome', form);
+  const zapInput = useField('zap', form);
+  const enderecoInput = useField('endereco', form);
+  const sellerBox = useField('seller', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
   };
 
-  const configureActions = (actions: any) => {
-    imgActions;
-  };
-
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs></Grid>
+        <Grid item xs />
         <Grid item xs="auto">
           <Box p={2}>
             <Typography className={classes.link}>
@@ -169,9 +167,8 @@ function PerfilScreen({
             <Grid item xs={3}>
               <ImageUpload
                 onChangeImage={handleImage}
-                rounded={true}
+                rounded
                 defaultImage={src}
-                configureActions={configureActions}
               />
             </Grid>
             <Grid item xs={9}>
@@ -185,9 +182,9 @@ function PerfilScreen({
                       variant="outlined"
                       error={nomeInput.meta.touched && nomeInput.meta.invalid}
                       helperText={
-                        nomeInput.meta.touched &&
-                        nomeInput.meta.invalid &&
-                        nomeInput.meta.error
+                        nomeInput.meta.touched
+                        && nomeInput.meta.invalid
+                        && nomeInput.meta.error
                       }
                       defaultValue={nome}
                     />
@@ -200,9 +197,9 @@ function PerfilScreen({
                       variant="outlined"
                       error={zapInput.meta.touched && zapInput.meta.invalid}
                       helperText={
-                        zapInput.meta.touched &&
-                        zapInput.meta.invalid &&
-                        zapInput.meta.error
+                        zapInput.meta.touched
+                        && zapInput.meta.invalid
+                        && zapInput.meta.error
                       }
                       defaultValue={zap}
                     />
@@ -217,15 +214,15 @@ function PerfilScreen({
                         enderecoInput.meta.touched && enderecoInput.meta.invalid
                       }
                       helperText={
-                        enderecoInput.meta.touched &&
-                        enderecoInput.meta.invalid &&
-                        enderecoInput.meta.error
+                        enderecoInput.meta.touched
+                        && enderecoInput.meta.invalid
+                        && enderecoInput.meta.error
                       }
                       defaultValue={endereco}
                     />
                   </Grid>
                   <Grid item xs={12}>
-                  <FormControlLabel control={<Checkbox defaultChecked={seller} {...sellerBox.input} />} label="Quero vender" />
+                    <FormControlLabel control={<Checkbox defaultChecked={seller} {...sellerBox.input} />} label="Quero vender" />
                   </Grid>
                   <Grid item xs={12}>
                     <Button variant="contained" color="secondary" type="submit">
@@ -239,8 +236,8 @@ function PerfilScreen({
         </Box>
         <Snackbar
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
           open={openDanger}
           autoHideDuration={6000}
@@ -252,8 +249,8 @@ function PerfilScreen({
         </Snackbar>
         <Snackbar
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
           open={openSuccess}
           autoHideDuration={6000}
@@ -270,10 +267,10 @@ function PerfilScreen({
 
 PerfilScreen.defaultProps = {
   src:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg/1200px-Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg",
-  nome: "Marcos Zuck e Berg",
-  endereco: "California Windows State",
-  zap: "+554433221100",
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg/1200px-Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg',
+  nome: 'Marcos Zuck e Berg',
+  endereco: 'California Windows State',
+  zap: '+554433221100',
 };
 
 export default PerfilScreen;

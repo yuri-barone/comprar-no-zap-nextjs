@@ -5,12 +5,12 @@ import {
   IconButton,
   makeStyles,
   Typography,
-} from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
-import CloseIcon from "@material-ui/icons/Close";
-import { formatNumberToMoneyWithSymbol } from "../../formatters";
+} from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import CloseIcon from '@material-ui/icons/Close';
+import { formatNumberToMoneyWithSymbol } from '../../formatters';
 
 const useStyles = makeStyles((theme) => ({
   imgSize: {
@@ -18,23 +18,23 @@ const useStyles = makeStyles((theme) => ({
     width: 50,
   },
   containerMaxHeight: {
-    height: "100%",
+    height: '100%',
   },
   badge: {
     padding: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    cursor: "pointer",
+    cursor: 'pointer',
     backgroundColor: theme.palette.grey[500],
     color: theme.palette.common.white,
-    "&:hover": {
+    '&:hover': {
       backgroundColor: theme.palette.error.main,
     },
   },
   productName: {
     maxWidth: theme.spacing(10),
-    textOverflow: "ellipsis",
-    overflow: "hidden",
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
     color: 'black',
   },
 }));
@@ -62,6 +62,11 @@ const ItemShowDetails = ({
   const [productQuantity, setProductQuantity] = useState(quantity);
   const [totalValue, setTotalValue] = useState<number>();
 
+  const calcTotalValue = () => {
+    const total = productValue * quantity;
+    setTotalValue(total);
+  };
+
   useEffect(() => {
     calcTotalValue();
   }, [quantity]);
@@ -82,11 +87,6 @@ const ItemShowDetails = ({
     setProductQuantity(finalQuantity);
   };
 
-  const calcTotalValue = () => {
-    const total = productValue * quantity;
-    setTotalValue(total);
-  };
-
   const handleClick = () => {
     removeItem(productId);
   };
@@ -95,10 +95,10 @@ const ItemShowDetails = ({
     <Grid container alignItems="center" direction="column">
       <Grid item xs="auto">
         <Badge
-          badgeContent={<CloseIcon fontSize="small"></CloseIcon>}
+          badgeContent={<CloseIcon fontSize="small" />}
           anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
+            vertical: 'top',
+            horizontal: 'right',
           }}
           onClick={handleClick}
           classes={{ badge: classes.badge }}
@@ -117,18 +117,18 @@ const ItemShowDetails = ({
           {productName}
         </Typography>
         <Typography color="textSecondary" align="center">
-          {formatNumberToMoneyWithSymbol(totalValue, "R$")}
+          {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
         </Typography>
       </Grid>
       <Grid item xs="auto">
         <IconButton onClick={removeQuantity}>
-          <RemoveIcon fontSize="small"></RemoveIcon>
+          <RemoveIcon fontSize="small" />
         </IconButton>
         <Typography component="span" color="textSecondary">
           {quantity}
         </Typography>
         <IconButton onClick={addQuantity}>
-          <AddIcon fontSize="small"></AddIcon>
+          <AddIcon fontSize="small" />
         </IconButton>
       </Grid>
     </Grid>
@@ -137,10 +137,10 @@ const ItemShowDetails = ({
 
 ItemShowDetails.defaultProps = {
   src:
-    "https://t1.rg.ltmcdn.com/pt/images/3/1/3/hamburguer_de_frango_com_legumes_7313_orig.jpg",
+    'https://t1.rg.ltmcdn.com/pt/images/3/1/3/hamburguer_de_frango_com_legumes_7313_orig.jpg',
   quantity: 5,
   productValue: 550,
-  productName: "Hamburguer de frango",
+  productName: 'Hamburguer de frango',
 };
 
 export default ItemShowDetails;

@@ -3,17 +3,14 @@ import addResponseErrorMidleware from './responseErrorMidleware';
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-const create = (baseURL: string | undefined) =>
-  axios.create({
-    baseURL,
-    timeout: 50000,
-  });
+const create = (baseURL: string | undefined) => axios.create({
+  baseURL,
+  timeout: 50000,
+});
 
-  export const mainApi = create('http://localhost:3030');
-  addResponseErrorMidleware(mainApi)
+export const mainApi = create('http://localhost:3030');
+addResponseErrorMidleware(mainApi);
 
-
-
-  export const configureMainApi = (token:string) => {
-    mainApi.defaults.headers.common['Authorization'] = 'Bearer '.concat(token);
-  };
+export const configureMainApi = (token:string) => {
+  mainApi.defaults.headers.common.Authorization = 'Bearer '.concat(token);
+};

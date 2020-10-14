@@ -1,8 +1,9 @@
-import { makeStyles } from "@material-ui/core";
-import React, { useRef, useState } from "react";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import { getBase64, resizeImage } from "../../images/base64ImageManipulator";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { makeStyles } from '@material-ui/core';
+import React, { useRef, useState } from 'react';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import clsx from 'clsx';
+import { getBase64, resizeImage } from '../../images/base64ImageManipulator';
 
 export type ImageUploadProps = {
   defaultImage?: String;
@@ -14,37 +15,37 @@ export type ImageUploadProps = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
     backgroundColor: theme.palette.grey[300],
     minHeight: 176,
-    width: "100%",
-    overflow: "hidden",
+    width: '100%',
+    overflow: 'hidden',
   },
   rounded: {
-    position: "relative",
+    position: 'relative',
     borderRadius: 200,
     height: theme.spacing(22),
     width: theme.spacing(22),
   },
   input: {
-    display: "none",
+    display: 'none',
   },
   clickableLabel: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
     zIndex: 99,
   },
-  img:{
-    position: "absolute",
-    objectFit: "cover",
+  img: {
+    position: 'absolute',
+    objectFit: 'cover',
   },
-  icon:{
+  icon: {
     zIndex: 99,
     pointerEvents: 'none',
   },
@@ -61,7 +62,7 @@ function ImageUpload({
   const fileInput: any = useRef(null);
   const [imgB64, setImgB64] = useState<any>(defaultImage);
   const noop = () => {};
- 
+
   const handleFiles = async () => {
     const file = fileInput.current.files[0];
     const img = await getBase64(file);
@@ -71,10 +72,10 @@ function ImageUpload({
   };
 
   const clear = () => {
-    setImgB64(defaultImage)
-  }
+    setImgB64(defaultImage);
+  };
 
-  configureActions({clear})
+  if (configureActions) { configureActions({ clear }); }
 
   const uploaderKey = Math.random().toString(36).substr(2, 5);
 
@@ -90,13 +91,12 @@ function ImageUpload({
       />
       <img
         alt=""
-        src={imgB64 || defaultImage || "empty-img.jpg" }
+        src={imgB64 || defaultImage || 'empty-img.jpg'}
         className={classes.img}
         width="100%"
         height="100%"
-      ></img>
-      <label htmlFor={`icon-button-file-${uploaderKey}`} className={classes.clickableLabel}>
-      </label>
+      />
+      <label htmlFor={`icon-button-file-${uploaderKey}`} className={classes.clickableLabel} />
       <PhotoCamera className={classes.icon} />
     </div>
   );

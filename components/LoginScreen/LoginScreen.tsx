@@ -1,34 +1,31 @@
 import {
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
   Grid,
-  IconButton,
-  Link,
   makeStyles,
   TextField,
   Typography,
-} from "@material-ui/core";
-import React from "react";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import { useForm, useField } from "react-final-form-hooks";
-import * as yup from "yup";
-import { ValidationErrors } from "final-form";
+} from '@material-ui/core';
+import React from 'react';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { useForm, useField } from 'react-final-form-hooks';
+import * as yup from 'yup';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ValidationErrors } from 'final-form';
 
-export type loginScreenProps = {
+export type LoginScreenProps = {
   onLogin: (loginData: any) => void;
 };
 
 yup.setLocale({
   mixed: {
-    default: "Não é válido",
-    required: "O campo precisa estar preenchido",
+    default: 'Não é válido',
+    required: 'O campo precisa estar preenchido',
   },
   string: {
     // eslint-disable-next-line no-template-curly-in-string
-    min: "O mínimo de caracteres é ${min}",
-    email: "Precisa ser um email válido",
+    min: 'O mínimo de caracteres é ${min}',
+    email: 'Precisa ser um email válido',
   },
 });
 
@@ -40,46 +37,48 @@ const schema = yup.object().shape({
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.grey[200],
-    minHeight: "100vh",
-    display: "flex",
+    minHeight: '100vh',
+    display: 'flex',
   },
   loginContainerColor: {
     backgroundColor: theme.palette.grey[50],
-    height: "100vh",
-    width: "25%",
+    height: '100vh',
+    width: '25%',
   },
   imgDiv: {
-    height: "100vh",
+    height: '100vh',
   },
   img: {
-    objectFit: "cover",
+    objectFit: 'cover',
   },
   logo: {
-    maxWidth: "100%",
+    maxWidth: '100%',
   },
 }));
 
-function LoginScreen({ onLogin }: loginScreenProps) {
+function LoginScreen({ onLogin }: LoginScreenProps) {
+  // eslint-disable-next-line consistent-return
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
     } catch (errors) {
-      let formErrors: any = {};
+      const formErrors: any = {};
       errors.inner.forEach((erro: ValidationErrors) => {
         formErrors[erro.path] = erro.message;
       });
       return formErrors;
     }
-    return;
   };
 
-  const { form, handleSubmit, pristine, submitting } = useForm({
+  const {
+    form, handleSubmit, pristine, submitting,
+  } = useForm({
     onSubmit: onLogin, // the function to call with your form values upon valid submit
     validate,
   });
 
-  const email = useField("email", form);
-  const password = useField("password", form);
+  const email = useField('email', form);
+  const password = useField('password', form);
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -92,7 +91,7 @@ function LoginScreen({ onLogin }: loginScreenProps) {
                   alt=""
                   src="/comprar-no-zap.svg"
                   className={classes.logo}
-                ></img>
+                />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="h4" color="textSecondary">
@@ -119,9 +118,9 @@ function LoginScreen({ onLogin }: loginScreenProps) {
                   type="password"
                   error={password.meta.touched && password.meta.invalid}
                   helperText={
-                    password.meta.touched &&
-                    password.meta.invalid &&
-                    password.meta.error
+                    password.meta.touched
+                    && password.meta.invalid
+                    && password.meta.error
                   }
                   fullWidth
                 />
@@ -161,7 +160,7 @@ function LoginScreen({ onLogin }: loginScreenProps) {
           className={classes.img}
           height="100%"
           width="100%"
-        ></img>
+        />
       </div>
     </div>
   );

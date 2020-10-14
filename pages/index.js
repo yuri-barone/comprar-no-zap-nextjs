@@ -6,84 +6,87 @@ import {
   Link,
   makeStyles,
   Typography,
-} from "@material-ui/core";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import LoggedBarIndex from "../components/LoggedBar/LoggedBarIndex";
-import Search from "../components/Search/Search";
-import useNavigation from "../components/useNavigation";
-import useSession from "../components/useSession";
+} from '@material-ui/core';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import LoggedBarIndex from '../components/LoggedBar/LoggedBarIndex';
+import Search from '../components/Search/Search';
+import useNavigation from '../components/useNavigation';
+import useSession from '../components/useSession';
 
 const useStyles = makeStyles((theme) => ({
   img: {
-    objectFit: "cover",
-    width:'100%',
+    objectFit: 'cover',
+    width: '100%',
   },
   imgDiv: {
     padding: 20,
   },
   containerHeight: {
-    height: "100%",
+    height: '100%',
   },
   link: {
-      '& > * + *': {
-        marginLeft: theme.spacing(2),
-      },
-  }
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
+  },
 }));
 
 export default function Home() {
   const classes = useStyles();
   const Router = useRouter();
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const session = useSession(false);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const handleProductSearch = () => {
-    const query = navigation.generateQueryUrl("0", filter)
+    const query = navigation.generateQueryUrl('0', filter);
     Router.push({
-      pathname: "/search",
-      query
-    })
-  }
+      pathname: '/search',
+      query,
+    });
+  };
   const handlePlacesSearch = () => {
-    const query = navigation.generateQueryUrl("1", filter)
+    const query = navigation.generateQueryUrl('1', filter);
     Router.push({
-      pathname: "/search",
-      query
-    })
-  }
+      pathname: '/search',
+      query,
+    });
+  };
   const storeFilter = (e) => {
-    setFilter(e.target.value)
-  }
-  
+    setFilter(e.target.value);
+  };
 
   return (
     <>
       <Grid container className={classes.containerHeight}>
         <Grid item xs={12}>
-          {session.isAutheticated && <LoggedBarIndex 
-            src={session.profile["picture.imgBase64"]}
+          {session.isAutheticated && (
+          <LoggedBarIndex
+            src={session.profile['picture.imgBase64']}
             name={session.profile.nome}
             zap={session.profile.zap}
-          />}
-          {!session.isAutheticated && <Grid container spacing={2}>
-            <Grid item xs></Grid>
+          />
+          )}
+          {!session.isAutheticated && (
+          <Grid container spacing={2}>
+            <Grid item xs />
             <Grid item xs="auto">
               <Box p={2}>
-              <Typography className={classes.link}>
-                <Link href="/cadastro"  color="inherit">
-                Cadastrar-me
-                </Link>
-                <Link href="/entrar" color="inherit">
-                  Logar-me
-                </Link>
+                <Typography className={classes.link}>
+                  <Link href="/cadastro" color="inherit">
+                    Cadastrar-me
+                  </Link>
+                  <Link href="/entrar" color="inherit">
+                    Logar-me
+                  </Link>
                 </Typography>
-                </Box>
+              </Box>
             </Grid>
-          </Grid>}
+          </Grid>
+          )}
           <Grid item xs={12}>
-            <Divider/>
+            <Divider />
           </Grid>
         </Grid>
 
@@ -95,13 +98,13 @@ export default function Home() {
                 alt=""
                 src="/comprar-no-zap.svg"
                 className={classes.img}
-              ></img>
+              />
             </Grid>
             <Grid item xs={4} />
 
             <Grid item xs={3} />
             <Grid item xs={6}>
-              <Search onEnter={handleProductSearch} onChange={storeFilter}></Search>
+              <Search onEnter={handleProductSearch} onChange={storeFilter} />
             </Grid>
             <Grid item xs={3} />
 
@@ -120,14 +123,17 @@ export default function Home() {
 
             <Grid item xs={12}>
               <Typography variant="h6" color="textSecondary" align="center">
-                Não perca tempo procurando, o{" "}
+                Não perca tempo procurando, o
+                {' '}
                 <Box component="span" fontWeight="fontWeightBold">
                   Comprar no zap
-                </Box>{" "}
+                </Box>
+                {' '}
                 já organizou tudo para você!
               </Typography>
               <Typography variant="h6" color="textSecondary" align="center">
-                Hambúrgueres, lanches, porções, eletrônicos, roupas...{" "}
+                Hambúrgueres, lanches, porções, eletrônicos, roupas...
+                {' '}
                 <Box component="span" fontWeight="fontWeightBold">
                   se tem zap está aqui
                 </Box>

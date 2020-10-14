@@ -1,5 +1,4 @@
 import {
-  AppBar,
   Avatar,
   Box,
   Button,
@@ -8,14 +7,13 @@ import {
   Link,
   makeStyles,
   Popover,
-  Toolbar,
   Typography,
   withStyles,
-} from "@material-ui/core";
-import React from "react";
-import red from '@material-ui/core/colors/red'
-import { useRouter } from "next/router";
-import Search from "../Search/Search";
+} from '@material-ui/core';
+import React from 'react';
+import red from '@material-ui/core/colors/red';
+import { useRouter } from 'next/router';
+import Search from '../Search/Search';
 
 export type MyAppBarLoggedProps = {
   onSearch: (filter: string) => void;
@@ -40,8 +38,8 @@ const ColorButton = withStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: "#fff",
-    width: "100%",
+    backgroundColor: '#fff',
+    width: '100%',
   },
   title: {},
   imgDiv: {
@@ -52,35 +50,37 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
   },
   img: {
-    objectFit: "cover",
+    objectFit: 'cover',
     borderRadius: 200,
   },
   logo: {
-    objectFit: "cover",
+    objectFit: 'cover',
   },
   link: {
-    "& > * + *": {
+    '& > * + *': {
       marginLeft: theme.spacing(2),
     },
   },
   imgPopover: {
-    display: "flex",
+    display: 'flex',
     width: theme.spacing(15),
     height: theme.spacing(15),
   },
   avatarClick: {
-    cursor: "pointer",
+    cursor: 'pointer',
   },
 }));
 
-const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps) => {
+const MyAppBarLogged = ({
+  value, onChange, src, name, zap,
+}: MyAppBarLoggedProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const Router = useRouter()
+  const Router = useRouter();
   const handleOnClick = () => {
-    localStorage.clear()
-    Router.push("/")
-  }
+    localStorage.clear();
+    Router.push('/');
+  };
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -96,7 +96,7 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
       <Container>
         <Box p={2}>
           <Grid container alignItems="center" spacing={2}>
-            <Grid item xs={"auto"}>
+            <Grid item xs="auto">
               <div className={classes.imgDiv}>
                 <img
                   alt=""
@@ -104,7 +104,7 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
                   className={classes.logo}
                   height="100%"
                   width="100%"
-                ></img>
+                />
               </div>
             </Grid>
             <Grid item xs={6}>
@@ -112,9 +112,9 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
                 value={value}
                 onEnter={() => null}
                 onChange={onChange}
-              ></Search>
+              />
             </Grid>
-            <Grid item xs></Grid>
+            <Grid item xs />
             <Grid item xs="auto">
               <Typography className={classes.link} component="span">
                 <Link href="/produtos" color="inherit">
@@ -125,21 +125,21 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
             <Grid item xs="auto">
               <Avatar
                 onClick={handleClick}
-                src={src || "/empty-profile.png"}
+                src={src || '/empty-profile.png'}
                 className={classes.avatarClick}
-              ></Avatar>
+              />
               <Popover
                 id="showProfile"
                 open={open}
                 anchorEl={anchorEl}
                 onClose={handleClose}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right',
                 }}
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right',
                 }}
               >
                 <Box p={2}>
@@ -147,12 +147,12 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
                     <Grid item xs="auto">
                       <div className={classes.imgPopover}>
                         <img
-                          src={src || "/empty-profile.png"}
+                          src={src || '/empty-profile.png'}
                           alt=""
                           className={classes.img}
                           height="100%"
                           width="100%"
-                        ></img>
+                        />
                       </div>
                     </Grid>
                     <Grid item xs={12}>
@@ -176,14 +176,14 @@ const MyAppBarLogged = ({ value, onChange, src, name, zap }: MyAppBarLoggedProps
                       </Button>
                     </Grid>
                     <Grid item xs={12}>
-                    <ColorButton
-                          variant="outlined"
-                          fullWidth
-                          onClick={handleOnClick}
-                        >
-                          Sair
-                        </ColorButton>
-                      </Grid>
+                      <ColorButton
+                        variant="outlined"
+                        fullWidth
+                        onClick={handleOnClick}
+                      >
+                        Sair
+                      </ColorButton>
+                    </Grid>
                   </Grid>
                 </Box>
               </Popover>

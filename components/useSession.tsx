@@ -1,11 +1,11 @@
-import { configureMainApi } from "./services/Api";
-import { Router, useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
-import perfisService from "./services/perfisService";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
+import { configureMainApi } from './services/Api';
+import perfisService from './services/perfisService';
 
-export const PDZToken = "PDZT";
-export const PDZUsername = "PDZU";
+export const PDZToken = 'PDZT';
+export const PDZUsername = 'PDZU';
 
 export const keepSession = (username: string, token: string) => {
   localStorage.setItem(PDZToken, token);
@@ -39,7 +39,7 @@ const useSession = (loginRequired?: boolean) => {
     const token = localStorage.getItem(PDZToken);
     const username = localStorage.getItem(PDZUsername);
     if (!token && loginRequired) {
-      router.push("/entrar");
+      router.push('/entrar');
     }
     if (!token) {
       setSession(unauthenticatedState);
@@ -57,19 +57,15 @@ const useSession = (loginRequired?: boolean) => {
     loadProfile(userId);
   };
 
-  const initializeSession = () =>{
-    if(!session.isAutheticated){
+  const initializeSession = () => {
+    if (!session.isAutheticated) {
       buildSession();
     }
-  }
+  };
 
-  
   useEffect(() => {
-    initializeSession();    
-  },[session]);
-
-
-  
+    initializeSession();
+  }, [session]);
 
   return session;
 };

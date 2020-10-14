@@ -1,45 +1,44 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
 const getUrlParams = () => {
-    const url = new URL(window.location.href);
-    var urlParams = new URLSearchParams(url.search);
-    const params = {
-      tipo: urlParams.get("tipo"),
-      termo: urlParams.get("termo"),
-      perfilId: urlParams.get("perfilId"),
-    };
-    return params;
+  const url = new URL(window.location.href);
+  const urlParams = new URLSearchParams(url.search);
+  const params = {
+    tipo: urlParams.get('tipo'),
+    termo: urlParams.get('termo'),
+    perfilId: urlParams.get('perfilId'),
   };
-
-const generateQueryUrl = (tipo:string, termo?:string, perfilId?:string) => {
-    const params = {
-        tipo,
-        termo,
-        perfilId,
-    }
-    const query =  higienizeParams(params)
-    return query
-}
+  return params;
+};
 
 const higienizeParams = (params:any) => {
-    const validator = yup.string().trim().required()
-    if(validator.isValidSync(params.tipo) === false){
-        delete params.tipo
-    }
-    if(validator.isValidSync(params.termo) === false){
-        delete params.termo
-    }
-    if(validator.isValidSync(params.perfilId) === false){
-        delete params.perfilId
-    }
-    return params
-}
+  const values:any = params;
+  const validator = yup.string().trim().required();
+  if (validator.isValidSync(values.tipo) === false) {
+    delete values.tipo;
+  }
+  if (validator.isValidSync(values.termo) === false) {
+    delete values.termo;
+  }
+  if (validator.isValidSync(values.perfilId) === false) {
+    delete values.perfilId;
+  }
+  return values;
+};
 
-const useNavigation = () => {
-    return {
-        getUrlParams: getUrlParams,
-        generateQueryUrl: generateQueryUrl,
-    }
-}
+const generateQueryUrl = (tipo:string, termo?:string, perfilId?:string) => {
+  const params = {
+    tipo,
+    termo,
+    perfilId,
+  };
+  const query = higienizeParams(params);
+  return query;
+};
 
-export default useNavigation
+const useNavigation = () => ({
+  getUrlParams,
+  generateQueryUrl,
+});
+
+export default useNavigation;

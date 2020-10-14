@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint ./components/ ./pages/ -c .eslintrc.json --ext tsx,jsx",
+    "lint-fix": "eslint ./components/ ./pages/ -c .eslintrc.json --fix --ext tsx,jsx"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -16,9 +18,19 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/yup": "^0.29.7",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
     "axios": "^0.20.0",
+    "clsx": "^1.1.1",
+    "eslint": "7.2.0",
+    "eslint-config-airbnb": "18.2.0",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.21.4",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "final-form": "^4.20.1",
     "jwt-decode": "^3.0.0",
+    "lint": "^0.7.0",
     "material-ui-search-bar": "^1.0.0",
     "next": "9.5.3",
     "react": "16.13.1",

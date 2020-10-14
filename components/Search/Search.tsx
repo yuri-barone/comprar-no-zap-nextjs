@@ -1,6 +1,8 @@
-import { makeStyles, TextField, fade, InputBase } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import SearchIcon from "@material-ui/icons/Search";
+import {
+  makeStyles, fade, InputBase,
+} from '@material-ui/core';
+import React from 'react';
+import SearchIcon from '@material-ui/icons/Search';
 
 export type SearchProps = {
   onChange?: (e:any) => void;
@@ -10,14 +12,14 @@ export type SearchProps = {
 
 const useStyles = makeStyles((theme) => ({
   searchDiv: {
-    position: "relative",
-    display: "flex",
+    position: 'relative',
+    display: 'flex',
     borderRadius: 250,
-    border: "1px" + " " + "solid" + " " + fade(theme.palette.common.black, 0.4),
-    "&:hover": {
-      border: "1px" + " " + "solid" + " " + theme.palette.common.black,
+    border: `1px solid ${fade(theme.palette.common.black, 0.4)}`,
+    '&:hover': {
+      border: `1px solid ${theme.palette.common.black}`,
     },
-    width: "100%",
+    width: '100%',
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   inputRoot: {
-    color: "inherit",
+    color: 'inherit',
     width: '100%',
   },
   inputInput: {
@@ -38,22 +40,22 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    height: theme.spacing(4)
+    height: theme.spacing(4),
   },
 }));
 
-function Search({onEnter, value, onChange }: SearchProps) {
+function Search({ onEnter, value, onChange }: SearchProps) {
   const classes = useStyles();
   const handleKeyDown = (e:any) => {
-    if (e.keyCode == 13) {
-      onEnter()
+    if (e.keyCode === 13) {
+      onEnter();
     }
-  }
+  };
 
   return (
     <div className={classes.searchDiv}>
       <div className={classes.searchIcon}>
-      <SearchIcon />
+        <SearchIcon />
       </div>
       <InputBase
         placeholder="Pesquisar por produtos ou empresas"

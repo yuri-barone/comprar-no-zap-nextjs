@@ -13,35 +13,73 @@ import {
   RadioGroup,
   TextField,
   Typography,
-} from "@material-ui/core";
-import React, { useMemo, useState } from "react";
-import ItemShowDetails from "../ItemShowDetails/ItemShowDetails";
-import { formatNumberToMoneyWithSymbol } from "../../formatters";
-import { useForm, useField } from "react-final-form-hooks";
-import * as yup from "yup";
-import { ValidationErrors } from "final-form";
+} from '@material-ui/core';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ValidationErrors } from 'final-form';
+import React, { useMemo } from 'react';
+import { useForm, useField } from 'react-final-form-hooks';
+import * as yup from 'yup';
+import { formatNumberToMoneyWithSymbol } from '../../formatters';
+import ItemShowDetails from '../ItemShowDetails/ItemShowDetails';
 
 yup.setLocale({
   mixed: {
-    default: "Não é válido",
-    required: "O campo precisa estar preenchido",
+    default: 'Não é válido',
+    required: 'O campo precisa estar preenchido',
   },
   string: {
     // eslint-disable-next-line no-template-curly-in-string
-    min: "O mínimo de caracteres é ${min}",
+    min: 'O mínimo de caracteres é ${min}',
   },
 });
 
 const schema = yup.object().shape({
   endereco: yup
     .string()
-    .when("entrega", { is: true, then: yup.string().min(3).required() }),
-  metodoPagamento: yup.string().required("Selecione o pagamento"),
+    .when('entrega', { is: true, then: yup.string().min(3).required() }),
+  metodoPagamento: yup.string().required('Selecione o pagamento'),
 });
+
+const generateZapLink = (
+  zap: number,
+  products: Array<any>,
+  paymentMethod: string,
+  enderecoParam: string,
+  trocoParam: number,
+) => {
+  const stringProducts = products.map((produto) => `${produto.quantity}%20${produto.product.titulo}%0a`);
+  const validateEntrega = () => {
+    if (enderecoParam) {
+      return `%0a%0a*Entregar%20em*%0a${enderecoParam}`;
+    }
+    return '%0a%0a*Irei%20buscar*';
+  };
+
+  const validateTroco = () => {
+    if (!!trocoParam && paymentMethod === 'Dinheiro') {
+      return `(Troco para ${formatNumberToMoneyWithSymbol(trocoParam, 'R$')})`;
+    }
+    return '';
+  };
+  const validateZap = () => {
+    const numero = zap.toString();
+    if (!numero.startsWith('55')) {
+      return `55${numero}`;
+    }
+    return numero;
+  };
+  const temTroco = validateTroco();
+  const formaDeReceber = validateEntrega();
+  const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
+    '',
+  )}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
+  return link;
+};
 
 const useStyles = makeStyles({
   formWidth: {
-    width: "100%",
+    width: '100%',
   },
 });
 
@@ -68,100 +106,64 @@ const CartDetails = ({
     return total;
   }, [cartProductsData]);
 
-  const onSubmit = (values: any) => {
-    values["products"] = cartProductsData;
-    const link = generateZapLink(
-      Number(values.products[0].product["perfil.zap"]),
-      values.products,
-      values.metodoPagamento,
-      values.endereco,
-      values.troco
-    );
-    const win = window.open(link, "_blank");
-    win.focus();
-  };
-
-  const generateZapLink = (
-    zap: number,
-    products: Array<any>,
-    metodoPagamento: string,
-    endereco: string,
-    troco: number
-  ) => {
-    const stringProducts = products.map((produto) => {
-      return `${produto.quantity}%20${produto.product.titulo}%0a`;
-    });
-    const validateEntrega = () => {
-      if (!!entrega.input.value) {
-        return `%0a%0a*Entregar%20em*%0a${endereco}`;
-      } else {
-        return `%0a%0a*Irei%20buscar*`;
-      }
-    };
-    const validateTroco = () => {
-      if (!!troco && metodoPagamento === "Dinheiro") {
-        return `(Troco para ${formatNumberToMoneyWithSymbol(troco, "R$")})`;
-      } else {
-        return "";
-      }
-    };
-    const validateZap = () => {
-      const numero = zap.toString()
-      if (!numero.startsWith("55")) {
-        return `55${numero}`
-      }
-    }
-    const temTroco = validateTroco();
-    const formaDeReceber = validateEntrega();
-    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
-      ""
-    )}%0a*Forma%20de%20pagamento*%0a${metodoPagamento}${temTroco}${formaDeReceber}`;
-    return link;
-  };
+  // eslint-disable-next-line consistent-return
   const validate = (values: any) => {
     try {
       schema.validateSync(values, { abortEarly: false });
     } catch (errors) {
-      let formErrors: any = {};
-      errors.inner.forEach((erro: ValidationErrors) => {
+      const formErrors: any = {};
+      errors.inner.forEach((erro:ValidationErrors) => {
         formErrors[erro.path] = erro.message;
       });
       return formErrors;
     }
-    return;
   };
 
-  const { form, handleSubmit, values, pristine, submitting } = useForm({
-    onSubmit, // the function to call with your form values upon valid submit
+  const onSubmit = (values: any) => {
+    const args:any = values;
+    args.products = cartProductsData;
+    const link = generateZapLink(
+      Number(values.products[0].product['perfil.zap']),
+      values.products,
+      values.metodoPagamento,
+      values.entrega ? values.endereco : undefined,
+      values.troco,
+    );
+    const win = window.open(link, '_blank');
+    win.focus();
+  };
+
+  const {
+    form, handleSubmit,
+  } = useForm({
     validate, // a record-level validation function to check all form values
-    initialValues
+    initialValues,
+    onSubmit, // the function to call with your form values upon valid submit☻☻
   });
-  const endereco = useField("endereco", form);
-  const troco = useField("troco", form);
-  const entrega = useField("entrega", form);
-  const metodoPagamento = useField("metodoPagamento", form);
+  const endereco = useField('endereco', form);
+  const troco = useField('troco', form);
+  const entrega = useField('entrega', form);
+  const metodoPagamento = useField('metodoPagamento', form);
 
   return (
     <form className={classes.formWidth} onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Grid container spacing={4}>
-            {cartProductsData.map((item) => {
-              return (
-                <Grid item xs="auto">
-                  <ItemShowDetails
-                    src={item.product["picture.imgBase64"]}
-                    quantity={item.quantity}
-                    productValue={item.product.valor}
-                    productName={item.product.titulo}
-                    productId={item.product.id}
-                    key={item.product.id}
-                    changeItemQuantity={changeItemQuantity}
-                    removeItem={removeItem}
-                  />
-                </Grid>
-              );
-            })}
+            {cartProductsData.map((item) => (
+              <Grid item xs="auto">
+                <ItemShowDetails
+                  src={item.product['picture.imgBase64']}
+                  quantity={item.quantity}
+                  productValue={item.product.valor}
+                  productName={item.product.titulo}
+                  productId={item.product.id}
+                  key={item.product.id}
+                  changeItemQuantity={changeItemQuantity}
+                  removeItem={removeItem}
+                />
+              </Grid>
+            ))}
           </Grid>
         </Grid>
         <Grid item xs={12}>
@@ -179,14 +181,14 @@ const CartDetails = ({
                 <TextField
                   error={endereco.meta.touched && endereco.meta.invalid}
                   helperText={
-                    endereco.meta.touched &&
-                    endereco.meta.invalid &&
-                    endereco.meta.error
+                    endereco.meta.touched
+                    && endereco.meta.invalid
+                    && endereco.meta.error
                   }
                   {...endereco.input}
                   label="Endereço de entrega"
                   fullWidth
-                ></TextField>
+                />
               </Collapse>
             </Grid>
             <Grid item xs="auto">
@@ -211,12 +213,12 @@ const CartDetails = ({
                   />
                 </RadioGroup>
                 <FormHelperText>
-                  {metodoPagamento.meta.touched &&
-                    metodoPagamento.meta.invalid &&
-                    metodoPagamento.meta.error}
+                  {metodoPagamento.meta.touched
+                    && metodoPagamento.meta.invalid
+                    && metodoPagamento.meta.error}
                 </FormHelperText>
               </FormControl>
-              <Collapse in={metodoPagamento.input.value === "Dinheiro"}>
+              <Collapse in={metodoPagamento.input.value === 'Dinheiro'}>
                 <TextField
                   InputProps={{
                     startAdornment: (
@@ -238,7 +240,9 @@ const CartDetails = ({
 
         <Grid item xs={6} sm={6}>
           <Typography variant="h6">
-            Total: {formatNumberToMoneyWithSymbol(totalValue, "R$")}
+            Total:
+            {' '}
+            {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
           </Typography>
         </Grid>
         <Grid item xs={6} sm={6}>

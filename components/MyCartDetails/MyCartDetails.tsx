@@ -6,9 +6,9 @@ import {
   makeStyles,
   Paper,
   Typography,
-} from "@material-ui/core";
-import React, { useEffect, useMemo, useState } from "react";
-import CartDetails from "../CartDetails/CartDetails";
+} from '@material-ui/core';
+import React, { useEffect, useMemo, useState } from 'react';
+import CartDetails from '../CartDetails/CartDetails';
 
 export type MyCartDetailsProps = {
   cartProductsData: Array<any>;
@@ -21,8 +21,8 @@ export type MyCartDetailsProps = {
 
 const useStyles = makeStyles({
   root: {
-    height: "100vh",
-    overflowY: "auto",
+    height: '100vh',
+    overflowY: 'auto',
   },
 });
 const MyCartDetails = ({
@@ -37,13 +37,13 @@ const MyCartDetails = ({
   const classes = useStyles();
   const [cartSellers, setCartSellers] = useState([]);
   const groupProductsBySeller = () => {
-    let sellerProductsMap: any = {};
+    const sellerProductsMap: any = {};
     cartProductsData.forEach((shoppItem: any) => {
       const sellerId = shoppItem.product.perfilId;
       sellerProductsMap[sellerId] = sellerProductsMap[sellerId] || {
-        perfilName: shoppItem.product["perfil.nome"],
-        zap: shoppItem.product["perfil.zap"],
-        endereco: shoppItem.product["perfil.endereco"],
+        perfilName: shoppItem.product['perfil.nome'],
+        zap: shoppItem.product['perfil.zap'],
+        endereco: shoppItem.product['perfil.endereco'],
         items: [],
       };
       sellerProductsMap[sellerId].items.push(shoppItem);
@@ -68,10 +68,12 @@ const MyCartDetails = ({
                     <Grid item xs>
                       <Typography variant="h5">Meu pedido</Typography>
                       <Typography>
-                        Basta clicar no botão{" "}
+                        Basta clicar no botão
+                        {' '}
                         <Box component="span" fontWeight="fontWeightBold">
                           Pedir no Zap
-                        </Box>{" "}
+                        </Box>
+                        {' '}
                         que o seu pedido será enviado pelo WhatsApp
                       </Typography>
                     </Grid>
@@ -89,26 +91,24 @@ const MyCartDetails = ({
                 </Box>
               </Paper>
             </Grid>
-            {cartSellers.map((item) => {
-              return (
-                <Grid item xs={12} key={item.perfilId}>
-                  <Paper variant="outlined">
-                    <Box p={2}>
-                      <Typography variant="h5">
-                        <Box pb={2}>{item.perfilName}</Box>
-                      </Typography>
+            {cartSellers.map((item) => (
+              <Grid item xs={12} key={item.perfilId}>
+                <Paper variant="outlined">
+                  <Box p={2}>
+                    <Typography variant="h5">
+                      <Box pb={2}>{item.perfilName}</Box>
+                    </Typography>
 
-                      <CartDetails
-                        cartProductsData={item.items}
-                        changeItemQuantity={changeItemQuantity}
-                        removeItem={removeItem}
-                        initialValues={{endereco: initialEndereco}}
-                      />
-                    </Box>
-                  </Paper>
-                </Grid>
-              );
-            })}
+                    <CartDetails
+                      cartProductsData={item.items}
+                      changeItemQuantity={changeItemQuantity}
+                      removeItem={removeItem}
+                      initialValues={{ endereco: initialEndereco }}
+                    />
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
             <Grid item xs={12}>
               <Paper variant="outlined">
                 <Box p={2}>

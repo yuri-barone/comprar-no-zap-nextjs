@@ -3,13 +3,11 @@ import {
   Button,
   Card,
   CardContent,
-  CardMedia,
   Grid,
   makeStyles,
   Typography,
-} from "@material-ui/core";
-import { useRouter } from "next/router";
-import React from "react";
+} from '@material-ui/core';
+import React from 'react';
 
 export type EnterpriseCardProps = {
   src?: string;
@@ -27,25 +25,30 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
   },
   maxHeigth: {
-    height: "100%",
+    height: '100%',
   },
 }));
-const EnterpriseCard = ({ src, name, zap, endereco, id, onNavigate }: EnterpriseCardProps) => {
+const EnterpriseCard = ({
+  src, name, zap, endereco, id, onNavigate,
+}: EnterpriseCardProps) => {
   const classes = useStyles();
   const handleOnSeeProducts = () => {
-    onNavigate({src, name, zap, endereco, id})
-  }
+    onNavigate({
+      src, name, zap, endereco, id,
+    });
+  };
   const handleSendMessage = () => {
     const validateZap = () => {
-      const numero = zap.toString()
-      if (!numero.startsWith("55")) {
-        return `55${numero}`
+      const numero = zap.toString();
+      if (!numero.startsWith('55')) {
+        return `55${numero}`;
       }
-    }
-    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=Olá,%20te%20encontrei%20no%20*comprarnozap.com*`
-    const win = window.open(link, "_blank");
+      return numero;
+    };
+    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=Olá,%20te%20encontrei%20no%20*comprarnozap.com*`;
+    const win = window.open(link, '_blank');
     win.focus();
-  }
+  };
 
   return (
     <Card className={classes.root}>
@@ -86,10 +89,10 @@ const EnterpriseCard = ({ src, name, zap, endereco, id, onNavigate }: Enterprise
 
 EnterpriseCard.defaultProps = {
   src:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg/1200px-Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg",
-  name: "Marcos Zuck e Berg",
-  endereco: "California Windows State",
-  zap: "+554433221100",
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg/1200px-Mark_Zuckerberg_F8_2019_Keynote_%2832830578717%29_%28cropped%29.jpg',
+  name: 'Marcos Zuck e Berg',
+  endereco: 'California Windows State',
+  zap: '+554433221100',
 };
 
 export default EnterpriseCard;
