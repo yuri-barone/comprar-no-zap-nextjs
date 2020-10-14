@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { ValidationErrors } from "final-form";
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { useForm, useField } from "react-final-form-hooks";
 import * as yup from "yup";
 import ImageUpload from "../ImageUpload/ImageUpload";
@@ -81,7 +81,7 @@ function PerfilScreen({
   const openSnackBarDanger = () => {
     setOpenDanger(true);
   };
-  const handleDangerClose = (event: any, reason: any) => {
+  const handleDangerClose = (event: SyntheticEvent<Element, Event>, reason: any) => {
     if (reason === "clickaway") {
       return;
     }
@@ -91,7 +91,7 @@ function PerfilScreen({
   const openSnackBarSuccess = () => {
     setOpenSuccess(true);
   };
-  const handleSuccessClose = (event: any, reason: any) => {
+  const handleSuccessClose = (event: SyntheticEvent<Element, Event>, reason: any) => {
     if (reason === "clickaway") {
       return;
     }
