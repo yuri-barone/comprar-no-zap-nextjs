@@ -8,6 +8,7 @@ WORKDIR /usr/src
 COPY . /usr/src
 
 # install dependencies
+COPY package.json yarn.lock ./
 RUN yarn install
 
 # start app
