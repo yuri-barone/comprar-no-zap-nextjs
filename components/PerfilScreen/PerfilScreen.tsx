@@ -243,7 +243,7 @@ function PerfilScreen({
           autoHideDuration={6000}
           onClose={handleDangerClose}
         >
-          <Alert onClose={handleDangerClose} severity="error">
+          <Alert severity="error">
             Não foi possível atualizar seu perfil.
           </Alert>
         </Snackbar>
@@ -256,7 +256,7 @@ function PerfilScreen({
           autoHideDuration={6000}
           onClose={handleSuccessClose}
         >
-          <Alert onClose={handleSuccessClose} severity="success">
+          <Alert severity="success">
             Perfil atualizado com sucesso.
           </Alert>
         </Snackbar>
