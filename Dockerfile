@@ -2,7 +2,7 @@ FROM node:12-alpine as build
 WORKDIR /app
 
 # Installing dependencies
-COPY package*.json ./
+COPY package.json yarn.lock ./
 RUN yarn install
 
 # Copying source files
