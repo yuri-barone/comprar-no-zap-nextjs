@@ -1,7 +1,5 @@
-FROM node:10
-
-# Setting working directory. All the path will be relative to WORKDIR
-WORKDIR /usr/src/app
+FROM node:12-alpine as build
+WORKDIR /app
 
 # Installing dependencies
 COPY package*.json ./
