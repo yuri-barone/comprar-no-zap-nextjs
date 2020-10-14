@@ -1,17 +1,16 @@
-FROM node:12-alpine as build
-WORKDIR /app
+FROM node:alpine
 
-# Installing dependencies
-COPY package.json yarn.lock ./
+# create & set working directory
+RUN mkdir -p /usr/src
+WORKDIR /usr/src
+
+# copy source files
+COPY . /usr/src
+
+# install dependencies
 RUN yarn install
 
-# Copying source files
-COPY . .
-
-# Building app
+# start app
 RUN yarn run build
-
-# Running the app
 EXPOSE 3000
-
-CMD [ "yarn", "start" ]
+CMD yarn run start
