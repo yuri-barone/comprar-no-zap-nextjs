@@ -22,8 +22,9 @@ const find = async (filter: string) => {
   try {
     const args = [];
     if (filter) {
-      args.push(`nome[$iLike]=%${filter.trim().replace(/\s/g, '+')}%`);
+      args.push(`termo=${filter.trim().replace(/\s/g, '+')}`);
     }
+    args.push('optimized=true');
     const response = await api.get(`/perfis?${args.join('&')}`);
     return { data: response.data };
   } catch (error) {
@@ -43,7 +44,6 @@ const edit = async (id:number, data: object) => {
 const getPerfilByUserId = async (id: number) => {
   try {
     const response = await api.get(`/perfis/?userId=${id}`);
-
     return { data: response.data };
   } catch (error) {
     return error;

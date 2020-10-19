@@ -27,6 +27,7 @@ export const resizeImage = (imgAvatar: any, maxWidth = 400, maxHeight = 400) => 
 });
 
 export const getBase64 = async (file: any) => new Promise((resolve, reject) => {
+  if (!file) { reject(new Error('Imagem não encontrada')); }
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = () => resolve(reader.result);

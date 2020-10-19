@@ -269,9 +269,9 @@ function SignUpScreen() {
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="caption">
-                          Descreva com palavras chaves aquilo que se encontrará
-                          na sua loja, assim as pessoas vão te encontrar mais
-                          facilmente
+                          Coloque aqui o nome de alguns produtos ou serviços que
+                          você trabalha, assim as pessoas te encontrarão mais
+                          fácil.
                         </Typography>
                       </Grid>
                     </Grid>
@@ -335,9 +335,7 @@ function SignUpScreen() {
           </form>
         </Box>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert severity="error">
-            Seu cadastro não pode ser finalizado.
-          </Alert>
+          <Alert severity="error">Seu cadastro não pode ser finalizado.</Alert>
         </Snackbar>
       </div>
     </>

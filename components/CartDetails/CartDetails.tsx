@@ -123,7 +123,7 @@ const CartDetails = ({
     const args:any = values;
     args.products = cartProductsData;
     const link = generateZapLink(
-      Number(values.products[0].product['perfil.zap']),
+      Number(values.products[0].product.zap),
       values.products,
       values.metodoPagamento,
       values.entrega ? values.endereco : undefined,
@@ -153,7 +153,7 @@ const CartDetails = ({
             {cartProductsData.map((item) => (
               <Grid item xs="auto">
                 <ItemShowDetails
-                  src={item.product['picture.imgBase64']}
+                  src={item.product.imgBase64}
                   quantity={item.quantity}
                   productValue={item.product.valor}
                   productName={item.product.titulo}

@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
   containerFullHeight: {
     height: '100%',
   },
+  pedir: {
+    color: theme.palette.primary.main,
+    fontWeight: 'bold',
+  },
 }));
 
 const MyCart = ({
@@ -55,7 +59,7 @@ const MyCart = ({
           <Grid container>
             <Grid item xs={12}>
               <Box pb={2}>
-                <Typography variant="h5" color="textPrimary">
+                <Typography variant="h5">
                   Meu carrinho:
                 </Typography>
               </Box>
@@ -65,7 +69,7 @@ const MyCart = ({
                 {cartProducts.map((item: any) => (
                   <Grid item xs={2} key={item.product.id}>
                     <ItemShowDetails
-                      src={item.product['picture.imgBase64']}
+                      src={item.product.imgBase64}
                       quantity={item.quantity}
                       productValue={item.product.valor}
                       productName={item.product.titulo}
@@ -87,33 +91,36 @@ const MyCart = ({
             spacing={1}
           >
             <Grid item xs={12}>
-              <Typography variant="h6" color="textPrimary">
+              <Typography variant="h6">
                 Total:
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" color="primary">
+              <Typography variant="body1">
                 {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Button
-                color="primary"
-                variant="contained"
-                onClick={handleOpen}
+                color="inherit"
+                variant="outlined"
+                onClick={removeAll}
                 fullWidth
+                size="large"
               >
-                Pedir no zap
+                Limpar carrinho
               </Button>
             </Grid>
             <Grid item xs={12}>
               <Button
-                color="secondary"
-                variant="outlined"
-                onClick={removeAll}
+                color="inherit"
+                variant="contained"
+                onClick={handleOpen}
+                size="large"
                 fullWidth
+                className={classes.pedir}
               >
-                Limpar carrinho
+                Pedir no zap
               </Button>
             </Grid>
           </Grid>

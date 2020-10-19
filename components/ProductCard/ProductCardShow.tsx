@@ -131,6 +131,7 @@ function ProductCard({
         defaultImage={product['picture.imgBase64']}
         onSave={saveEditProduct}
         initialValues={product}
+        uploaderKey={product.id}
         onCancel={() => setIsEditing(false)}
       />
     );

@@ -9,13 +9,28 @@ const save = async (data: object) => {
   }
 };
 
-const find = async (filter: string, id?:number) => {
+const find = async (filter: string, perfilId?:number) => {
   try {
     const args = [];
     if (filter) {
       args.push(`titulo[$iLike]=%${filter.trim().replace(/\s/g, '+')}%`);
     }
-    if (id) { args.push(`perfilId=${id}`); }
+    if (perfilId) { args.push(`perfilId=${perfilId}`); }
+    const response = await api.get(`/products?${args.join('&')}`);
+    return { data: response.data };
+  } catch (error) {
+    return error;
+  }
+};
+
+const findOptimized = async (filter: string, perfilId?:number) => {
+  try {
+    const args = [];
+    if (filter) {
+      args.push(`termo=${filter.trim().replace(/\s/g, '+')}`);
+    }
+    if (perfilId) { args.push(`perfilId=${perfilId}`); }
+    args.push('optimized=true');
     const response = await api.get(`/products?${args.join('&')}`);
     return { data: response.data };
   } catch (error) {
@@ -44,6 +59,7 @@ const edit = async (id:number, data:any) => {
 export default {
   save,
   find,
+  findOptimized,
   deleteProduct,
   edit,
 };

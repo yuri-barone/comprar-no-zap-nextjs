@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,
-    backgroundColor: theme.palette.background.default,
     maxHeight: theme.spacing(25),
+    color: theme.palette.common.white,
   },
   showingCart: {
     paddingBottom: theme.spacing(28),
@@ -57,7 +57,7 @@ export default function Home() {
   const [locaisData, setLocaisData] = useState([]);
   const [cartProducts, setCartProducts] = useState([]);
   const [totalValue, setTotalValue] = useState(0);
-  const [searchInput, setSearchInput] = useState<string | undefined>();
+  const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
   const [currentStoreToShow, setCurrentStoreToShow] = useState<any>(null);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
   const session:any = useSession(false);
@@ -76,7 +76,7 @@ export default function Home() {
   // eslint-disable-next-line consistent-return
   const getProducts = async (termo: string | undefined, storeId?: number) => {
     try {
-      const productResponse = await productsService.find(termo, storeId);
+      const productResponse = await productsService.findOptimized(termo, storeId);
       setProductsData(productResponse.data.data);
     } catch (error) {
       return error;
@@ -146,7 +146,6 @@ export default function Home() {
     if (parseInt(params.perfilId, 10)) {
       query.perfilId = params.perfilId;
     }
-
     Router.push({
       pathname: '/search',
       query,
@@ -156,7 +155,7 @@ export default function Home() {
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
       const params = navigation.getUrlParams();
-      if (params.termo !== searchInput) {
+      if (searchInput !== undefined && params.termo !== searchInput) {
         addSearchToUrl(searchInput);
       }
     }, 500);
@@ -313,7 +312,7 @@ export default function Home() {
                       name={item.nome}
                       zap={item.zap}
                       endereco={item.endereco}
-                      src={item['picture.imgBase64']}
+                      src={item.imgBase64}
                     />
                   </Grid>
                 ))}
@@ -321,7 +320,7 @@ export default function Home() {
           </Grid>
         </Grid>
         <Slide direction="up" in={showingCart}>
-          <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#ece5dd' }}>
+          <AppBar position="fixed" className={classes.appBar} color="primary">
             <Box p={2}>
               <Container>
                 <MyCart

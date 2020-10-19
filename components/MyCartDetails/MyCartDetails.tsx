@@ -41,9 +41,9 @@ const MyCartDetails = ({
     cartProductsData.forEach((shoppItem: any) => {
       const sellerId = shoppItem.product.perfilId;
       sellerProductsMap[sellerId] = sellerProductsMap[sellerId] || {
-        perfilName: shoppItem.product['perfil.nome'],
-        zap: shoppItem.product['perfil.zap'],
-        endereco: shoppItem.product['perfil.endereco'],
+        perfilName: shoppItem.product.nome,
+        zap: shoppItem.product.zap,
+        endereco: shoppItem.product.endereco,
         items: [],
       };
       sellerProductsMap[sellerId].items.push(shoppItem);

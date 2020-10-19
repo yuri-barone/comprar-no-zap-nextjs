@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: theme.spacing(10),
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    color: 'black',
   },
 }));
 
@@ -116,7 +115,7 @@ const ItemShowDetails = ({
         >
           {productName}
         </Typography>
-        <Typography color="textSecondary" align="center">
+        <Typography align="center">
           {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
         </Typography>
       </Grid>
@@ -124,7 +123,7 @@ const ItemShowDetails = ({
         <IconButton onClick={removeQuantity}>
           <RemoveIcon fontSize="small" />
         </IconButton>
-        <Typography component="span" color="textSecondary">
+        <Typography component="span">
           {quantity}
         </Typography>
         <IconButton onClick={addQuantity}>

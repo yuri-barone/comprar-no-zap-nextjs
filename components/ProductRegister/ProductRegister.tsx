@@ -6,7 +6,6 @@ import {
   CardContent,
   Grid,
   InputAdornment,
-  makeStyles,
   TextField,
 } from '@material-ui/core';
 import React, { useState } from 'react';
@@ -21,6 +20,7 @@ export type ProductRegisterProps = {
   onSave: (productData: any) => void;
   initialValues?: any;
   defaultImage?: string;
+  uploaderKey?: string,
   onCancel?: () => void;
 };
 
@@ -54,27 +54,14 @@ const schema = yup.object().shape({
     .required(),
 });
 
-const useStyles = makeStyles({
-  root: {},
-  input: {
-    display: 'none',
-  },
-  buttonUpload: {
-    position: 'absolute',
-    zIndex: 99,
-    width: 250,
-    height: 200,
-  },
-});
-
-function ProductRegister({
+const ProductRegister = ({
   onSave,
   initialValues,
   defaultImage,
+  uploaderKey,
   onCancel,
-}: ProductRegisterProps) {
+}: ProductRegisterProps) => {
   const [img64, setImg64] = useState<string>(defaultImage);
-  const classes = useStyles();
   const imgActions: any = {};
 
   // eslint-disable-next-line consistent-return
@@ -118,12 +105,13 @@ function ProductRegister({
   };
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardActionArea>
         <ImageUpload
           defaultImage={defaultImage}
           onChangeImage={handleImage}
           configureActions={configureActions}
+          uploaderKey={uploaderKey}
         />
       </CardActionArea>
       <CardContent>
@@ -213,6 +201,6 @@ function ProductRegister({
       </CardContent>
     </Card>
   );
-}
+};
 
 export default ProductRegister;

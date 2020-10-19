@@ -17,7 +17,7 @@ import perfisService from '../components/services/perfisService';
 import LoggedBarProducts from '../components/LoggedBar/LoggedBarProducts';
 import { resizeImage } from '../images/base64ImageManipulator';
 
-const produtos = () => {
+const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
   const [productsData, setProductsData] = useState([]);
   const [openCadastroDanger, setOpenCadastroDanger] = useState(false);
   const [openCadastroSuccess, setOpenCadastroSuccess] = useState(false);
@@ -155,7 +155,7 @@ const produtos = () => {
             )}
 
             <Grid item xs={3}>
-              <ProductRegister key="new-products" onSave={salvarProduto} />
+              <ProductRegister key="new-products" onSave={salvarProduto} uploaderKey={uploaderKey} />
             </Grid>
             {productsData
               && productsData.map((item) => (
@@ -242,5 +242,6 @@ const produtos = () => {
     </>
   );
 };
-
+// eslint-disable-next-line max-len
+export const getStaticProps = async () => ({ props: { uploaderKey: Math.random().toString(36).substr(2, 5) } });
 export default produtos;

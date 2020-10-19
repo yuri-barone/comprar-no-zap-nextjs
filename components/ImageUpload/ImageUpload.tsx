@@ -11,6 +11,7 @@ export type ImageUploadProps = {
   rounded?: boolean;
   size?: number;
   configureActions?: (actions:any) => void;
+  uploaderKey?:string,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -49,15 +50,16 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 99,
     pointerEvents: 'none',
   },
-}));
+}), { classNamePrefix: 'ImageUpload' });
 
-function ImageUpload({
+const ImageUpload = ({
   defaultImage,
   onChangeImage,
   rounded,
   size,
   configureActions,
-}: ImageUploadProps) {
+  uploaderKey,
+}: ImageUploadProps) => {
   const classes = useStyles({ rounded, size });
   const fileInput: any = useRef(null);
   const [imgB64, setImgB64] = useState<any>(defaultImage);
@@ -77,10 +79,8 @@ function ImageUpload({
 
   if (configureActions) { configureActions({ clear }); }
 
-  const uploaderKey = Math.random().toString(36).substr(2, 5);
-
   return (
-    <div className={clsx(rounded && classes.rounded, classes.root)}>
+    <div className={clsx(rounded ? classes.rounded : '', classes.root)}>
       <input
         accept="image/*"
         id={`icon-button-file-${uploaderKey}`}
@@ -90,7 +90,7 @@ function ImageUpload({
         ref={fileInput}
       />
       <img
-        alt=""
+        alt="upload"
         src={imgB64 || defaultImage || 'empty-img.jpg'}
         className={classes.img}
         width="100%"
@@ -100,6 +100,6 @@ function ImageUpload({
       <PhotoCamera className={classes.icon} />
     </div>
   );
-}
+};
 
 export default ImageUpload;

@@ -38,13 +38,13 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
 
   return (
     <Card className={classes.root}>
-      <CardMedia component="img" height="200" image={product['picture.imgBase64']} title={product.titulo} />
+      <CardMedia component="img" height="200" image={product.imgBase64} title={product.titulo} />
       <CardContent>
         <Typography variant="h5">{product.titulo}</Typography>
         <Typography color="textSecondary">{product.descricao}</Typography>
         <br />
         <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor, 'R$')}</Typography>
-        <Typography color="textSecondary">{product['perfil.nome']}</Typography>
+        <Typography color="textSecondary">{product.nome}</Typography>
       </CardContent>
       <CardActions>
         <Grid container justify="flex-end">
