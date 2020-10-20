@@ -8,7 +8,7 @@ const create = (baseURL: string | undefined) => axios.create({
   timeout: 50000,
 });
 
-export const mainApi = create('http://localhost:3030');
+export const mainApi = create('http://ec2-3-134-79-148.us-east-2.compute.amazonaws.com:3030');
 addResponseErrorMidleware(mainApi);
 
 export const configureMainApi = (token:string) => {
