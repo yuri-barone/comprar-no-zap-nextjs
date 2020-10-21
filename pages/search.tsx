@@ -4,6 +4,7 @@ import {
   Container,
   Divider,
   Grid,
+  Hidden,
   makeStyles,
   Slide,
   Tab,
@@ -246,30 +247,51 @@ export default function Home() {
       />
       )}
       {!session.isAutheticated && (
-      <MyAppBar
-        value={searchInput}
-        onChange={searchOnChange}
-        onSearch={buscar}
-      />
+        <MyAppBar
+          value={searchInput}
+          onChange={searchOnChange}
+          onSearch={buscar}
+        />
       )}
       <Box style={{ backgroundColor: 'white' }}>
-        <Container>
-          <Grid container>
-            <Grid item xs="auto">
-              <Tabs
-                value={tabValue}
-                onChange={handleChangeTab}
-                indicatorColor="primary"
-                textColor="primary"
-                centered
-              >
-                <Tab label="Produtos" />
-                <Tab label="Locais" />
-              </Tabs>
+        <Hidden smDown>
+          <Container>
+            <Grid container>
+              <Grid item xs="auto">
+                <Tabs
+                  value={tabValue}
+                  onChange={handleChangeTab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  centered
+                >
+                  <Tab label="Produtos" />
+                  <Tab label="Locais" />
+                </Tabs>
+              </Grid>
+              <Grid item xs />
             </Grid>
-            <Grid item xs />
-          </Grid>
-        </Container>
+          </Container>
+        </Hidden>
+        <Hidden smUp>
+          <Container>
+            <Grid container>
+              <Grid item xs={12}>
+                <Tabs
+                  value={tabValue}
+                  onChange={handleChangeTab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  centered
+                >
+                  <Tab label="Produtos" />
+                  <Tab label="Locais" />
+                </Tabs>
+              </Grid>
+              <Grid item xs />
+            </Grid>
+          </Container>
+        </Hidden>
       </Box>
       <Divider />
       <Container>

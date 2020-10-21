@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Container,
   Divider,
   Grid,
   Link,
@@ -59,7 +60,7 @@ export default function Home() {
 
   return (
     <>
-      <Grid container className={classes.containerHeight}>
+      <Grid container className={classes.containerHeight} spacing={2}>
         <Grid item xs={12}>
           {session.isAutheticated && (
           <LoggedBarIndex
@@ -69,9 +70,10 @@ export default function Home() {
           />
           )}
           {!session.isAutheticated && (
+
           <Grid container spacing={2}>
             <Grid item xs />
-            <Grid item xs="auto">
+            <Grid item xs="auto" sm="auto">
               <Box p={2}>
                 <Typography className={classes.link}>
                   <Link href="/cadastro" color="inherit">
@@ -89,58 +91,55 @@ export default function Home() {
             <Divider />
           </Grid>
         </Grid>
+        <Container>
+          <Grid item xs={12}>
+            <Grid container spacing={2} justify="center">
+              <Grid item xs={12} sm={6}>
+                <img
+                  alt=""
+                  src="/comprar-no-zap.svg"
+                  className={classes.img}
+                />
+              </Grid>
 
-        <Grid item xs={12}>
-          <Grid container spacing={4}>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
-              <img
-                alt=""
-                src="/comprar-no-zap.svg"
-                className={classes.img}
-              />
-            </Grid>
-            <Grid item xs={4} />
-
-            <Grid item xs={3} />
-            <Grid item xs={6}>
-              <Search onEnter={handleProductSearch} onChange={storeFilter} />
-            </Grid>
-            <Grid item xs={3} />
-
-            <Grid item xs={4} />
-            <Grid item xs={2}>
-              <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth>
-                Ver produtos
-              </Button>
-            </Grid>
-            <Grid item xs={2}>
-              <Button color="secondary" variant="outlined" onClick={handlePlacesSearch} fullWidth>
-                Ver lugares
-              </Button>
-            </Grid>
-            <Grid item xs={4} />
-
-            <Grid item xs={12}>
-              <Typography variant="h6" color="textSecondary" align="center">
-                Não perca tempo procurando, o
-                {' '}
-                <Box component="span" fontWeight="fontWeightBold">
-                  Comprar no zap
-                </Box>
-                {' '}
-                já organizou tudo para você!
-              </Typography>
-              <Typography variant="h6" color="textSecondary" align="center">
-                Hambúrgueres, lanches, porções, eletrônicos, roupas...
-                {' '}
-                <Box component="span" fontWeight="fontWeightBold">
-                  se tem zap está aqui
-                </Box>
-              </Typography>
+              <Grid item xs={12} sm={8}>
+                <Search onEnter={handleProductSearch} onChange={storeFilter} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Grid container justify="center" spacing={2}>
+                  <Grid item xs={12} sm={4}>
+                    <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth>
+                      Ver produtos
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Button color="secondary" variant="outlined" onClick={handlePlacesSearch} fullWidth>
+                      Ver lugares
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <Typography variant="body1" color="textSecondary" align="center">
+                  Não perca tempo procurando, o
+                  {' '}
+                  <Box component="span" fontWeight="fontWeightBold">
+                    Comprar no zap
+                  </Box>
+                  {' '}
+                  já organizou tudo para você!
+                </Typography>
+                <Typography variant="body1" color="textSecondary" align="center">
+                  Hambúrgueres, lanches, porções, eletrônicos, roupas...
+                  {' '}
+                  <Box component="span" fontWeight="fontWeightBold">
+                    se tem zap está aqui!
+                  </Box>
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Container>
       </Grid>
     </>
   );

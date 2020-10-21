@@ -31,11 +31,11 @@ const EnterpriseCard = ({
 }: EnterpriseCardProps) => {
   const classes = useStyles();
   return (
-    <Grid container alignItems="center">
-      <Grid item xs={2}>
+    <Grid container alignItems="center" spacing={2}>
+      <Grid item xs={6} sm={2}>
         <Avatar src={src} className={classes.avatarSize} />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={6} sm={6}>
         <Grid container>
           <Grid item xs={12}>
             <Typography variant="h6">{name}</Typography>
@@ -45,7 +45,7 @@ const EnterpriseCard = ({
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} sm={4}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Button variant="outlined" color="primary" fullWidth onClick={onRemove}>

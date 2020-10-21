@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Grid,
+  Hidden,
   makeStyles,
   TextField,
   Typography,
@@ -45,6 +46,11 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '25%',
   },
+  loginContainerColorSm: {
+    backgroundColor: theme.palette.grey[50],
+    height: '100vh',
+    width: '100%',
+  },
   imgDiv: {
     height: '100vh',
   },
@@ -81,88 +87,165 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
   const password = useField('password', form);
   const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <div className={classes.loginContainerColor}>
-        <form onSubmit={handleSubmit}>
-          <Box p={2}>
-            <Grid container justify="center" spacing={2}>
-              <Grid item xs={12}>
-                <img
-                  alt=""
-                  src="/comprar-no-zap.svg"
-                  className={classes.logo}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h4" color="textSecondary">
-                  Fazer login
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...email.input}
-                  variant="outlined"
-                  label="E-mail"
-                  error={email.meta.touched && email.meta.invalid}
-                  helperText={
+    <>
+      <Hidden smUp>
+        <div className={classes.loginContainerColorSm}>
+          <form onSubmit={handleSubmit}>
+            <Box p={2}>
+              <Grid container justify="center" spacing={2}>
+                <Grid item xs={12}>
+                  <img
+                    alt=""
+                    src="/comprar-no-zap.svg"
+                    className={classes.logo}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h4" color="textSecondary">
+                    Fazer login
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    {...email.input}
+                    variant="outlined"
+                    label="E-mail"
+                    error={email.meta.touched && email.meta.invalid}
+                    helperText={
                     email.meta.touched && email.meta.invalid && email.meta.error
                   }
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...password.input}
-                  variant="outlined"
-                  label="Senha"
-                  type="password"
-                  error={password.meta.touched && password.meta.invalid}
-                  helperText={
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    {...password.input}
+                    variant="outlined"
+                    label="Senha"
+                    type="password"
+                    error={password.meta.touched && password.meta.invalid}
+                    helperText={
                     password.meta.touched
                     && password.meta.invalid
                     && password.meta.error
                   }
-                  fullWidth
-                />
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    color="secondary"
+                    href="/cadastro"
+                    fullWidth
+                  >
+                    Criar conta
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    disabled={pristine || submitting}
+                    startIcon={<ArrowForwardIcon />}
+                    size="large"
+                    fullWidth
+                  >
+                    Entrar
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  color="secondary"
-                  href="/cadastro"
-                  fullWidth
-                >
-                  Criar conta
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                  disabled={pristine || submitting}
-                  startIcon={<ArrowForwardIcon />}
-                  size="large"
-                  fullWidth
-                >
-                  Entrar
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </form>
-      </div>
-      <div className={classes.imgDiv}>
-        <img
-          alt=""
-          src="/pedir-no-zap-wallpaper.png"
-          className={classes.img}
-          height="100%"
-          width="100%"
-        />
-      </div>
-    </div>
+            </Box>
+          </form>
+        </div>
+      </Hidden>
+      <Hidden smDown>
+        <div className={classes.root}>
+          <div className={classes.loginContainerColor}>
+            <form onSubmit={handleSubmit}>
+              <Box p={2}>
+                <Grid container justify="center" spacing={2}>
+                  <Grid item xs={12}>
+                    <img
+                      alt=""
+                      src="/comprar-no-zap.svg"
+                      className={classes.logo}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="h4" color="textSecondary">
+                      Fazer login
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      {...email.input}
+                      variant="outlined"
+                      label="E-mail"
+                      error={email.meta.touched && email.meta.invalid}
+                      helperText={
+                    email.meta.touched && email.meta.invalid && email.meta.error
+                  }
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      {...password.input}
+                      variant="outlined"
+                      label="Senha"
+                      type="password"
+                      error={password.meta.touched && password.meta.invalid}
+                      helperText={
+                    password.meta.touched
+                    && password.meta.invalid
+                    && password.meta.error
+                  }
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      color="secondary"
+                      href="/cadastro"
+                      fullWidth
+                    >
+                      Criar conta
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      color="primary"
+                      variant="contained"
+                      disabled={pristine || submitting}
+                      startIcon={<ArrowForwardIcon />}
+                      size="large"
+                      fullWidth
+                    >
+                      Entrar
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </form>
+          </div>
+          <div className={classes.imgDiv}>
+            <img
+              alt=""
+              src="/pedir-no-zap-wallpaper.png"
+              className={classes.img}
+              height="100%"
+              width="100%"
+            />
+          </div>
+        </div>
+      </Hidden>
+    </>
   );
 }
 

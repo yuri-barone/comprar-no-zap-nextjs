@@ -2,12 +2,14 @@ import {
   Box,
   Container,
   Grid,
+  Hidden,
   Link,
   makeStyles,
   Typography,
 } from '@material-ui/core';
 import React from 'react';
 import Search from '../Search/Search';
+import MyAppBarSm from './MyAppBarSm';
 
 export type MyAppBarProps = {
   onSearch: (filter:string) => void,
@@ -40,44 +42,55 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyAppBar = ({ value, onChange }: MyAppBarProps) => {
+const MyAppBar = ({ value, onChange, onSearch }: MyAppBarProps) => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <Container>
-        <Box p={2}>
-          <Grid container alignItems="center">
-            <Grid item xs="auto">
-              <div className={classes.imgDiv}>
-                <img
-                  alt=""
-                  src="/comprar-no-zap-logo.svg"
-                  className={classes.img}
-                  height="100%"
-                  width="100%"
-                />
-              </div>
-            </Grid>
-            <Grid item xs={6}>
-              <Search value={value} onEnter={() => null} onChange={onChange} />
-            </Grid>
-            <Grid item xs />
-            <Grid item xs="auto">
-              <Box p={2}>
-                <Typography className={classes.link}>
-                  <Link href="/cadastro" color="inherit">
-                    Cadastrar-me
-                  </Link>
-                  <Link href="/entrar" color="inherit">
-                    Logar-me
-                  </Link>
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
-    </div>
+    <>
+      <Hidden smDown>
+        <div className={classes.root}>
+          <Container>
+            <Box p={2}>
+              <Grid container alignItems="center">
+                <Grid item xs={3} sm="auto">
+                  <div className={classes.imgDiv}>
+                    <img
+                      alt=""
+                      src="/comprar-no-zap-logo.svg"
+                      className={classes.img}
+                      height="100%"
+                      width="100%"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={9} sm={6}>
+                  <Search value={value} onEnter={() => null} onChange={onChange} />
+                </Grid>
+                <Grid item xs />
+                <Grid item xs="auto">
+                  <Box p={2}>
+                    <Typography className={classes.link}>
+                      <Link href="/cadastro" color="inherit">
+                        Cadastrar-me
+                      </Link>
+                      <Link href="/entrar" color="inherit">
+                        Logar-me
+                      </Link>
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </Container>
+        </div>
+      </Hidden>
+      <Hidden smUp>
+        <MyAppBarSm
+          value={value}
+          onChange={onChange}
+          onSearch={onSearch}
+        />
+      </Hidden>
+    </>
   );
 };
 
