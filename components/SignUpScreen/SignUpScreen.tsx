@@ -152,18 +152,27 @@ function SignUpScreen() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs />
-        <Grid item xs="auto">
-          <Box p={2}>
-            <Typography className={classes.link}>
-              <Link href="/" color="inherit">
-                Ir para a página inicial
-              </Link>
-              <Link href="/entrar" color="inherit">
-                Entrar em minha conta
-              </Link>
-            </Typography>
-          </Box>
+        <Grid item xs={12}>
+          <Grid container justify="flex-end">
+            <Grid item xs="auto" sm="auto">
+              <Box p={2}>
+                <Typography className={classes.link} component="span">
+                  <Link href="/" color="inherit">
+                    Pesquisar
+                  </Link>
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs="auto" sm="auto">
+              <Box p={2}>
+                <Typography className={classes.link} component="span">
+                  <Link href="/entrar" color="inherit">
+                    Entrar
+                  </Link>
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Divider />
@@ -172,13 +181,13 @@ function SignUpScreen() {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Grid container>
-                  <Grid item xs={3}>
+                <Grid container justify="center">
+                  <Grid item xs={8} sm={2}>
                     <ImageUpload onChangeImage={handleImage} rounded />
                   </Grid>
-                  <Grid item xs={9}>
+                  <Grid item xs={12} sm={10}>
                     <Grid container spacing={1}>
-                      <Grid item xs={12}>
+                      <Grid item xs={12} sm={6}>
                         <TextField
                           {...nome.input}
                           label="Nome"
@@ -191,6 +200,23 @@ function SignUpScreen() {
                             nome.meta.touched
                             && nome.meta.invalid
                             && nome.meta.error
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          {...zap.input}
+                          label="Whatsapp"
+                          variant="outlined"
+                          fullWidth
+                          margin="dense"
+                          id="zap"
+                          type="number"
+                          error={zap.meta.touched && zap.meta.invalid}
+                          helperText={
+                            zap.meta.touched
+                            && zap.meta.invalid
+                            && zap.meta.error
                           }
                         />
                       </Grid>
@@ -211,21 +237,25 @@ function SignUpScreen() {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <TextField
-                          {...zap.input}
-                          label="Whatsapp"
-                          variant="outlined"
-                          fullWidth
-                          margin="dense"
-                          id="zap"
-                          type="number"
-                          error={zap.meta.touched && zap.meta.invalid}
-                          helperText={
-                            zap.meta.touched
-                            && zap.meta.invalid
-                            && zap.meta.error
-                          }
-                        />
+                        <Grid container>
+                          <Grid item xs={12}>
+                            <TextField
+                              {...palavrasChaves.input}
+                              label="Palavras Chaves"
+                              variant="outlined"
+                              fullWidth
+                              margin="dense"
+                              id="palavrasChaves"
+                            />
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="caption">
+                              Coloque aqui o nome de alguns produtos ou serviços que
+                              você trabalha, assim as pessoas te encontrarão mais
+                              fácil.
+                            </Typography>
+                          </Grid>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -239,7 +269,7 @@ function SignUpScreen() {
                       Dados de login:
                     </Typography>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...email.input}
                       label="Email"
@@ -255,28 +285,7 @@ function SignUpScreen() {
                       }
                     />
                   </Grid>
-                  <Grid item xs={3}>
-                    <Grid container>
-                      <Grid item xs={12}>
-                        <TextField
-                          {...palavrasChaves.input}
-                          label="Palavras Chaves"
-                          variant="outlined"
-                          fullWidth
-                          margin="dense"
-                          id="palavrasChaves"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography variant="caption">
-                          Coloque aqui o nome de alguns produtos ou serviços que
-                          você trabalha, assim as pessoas te encontrarão mais
-                          fácil.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...password.input}
                       label="Senha"
@@ -293,7 +302,7 @@ function SignUpScreen() {
                       }
                     />
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...confirmarPassword.input}
                       label="Confirmar senha"

@@ -135,7 +135,7 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
                 <Grid item xs={12}>
                   <Button
                     variant="outlined"
-                    size="small"
+                    size="large"
                     color="secondary"
                     href="/cadastro"
                     fullWidth
@@ -209,7 +209,7 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
                   <Grid item xs={12}>
                     <Button
                       variant="outlined"
-                      size="small"
+                      size="large"
                       color="secondary"
                       href="/cadastro"
                       fullWidth

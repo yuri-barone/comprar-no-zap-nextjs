@@ -162,16 +162,16 @@ function PerfilScreen({
       </Grid>
       <Divider />
       <div className={classes.root}>
-        <Box p={3}>
-          <Grid container>
-            <Grid item xs={3}>
+        <Box p={2}>
+          <Grid container justify="center" spacing={2}>
+            <Grid item xs={8} sm={2}>
               <ImageUpload
                 onChangeImage={handleImage}
                 rounded
                 defaultImage={src}
               />
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={12} sm={10}>
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
@@ -180,6 +180,7 @@ function PerfilScreen({
                       id="nome"
                       label="Nome da empresa"
                       variant="outlined"
+                      fullWidth
                       error={nomeInput.meta.touched && nomeInput.meta.invalid}
                       helperText={
                         nomeInput.meta.touched
@@ -195,6 +196,7 @@ function PerfilScreen({
                       id="zap"
                       label="Whatsapp"
                       variant="outlined"
+                      fullWidth
                       error={zapInput.meta.touched && zapInput.meta.invalid}
                       helperText={
                         zapInput.meta.touched
@@ -210,6 +212,7 @@ function PerfilScreen({
                       id="endereco"
                       label="Endereço"
                       variant="outlined"
+                      fullWidth
                       error={
                         enderecoInput.meta.touched && enderecoInput.meta.invalid
                       }

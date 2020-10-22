@@ -154,7 +154,7 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
               </Grid>
             )}
 
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={3}>
               <ProductRegister key="new-products" onSave={salvarProduto} uploaderKey={uploaderKey} />
             </Grid>
             {productsData

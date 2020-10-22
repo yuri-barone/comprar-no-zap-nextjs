@@ -43,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -198,74 +200,76 @@ function ProductCard({
           </Grid>
         </Box>
       </Paper>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={openDelete}
-        onClose={handleCloseDelete}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openDelete}>
-          <Card>
-            <CardMedia
-              component="img"
-              height="200"
-              image={product['picture.imgBase64']}
-              title={product.titulo}
-            />
-            <CardContent>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <Typography variant="h5" className={classes.hideName} noWrap>{product.titulo}</Typography>
+      <Box p={2}>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={openDelete}
+          onClose={handleCloseDelete}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={openDelete}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="200"
+                image={product['picture.imgBase64']}
+                title={product.titulo}
+              />
+              <CardContent>
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" className={classes.hideName} noWrap>{product.titulo}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography color="textSecondary" className={classes.hideName} noWrap>
+                      {product.descricao}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="body1" color="primary">
+                      {formatNumberToMoneyWithSymbol(product.valor, 'R$')}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography color="textSecondary" variant="h6">
+                      {product['perfil.nome']}
+                    </Typography>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography color="textSecondary" className={classes.hideName} noWrap>
-                    {product.descricao}
-                  </Typography>
+              </CardContent>
+              <CardActions>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <ColorButton
+                      variant="contained"
+                      fullWidth
+                      onClick={deleteProduct}
+                    >
+                      Deletar
+                    </ColorButton>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCloseDelete}
+                      fullWidth
+                    >
+                      Cancelar
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1" color="primary">
-                    {formatNumberToMoneyWithSymbol(product.valor, 'R$')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography color="textSecondary" variant="h6">
-                    {product['perfil.nome']}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-            <CardActions>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <ColorButton
-                    variant="contained"
-                    fullWidth
-                    onClick={deleteProduct}
-                  >
-                    Deletar
-                  </ColorButton>
-                </Grid>
-                <Grid item xs={6}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={handleCloseDelete}
-                    fullWidth
-                  >
-                    Cancelar
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardActions>
-          </Card>
-        </Fade>
-      </Modal>
+              </CardActions>
+            </Card>
+          </Fade>
+        </Modal>
+      </Box>
     </>
   );
 }
