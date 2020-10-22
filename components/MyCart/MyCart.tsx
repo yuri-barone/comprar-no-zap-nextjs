@@ -142,19 +142,8 @@ const MyCart = ({
               {' '}
               {checkProductQuantity()}
               {' '}
-              produtos no carrinho.
+              items no carrinho.
             </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              color="inherit"
-              variant="outlined"
-              onClick={removeAll}
-              fullWidth
-              size="large"
-            >
-              Limpar carrinho
-            </Button>
           </Grid>
           <Grid item xs={12}>
             <Button
@@ -165,7 +154,7 @@ const MyCart = ({
               fullWidth
               className={classes.pedir}
             >
-              Ver carrinho
+              Ver Items
             </Button>
           </Grid>
         </Grid>

@@ -173,7 +173,7 @@ const CartDetails = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Grid container spacing={2}>
+            <Grid container spacing={4}>
               <Grid item xs>
                 <FormControlLabel
                   control={<Checkbox color="primary" {...entrega.input} />}
