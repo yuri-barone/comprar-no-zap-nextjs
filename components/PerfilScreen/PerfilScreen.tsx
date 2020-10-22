@@ -164,14 +164,14 @@ function PerfilScreen({
       <div className={classes.root}>
         <Box p={2}>
           <Grid container justify="center" spacing={2}>
-            <Grid item xs={8} sm={2}>
+            <Grid item xs={8} md={3} sm={2}>
               <ImageUpload
                 onChangeImage={handleImage}
                 rounded
                 defaultImage={src}
               />
             </Grid>
-            <Grid item xs={12} sm={10}>
+            <Grid item xs={12} md={9} sm={10}>
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>

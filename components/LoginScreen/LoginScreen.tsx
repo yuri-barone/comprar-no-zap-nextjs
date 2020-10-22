@@ -15,6 +15,7 @@ import * as yup from 'yup';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ValidationErrors } from 'final-form';
 import { green } from '@material-ui/core/colors';
+import clsx from 'clsx';
 
 export type LoginScreenProps = {
   onLogin: (loginData: any) => void;
@@ -55,12 +56,10 @@ const useStyles = makeStyles((theme) => ({
   loginContainerColor: {
     backgroundColor: theme.palette.grey[50],
     height: '100vh',
-    width: '25%',
+    width: '30%',
   },
-  rootXs: {
+  greenBackground: {
     backgroundColor: green[50],
-    height: '100vh',
-    width: '100%',
   },
   imgDiv: {
     height: '100vh',
@@ -69,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
   },
   logo: {
-    maxWidth: '100%',
+    width: '100%',
   },
 }));
 
@@ -101,8 +100,8 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
   const renderForm = () => (
     <form onSubmit={handleSubmit}>
       <Grid container justify="center" spacing={2}>
-        <Grid item xs={7}>
-          <Box pb={2}>
+        <Grid item xs={6}>
+          <Box pb={2} pt={2}>
             <img
               alt=""
               src="/comprar-no-zap-logo-vertical.svg"
@@ -174,22 +173,23 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
 
   return (
     <>
-      <Hidden smUp>
-        <div className={classes.rootXs}>
-          <Container className={classes.fullHeight}>
+      <Hidden lgUp>
+        <Container className={clsx(classes.fullHeight, classes.greenBackground)}>
+          <Box pb={2}>
             <Grid container className={classes.fullHeight}>
-              <Grid item xs={12} />
               {renderForm()}
             </Grid>
-          </Container>
-        </div>
+          </Box>
+        </Container>
       </Hidden>
-      <Hidden xsDown>
-        <div className={classes.root}>
-          <div className={classes.loginContainerColor}>
-            {renderForm()}
-          </div>
-          <div className={classes.imgDiv}>
+      <Hidden mdDown>
+        <Grid container>
+          <Grid item xs={3}>
+            <Box p={2}>
+              {renderForm()}
+            </Box>
+          </Grid>
+          <Grid item xs={9} className={classes.fullHeight}>
             <img
               alt=""
               src="/pedir-no-zap-wallpaper.png"
@@ -197,8 +197,8 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
               height="100%"
               width="100%"
             />
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </Hidden>
     </>
   );

@@ -318,7 +318,7 @@ export default function Home() {
             <Grid container alignItems="stretch" spacing={4}>
               {tabValue === 0
                 && productsData.map((item) => (
-                  <Grid item xs={12} sm={3} key={item.id}>
+                  <Grid item xs={12} md={6} sm={3} key={item.id}>
                     <ProductCard product={item} onAdd={adicionar} />
                   </Grid>
                 ))}
@@ -327,7 +327,7 @@ export default function Home() {
             <Grid container alignItems="stretch" spacing={4}>
               {tabValue === 1
                 && locaisData.map((item) => (
-                  <Grid item xs={12} sm={6} key={item.id}>
+                  <Grid item xs={12} md={12} sm={6} key={item.id}>
                     <EnterpriseCard
                       onNavigate={currentStore}
                       id={item.id}
