@@ -111,7 +111,7 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h4" color="textSecondary" align="center">
-            Fazer login
+            Seja bem vindo
           </Typography>
         </Grid>
         <Grid item xs={12}>
