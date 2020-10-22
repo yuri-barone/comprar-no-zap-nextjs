@@ -108,12 +108,12 @@ export default function Home() {
               <Grid item xs={12} sm={6}>
                 <Grid container justify="center" spacing={2}>
                   <Grid item xs={12} sm={4}>
-                    <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth>
+                    <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth size="large">
                       Ver produtos
                     </Button>
                   </Grid>
                   <Grid item xs={12} sm={4}>
-                    <Button color="secondary" variant="outlined" onClick={handlePlacesSearch} fullWidth>
+                    <Button color="secondary" variant="outlined" onClick={handlePlacesSearch} fullWidth size="large">
                       Ver lugares
                     </Button>
                   </Grid>

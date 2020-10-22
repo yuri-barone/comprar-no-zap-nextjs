@@ -48,7 +48,7 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
       </CardContent>
       <CardActions>
         <Grid container justify="flex-end">
-          <Grid item xs={6}>
+          <Grid item xs>
             <IconButton onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}>
               <RemoveIcon fontSize="small" />
             </IconButton>
@@ -60,7 +60,7 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
               <AddIcon fontSize="small" />
             </IconButton>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs="auto">
             <Button onClick={createProductCart} variant="contained" color="primary">
               Adicionar
             </Button>

@@ -254,7 +254,7 @@ export default function Home() {
         />
       )}
       <Box style={{ backgroundColor: 'white' }}>
-        <Hidden smDown>
+        <Hidden xsDown>
           <Container>
             <Grid container>
               <Grid item xs="auto">
