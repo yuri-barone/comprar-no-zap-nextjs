@@ -98,14 +98,13 @@ const MyCartDetails = ({
                     <Typography variant="h5">
                       <Box pb={2}>{item.perfilName}</Box>
                     </Typography>
-
-                    <CartDetails
-                      cartProductsData={item.items}
-                      changeItemQuantity={changeItemQuantity}
-                      removeItem={removeItem}
-                      initialValues={{ endereco: initialEndereco }}
-                    />
                   </Box>
+                  <CartDetails
+                    cartProductsData={item.items}
+                    changeItemQuantity={changeItemQuantity}
+                    removeItem={removeItem}
+                    initialValues={{ endereco: initialEndereco }}
+                  />
                 </Paper>
               </Grid>
             ))}

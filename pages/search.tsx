@@ -343,8 +343,8 @@ export default function Home() {
         </Grid>
         <Slide direction="up" in={showingCart}>
           <AppBar position="fixed" className={classes.appBar} color="primary">
-            <Box p={2}>
-              <Container>
+            <Container>
+              <Box pb={2} pt={2}>
                 <MyCart
                   cartProducts={cartProducts}
                   totalValue={totalValue}
@@ -353,8 +353,8 @@ export default function Home() {
                   removeAll={removeAll}
                   initialEndereco={inputEndereco}
                 />
-              </Container>
-            </Box>
+              </Box>
+            </Container>
           </AppBar>
         </Slide>
       </Container>

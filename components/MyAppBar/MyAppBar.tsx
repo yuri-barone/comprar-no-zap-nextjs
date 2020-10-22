@@ -46,7 +46,7 @@ const MyAppBar = ({ value, onChange, onSearch }: MyAppBarProps) => {
   const classes = useStyles();
   return (
     <>
-      <Hidden smDown>
+      <Hidden xsDown>
         <div className={classes.root}>
           <Container>
             <Box p={2}>

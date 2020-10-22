@@ -95,7 +95,7 @@ const MyAppBarLogged = ({
 
   return (
     <>
-      <Hidden smDown>
+      <Hidden xsDown>
         <div className={classes.root}>
           <Container>
             <Box p={2}>

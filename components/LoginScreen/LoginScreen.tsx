@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Container,
   Grid,
   Hidden,
   makeStyles,
@@ -13,6 +14,7 @@ import { useForm, useField } from 'react-final-form-hooks';
 import * as yup from 'yup';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ValidationErrors } from 'final-form';
+import { green } from '@material-ui/core/colors';
 
 export type LoginScreenProps = {
   onLogin: (loginData: any) => void;
@@ -31,8 +33,14 @@ yup.setLocale({
 });
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(4).required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .min(4)
+    .required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -41,13 +49,16 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
     display: 'flex',
   },
+  fullHeight: {
+    minHeight: '100vh',
+  },
   loginContainerColor: {
     backgroundColor: theme.palette.grey[50],
     height: '100vh',
     width: '25%',
   },
-  loginContainerColorSm: {
-    backgroundColor: theme.palette.grey[50],
+  rootXs: {
+    backgroundColor: green[50],
     height: '100vh',
     width: '100%',
   },
@@ -86,153 +97,97 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
   const email = useField('email', form);
   const password = useField('password', form);
   const classes = useStyles();
+
+  const renderForm = () => (
+    <form onSubmit={handleSubmit}>
+      <Grid container justify="center" spacing={2}>
+        <Grid item xs={7}>
+          <Box pb={2}>
+            <img
+              alt=""
+              src="/comprar-no-zap-logo-vertical.svg"
+              className={classes.logo}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h4" color="textSecondary" align="center">
+            Fazer login
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            {...email.input}
+            variant="outlined"
+            label="E-mail"
+            error={email.meta.touched && email.meta.invalid}
+            helperText={
+                          email.meta.touched
+                          && email.meta.invalid
+                          && email.meta.error
+                        }
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            {...password.input}
+            variant="outlined"
+            label="Senha"
+            type="password"
+            error={password.meta.touched && password.meta.invalid}
+            helperText={
+                          password.meta.touched
+                          && password.meta.invalid
+                          && password.meta.error
+                        }
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            variant="outlined"
+            size="large"
+            color="secondary"
+            href="/cadastro"
+            fullWidth
+          >
+            Criar conta
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            disabled={pristine || submitting}
+            startIcon={<ArrowForwardIcon />}
+            size="large"
+            fullWidth
+          >
+            Entrar
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
+  );
+
   return (
     <>
       <Hidden smUp>
-        <div className={classes.loginContainerColorSm}>
-          <form onSubmit={handleSubmit}>
-            <Box p={2}>
-              <Grid container justify="center" spacing={2}>
-                <Grid item xs={12}>
-                  <img
-                    alt=""
-                    src="/comprar-no-zap.svg"
-                    className={classes.logo}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h4" color="textSecondary">
-                    Fazer login
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    {...email.input}
-                    variant="outlined"
-                    label="E-mail"
-                    error={email.meta.touched && email.meta.invalid}
-                    helperText={
-                    email.meta.touched && email.meta.invalid && email.meta.error
-                  }
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    {...password.input}
-                    variant="outlined"
-                    label="Senha"
-                    type="password"
-                    error={password.meta.touched && password.meta.invalid}
-                    helperText={
-                    password.meta.touched
-                    && password.meta.invalid
-                    && password.meta.error
-                  }
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    color="secondary"
-                    href="/cadastro"
-                    fullWidth
-                  >
-                    Criar conta
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    disabled={pristine || submitting}
-                    startIcon={<ArrowForwardIcon />}
-                    size="large"
-                    fullWidth
-                  >
-                    Entrar
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-          </form>
+        <div className={classes.rootXs}>
+          <Container className={classes.fullHeight}>
+            <Grid container className={classes.fullHeight}>
+              <Grid item xs={12} />
+              {renderForm()}
+            </Grid>
+          </Container>
         </div>
       </Hidden>
-      <Hidden smDown>
+      <Hidden xsDown>
         <div className={classes.root}>
           <div className={classes.loginContainerColor}>
-            <form onSubmit={handleSubmit}>
-              <Box p={2}>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item xs={12}>
-                    <img
-                      alt=""
-                      src="/comprar-no-zap.svg"
-                      className={classes.logo}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="h4" color="textSecondary">
-                      Fazer login
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      {...email.input}
-                      variant="outlined"
-                      label="E-mail"
-                      error={email.meta.touched && email.meta.invalid}
-                      helperText={
-                    email.meta.touched && email.meta.invalid && email.meta.error
-                  }
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      {...password.input}
-                      variant="outlined"
-                      label="Senha"
-                      type="password"
-                      error={password.meta.touched && password.meta.invalid}
-                      helperText={
-                    password.meta.touched
-                    && password.meta.invalid
-                    && password.meta.error
-                  }
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="outlined"
-                      size="large"
-                      color="secondary"
-                      href="/cadastro"
-                      fullWidth
-                    >
-                      Criar conta
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      type="submit"
-                      color="primary"
-                      variant="contained"
-                      disabled={pristine || submitting}
-                      startIcon={<ArrowForwardIcon />}
-                      size="large"
-                      fullWidth
-                    >
-                      Entrar
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
-            </form>
+            {renderForm()}
           </div>
           <div className={classes.imgDiv}>
             <img

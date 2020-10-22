@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Grid,
+  Hidden,
   makeStyles,
   Modal,
   Typography,
@@ -52,81 +53,123 @@ const MyCart = ({
     setOpen(false);
   };
 
+  const checkProductQuantity = () => {
+    const cartQuantity = cartProducts.length;
+    return cartQuantity;
+  };
+
   return (
     <>
-      <Grid container>
-        <Grid item xs={10}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Box pb={2}>
-                <Typography variant="h5">
-                  Meu carrinho:
-                </Typography>
-              </Box>
+      <Hidden xsDown>
+        <Grid container>
+          <Grid item xs={10}>
+            <Grid container>
+              <Grid item xs={12}>
+                <Box pb={2}>
+                  <Typography variant="h5">
+                    Meu carrinho:
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  {cartProducts.map((item: any) => (
+                    <Grid item xs={2} key={item.product.id}>
+                      <ItemShowDetails
+                        src={item.product.imgBase64}
+                        quantity={item.quantity}
+                        productValue={item.product.valor}
+                        productName={item.product.titulo}
+                        productId={item.product.id}
+                        removeItem={removeItem}
+                        changeItemQuantity={changeItemQuantity}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Grid container spacing={2}>
-                {cartProducts.map((item: any) => (
-                  <Grid item xs={2} key={item.product.id}>
-                    <ItemShowDetails
-                      src={item.product.imgBase64}
-                      quantity={item.quantity}
-                      productValue={item.product.valor}
-                      productName={item.product.titulo}
-                      productId={item.product.id}
-                      removeItem={removeItem}
-                      changeItemQuantity={changeItemQuantity}
-                    />
-                  </Grid>
-                ))}
+          </Grid>
+          <Grid item xs={2}>
+            <Grid
+              container
+              alignContent="center"
+              className={classes.containerFullHeight}
+              spacing={1}
+            >
+              <Grid item xs={12}>
+                <Typography variant="h6">
+                  Total:
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body1">
+                  {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  onClick={removeAll}
+                  fullWidth
+                  size="large"
+                >
+                  Limpar carrinho
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  color="inherit"
+                  variant="contained"
+                  onClick={handleOpen}
+                  size="large"
+                  fullWidth
+                  className={classes.pedir}
+                >
+                  Pedir no zap
+                </Button>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Grid
-            container
-            alignContent="center"
-            className={classes.containerFullHeight}
-            spacing={1}
-          >
-            <Grid item xs={12}>
-              <Typography variant="h6">
-                Total:
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1">
-                {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                color="inherit"
-                variant="outlined"
-                onClick={removeAll}
-                fullWidth
-                size="large"
-              >
-                Limpar carrinho
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                color="inherit"
-                variant="contained"
-                onClick={handleOpen}
-                size="large"
-                fullWidth
-                className={classes.pedir}
-              >
-                Pedir no zap
-              </Button>
-            </Grid>
+      </Hidden>
+      <Hidden smUp>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="body1">
+              Você possui
+              {' '}
+              {checkProductQuantity()}
+              {' '}
+              produtos no carrinho.
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              color="inherit"
+              variant="outlined"
+              onClick={removeAll}
+              fullWidth
+              size="large"
+            >
+              Limpar carrinho
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleOpen}
+              size="large"
+              fullWidth
+              className={classes.pedir}
+            >
+              Ver carrinho
+            </Button>
           </Grid>
         </Grid>
-      </Grid>
-
+      </Hidden>
       <Modal open={open} onClose={handleClose}>
         <MyCartDetails
           initialEndereco={initialEndereco}

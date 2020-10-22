@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Checkbox,
   Collapse,
@@ -166,94 +167,96 @@ const CartDetails = ({
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
+        <Box p={2}>
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
 
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs>
-              <FormControlLabel
-                control={<Checkbox color="primary" {...entrega.input} />}
-                label="Entregar"
-              />
-              <Collapse in={entrega.input.value === true}>
-                <TextField
-                  error={endereco.meta.touched && endereco.meta.invalid}
-                  helperText={
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xs>
+                <FormControlLabel
+                  control={<Checkbox color="primary" {...entrega.input} />}
+                  label="Entregar"
+                />
+                <Collapse in={entrega.input.value === true}>
+                  <TextField
+                    error={endereco.meta.touched && endereco.meta.invalid}
+                    helperText={
                     endereco.meta.touched
                     && endereco.meta.invalid
                     && endereco.meta.error
                   }
-                  {...endereco.input}
-                  label="Endereço de entrega"
-                  fullWidth
-                />
-              </Collapse>
-            </Grid>
-            <Grid item xs="auto">
-              <FormControl
-                component="fieldset"
-                error={
+                    {...endereco.input}
+                    label="Endereço de entrega"
+                    fullWidth
+                  />
+                </Collapse>
+              </Grid>
+              <Grid item xs="auto">
+                <FormControl
+                  component="fieldset"
+                  error={
                   metodoPagamento.meta.touched && metodoPagamento.meta.invalid
                 }
-              >
-                <RadioGroup row name="payment" {...metodoPagamento.input}>
-                  <FormControlLabel
-                    value="Cartão"
-                    control={<Radio />}
-                    label="Cartão"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="Dinheiro"
-                    control={<Radio />}
-                    label="Dinheiro"
-                    labelPlacement="end"
-                  />
-                </RadioGroup>
-                <FormHelperText>
-                  {metodoPagamento.meta.touched
+                >
+                  <RadioGroup row name="payment" {...metodoPagamento.input}>
+                    <FormControlLabel
+                      value="Cartão"
+                      control={<Radio />}
+                      label="Cartão"
+                      labelPlacement="end"
+                    />
+                    <FormControlLabel
+                      value="Dinheiro"
+                      control={<Radio />}
+                      label="Dinheiro"
+                      labelPlacement="end"
+                    />
+                  </RadioGroup>
+                  <FormHelperText>
+                    {metodoPagamento.meta.touched
                     && metodoPagamento.meta.invalid
                     && metodoPagamento.meta.error}
-                </FormHelperText>
-              </FormControl>
-              <Collapse in={metodoPagamento.input.value === 'Dinheiro'}>
-                <TextField
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">R$</InputAdornment>
-                    ),
-                  }}
-                  error={troco.meta.touched && troco.meta.invalid}
-                  helperText={
+                  </FormHelperText>
+                </FormControl>
+                <Collapse in={metodoPagamento.input.value === 'Dinheiro'}>
+                  <TextField
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">R$</InputAdornment>
+                      ),
+                    }}
+                    error={troco.meta.touched && troco.meta.invalid}
+                    helperText={
                     troco.meta.touched && troco.meta.invalid && troco.meta.error
                   }
-                  {...troco.input}
-                  type="number"
-                  label="Troco para:"
-                />
-              </Collapse>
+                    {...troco.input}
+                    type="number"
+                    label="Troco para:"
+                  />
+                </Collapse>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Grid item xs={6} sm={6}>
-          <Typography variant="h6">
-            Total:
-            {' '}
-            {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
-          </Typography>
-        </Grid>
-        <Grid item xs={6} sm={6}>
-          <Grid container justify="flex-end">
-            <Grid item xs="auto">
-              <Button type="submit" variant="contained" color="primary">
-                Pedir no zap
-              </Button>
+          <Grid item xs={8} sm={6}>
+            <Typography variant="h6">
+              Total:
+              {' '}
+              {formatNumberToMoneyWithSymbol(totalValue, 'R$')}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Grid container justify="flex-end">
+              <Grid item xs="auto">
+                <Button type="submit" variant="contained" color="primary">
+                  Pedir no zap
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Grid>
     </form>
   );
