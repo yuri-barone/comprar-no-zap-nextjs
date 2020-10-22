@@ -63,7 +63,7 @@ const MyCart = ({
 
   return (
     <>
-      <Hidden xsDown>
+      <Hidden mdDown>
         <Grid container>
           <Grid item xs={10}>
             <Grid container>
@@ -137,7 +137,7 @@ const MyCart = ({
           </Grid>
         </Grid>
       </Hidden>
-      <Hidden smUp>
+      <Hidden mdUp>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Button
