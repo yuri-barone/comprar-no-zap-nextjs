@@ -105,7 +105,7 @@ export default function Home() {
               <Grid item xs={12} sm={8}>
                 <Search onEnter={handleProductSearch} onChange={storeFilter} />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={8}>
                 <Grid container justify="center" spacing={2}>
                   <Grid item xs={12} sm={12} md={6} lg={6}>
                     <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth size="large">

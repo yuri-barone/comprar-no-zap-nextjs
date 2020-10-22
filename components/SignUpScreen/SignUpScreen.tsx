@@ -187,7 +187,7 @@ function SignUpScreen() {
                       <ImageUpload onChangeImage={handleImage} rounded />
                     </Box>
                   </Grid>
-                  <Grid item xs={12} md={9} sm={10}>
+                  <Grid item xs={12} md={9} sm={12}>
                     <Grid container spacing={1}>
                       <Grid item xs={12} sm={6}>
                         <TextField
