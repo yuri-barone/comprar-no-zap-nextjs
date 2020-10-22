@@ -182,7 +182,7 @@ function SignUpScreen() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Grid container justify="center">
-                  <Grid item xs={8} sm={2}>
+                  <Grid item xs={7} sm={2}>
                     <ImageUpload onChangeImage={handleImage} rounded />
                   </Grid>
                   <Grid item xs={12} sm={10}>
