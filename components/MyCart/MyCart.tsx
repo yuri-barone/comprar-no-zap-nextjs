@@ -55,7 +55,10 @@ const MyCart = ({
 
   const checkProductQuantity = () => {
     const cartQuantity = cartProducts.length;
-    return cartQuantity;
+    if (cartQuantity > 1) {
+      return `Ver carrinho (${cartQuantity} items)`;
+    }
+    return 'Ver carrinho (1 item)';
   };
 
   return (
@@ -137,15 +140,6 @@ const MyCart = ({
       <Hidden smUp>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="body1">
-              Você possui
-              {' '}
-              {checkProductQuantity()}
-              {' '}
-              items no carrinho.
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
             <Button
               color="inherit"
               variant="contained"
@@ -154,7 +148,7 @@ const MyCart = ({
               fullWidth
               className={classes.pedir}
             >
-              Ver Items
+              {checkProductQuantity()}
             </Button>
           </Grid>
         </Grid>
