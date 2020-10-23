@@ -20,6 +20,15 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <link rel="shortcut icon" href="/logo/favicon.png" />
+          <meta name="description" content={metaDataConfig.description} />
+          <meta name="robots" content="index,follow,noodp,noydir" />
+          <meta property="og:locale" content={metaDataConfig.locale} />
+          <meta property="og:type" content={metaDataConfig.type} />
+          <meta property="og:title" content={metaDataConfig.title} />
+          <meta property="og:description" content={metaDataConfig.description} />
+          <meta property="og:url" content={metaDataConfig.url} />
+          <meta property="og:site_name" content={metaDataConfig.site_name} />
         </Head>
         <body>
           <Main />
