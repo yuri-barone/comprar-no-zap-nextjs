@@ -20,6 +20,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <link rel="shortcut icon" href="/favicon.png" />
           <meta name="description" content="Busca de produtos vendidos pelo whatsapp" />
           <meta property="og:title" content="Comprar no Zap" />
           <meta property="og:description" content="Busca de produtos vendidos pelo whatsapp" />
