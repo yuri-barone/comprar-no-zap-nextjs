@@ -8,7 +8,7 @@ const create = (baseURL: string | undefined) => axios.create({
   timeout: 50000,
 });
 
-export const mainApi = create('https://api.comprarnozap.com');
+export const mainApi = create('api.comprarnozap.com');
 addResponseErrorMidleware(mainApi);
 
 export const configureMainApi = (token:string) => {
