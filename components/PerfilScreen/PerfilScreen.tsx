@@ -167,7 +167,7 @@ function PerfilScreen({
       <div className={classes.root}>
         <Box p={2} className={classes.fullWidth}>
           <Grid container justify="center" spacing={2}>
-            <Grid item xs={4} md={3} sm={3} lg={2}>
+            <Grid item xs="auto" md={3} sm={3} lg={2}>
               <ImageUpload
                 onChangeImage={handleImage}
                 rounded
