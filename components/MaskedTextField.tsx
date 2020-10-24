@@ -32,7 +32,6 @@ const MaskedTextField = ({ field, id, label }:{field:any, id:string, label:strin
         }}
         mask={definedMask}
         placeholderChar={'\u2000'}
-        showMask
       />
     );
   }

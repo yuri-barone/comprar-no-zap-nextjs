@@ -108,7 +108,7 @@ function SignUpScreen() {
       const response = await usersService.login(loginValues);
       if (response.ok) {
         keepSession(values.zap, response.data);
-        router.push('/produtos');
+        router.push(params.seller ? '/produtos' : '/');
       }
     } else {
       openSnackBar();
