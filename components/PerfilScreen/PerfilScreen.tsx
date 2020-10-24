@@ -16,8 +16,10 @@ import { Alert } from '@material-ui/lab';
 import { ValidationErrors } from 'final-form';
 import React, { useState } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
+
 import * as yup from 'yup';
 import ImageUpload from '../ImageUpload/ImageUpload';
+import MaskedTextField from '../MaskedTextField';
 import perfisService from '../services/perfisService';
 import useSession from '../useSession';
 
@@ -33,7 +35,7 @@ yup.setLocale({
 });
 
 const schema = yup.object().shape({
-  nome: yup.string().min(5).required(),
+  nome: yup.string().required(),
   zap: yup.string().min(10).required(),
   endereco: yup.string().min(3).required(),
 });
@@ -46,6 +48,7 @@ export type PerfilScreenProps = {
   id: number;
   seller: boolean;
   searchNewPerfil: () => void;
+  userId: number;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -76,6 +79,7 @@ function PerfilScreen({
   id,
   searchNewPerfil,
   seller,
+  userId,
 }: PerfilScreenProps) {
   const [img64, setImg64] = useState<any>(src);
   const [openDanger, setOpenDanger] = useState(false);
@@ -106,6 +110,8 @@ function PerfilScreen({
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     session;
     params.imgBase64 = img64;
+    params.userId = userId;
+    params.seller = values.seller === true;
     const response = await perfisService.edit(id, params);
     if (response.ok) {
       searchNewPerfil();
@@ -178,6 +184,9 @@ function PerfilScreen({
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
+                    <Typography gutterBottom>Meus Dados</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
                     <TextField
                       {...nomeInput.input}
                       id="nome"
@@ -190,23 +199,13 @@ function PerfilScreen({
                         && nomeInput.meta.invalid
                         && nomeInput.meta.error
                       }
-                      defaultValue={nome}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      {...zapInput.input}
+                  <Grid item xs={12} sm={4}>
+                    <MaskedTextField
                       id="zap"
                       label="Whatsapp"
-                      variant="outlined"
-                      fullWidth
-                      error={zapInput.meta.touched && zapInput.meta.invalid}
-                      helperText={
-                        zapInput.meta.touched
-                        && zapInput.meta.invalid
-                        && zapInput.meta.error
-                      }
-                      defaultValue={zap}
+                      field={zapInput}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -224,7 +223,6 @@ function PerfilScreen({
                         && enderecoInput.meta.invalid
                         && enderecoInput.meta.error
                       }
-                      defaultValue={endereco}
                     />
                   </Grid>
                 </Grid>

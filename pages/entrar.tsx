@@ -22,10 +22,9 @@ const entrar = () => {
   const logar = async (values: any) => {
     const params:any = values;
     params.strategy = 'local';
-    params.email = params.email.toLowerCase();
     const response = await usersService.login(params);
     if (response.ok) {
-      keepSession(params.email.split('@')[0], response.data);
+      keepSession(params.phone, response.data);
       router.push('/produtos');
     } else {
       openSnackBar();

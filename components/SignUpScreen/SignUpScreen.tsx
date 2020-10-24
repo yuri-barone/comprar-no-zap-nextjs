@@ -20,6 +20,7 @@ import React, { useState } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
 import * as yup from 'yup';
 import ImageUpload from '../ImageUpload/ImageUpload';
+import MaskedTextField from '../MaskedTextField';
 import perfisService from '../services/perfisService';
 import usersService from '../services/usersService';
 import { keepSession } from '../useSession';
@@ -50,11 +51,6 @@ const schema = yup.object().shape({
     .string()
     .max(100)
     .min(3)
-    .required(),
-  email: yup
-    .string()
-    .email()
-    .max(100)
     .required(),
   password: yup
     .string()
@@ -99,17 +95,19 @@ function SignUpScreen() {
     const params: any = values;
     params.imgBase64 = img64;
     delete params.confirmarSenha;
-    params.email = params.email.toLowerCase();
+    if (!params.seller) {
+      params.seller = false;
+    }
 
     const responsePerfil = await perfisService.save(params);
     if (responsePerfil.ok) {
       const loginValues: any = {};
       loginValues.strategy = 'local';
-      loginValues.email = values.email.toLowerCase();
+      loginValues.phone = values.zap;
       loginValues.password = values.password;
       const response = await usersService.login(loginValues);
       if (response.ok) {
-        keepSession(values.email.split('@')[0], response.data);
+        keepSession(values.zap, response.data);
         router.push('/produtos');
       }
     } else {
@@ -139,7 +137,6 @@ function SignUpScreen() {
   const nome = useField('nome', form);
   const endereco = useField('endereco', form);
   const zap = useField('zap', form);
-  const email = useField('email', form);
   const password = useField('password', form);
   const confirmarPassword = useField('confirmarPassword', form);
   const seller = useField('seller', form);
@@ -189,13 +186,12 @@ function SignUpScreen() {
                   </Grid>
                   <Grid item xs={12} md={9} sm={12}>
                     <Grid container spacing={1}>
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12} sm={12}>
                         <TextField
                           {...nome.input}
                           label="Nome"
                           variant="outlined"
                           fullWidth
-                          margin="dense"
                           id="nome"
                           error={nome.meta.touched && nome.meta.invalid}
                           helperText={
@@ -205,30 +201,12 @@ function SignUpScreen() {
                           }
                         />
                       </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          {...zap.input}
-                          label="Whatsapp"
-                          variant="outlined"
-                          fullWidth
-                          margin="dense"
-                          id="zap"
-                          type="number"
-                          error={zap.meta.touched && zap.meta.invalid}
-                          helperText={
-                            zap.meta.touched
-                            && zap.meta.invalid
-                            && zap.meta.error
-                          }
-                        />
-                      </Grid>
                       <Grid item xs={12}>
                         <TextField
                           {...endereco.input}
                           label="Endereço"
                           variant="outlined"
                           fullWidth
-                          margin="dense"
                           id="endereco"
                           error={endereco.meta.touched && endereco.meta.invalid}
                           helperText={
@@ -246,7 +224,6 @@ function SignUpScreen() {
                               label="Palavras Chaves"
                               variant="outlined"
                               fullWidth
-                              margin="dense"
                               id="palavrasChaves"
                             />
                           </Grid>
@@ -272,19 +249,10 @@ function SignUpScreen() {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} sm={4}>
-                    <TextField
-                      {...email.input}
-                      label="Email"
-                      variant="outlined"
-                      fullWidth
-                      margin="dense"
-                      id="email"
-                      error={email.meta.touched && email.meta.invalid}
-                      helperText={
-                        email.meta.touched
-                        && email.meta.invalid
-                        && email.meta.error
-                      }
+                    <MaskedTextField
+                      id="zap"
+                      label="Whatsapp"
+                      field={zap}
                     />
                   </Grid>
                   <Grid item xs={12} sm={4}>
@@ -293,7 +261,6 @@ function SignUpScreen() {
                       label="Senha"
                       variant="outlined"
                       fullWidth
-                      margin="dense"
                       type="password"
                       id="password"
                       error={password.meta.touched && password.meta.invalid}
@@ -310,7 +277,6 @@ function SignUpScreen() {
                       label="Confirmar senha"
                       variant="outlined"
                       fullWidth
-                      margin="dense"
                       type="password"
                       id="confirmarPassword"
                       error={

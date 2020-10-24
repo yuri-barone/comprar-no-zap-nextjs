@@ -17,6 +17,7 @@ import { ValidationErrors } from 'final-form';
 import { green } from '@material-ui/core/colors';
 import clsx from 'clsx';
 import useWindowSize from '../useWindowSize';
+import MaskedTextField from '../MaskedTextField';
 
 export type LoginScreenProps = {
   onLogin: (loginData: any) => void;
@@ -35,10 +36,6 @@ yup.setLocale({
 });
 
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(),
   password: yup
     .string()
     .min(4)
@@ -94,8 +91,8 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
     validate,
   });
 
-  const email = useField('email', form);
-  const password = useField('password', form);
+  const phoneInput = useField('phone', form);
+  const passwordInput = useField('password', form);
   const classes = useStyles();
   const windowSize = useWindowSize();
 
@@ -119,30 +116,23 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            {...email.input}
-            variant="outlined"
-            label="E-mail"
-            error={email.meta.touched && email.meta.invalid}
-            helperText={
-                          email.meta.touched
-                          && email.meta.invalid
-                          && email.meta.error
-                        }
-            fullWidth
+          <MaskedTextField
+            id="zap"
+            label="Whatsapp"
+            field={phoneInput}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            {...password.input}
+            {...passwordInput.input}
             variant="outlined"
             label="Senha"
             type="password"
-            error={password.meta.touched && password.meta.invalid}
+            error={passwordInput.meta.touched && passwordInput.meta.invalid}
             helperText={
-                          password.meta.touched
-                          && password.meta.invalid
-                          && password.meta.error
+                          passwordInput.meta.touched
+                          && passwordInput.meta.invalid
+                          && passwordInput.meta.error
                         }
             fullWidth
           />

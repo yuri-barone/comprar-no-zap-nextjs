@@ -43,6 +43,7 @@ const editPerfil = () => {
           id={perfil.id}
           searchNewPerfil={searchPerfil}
           seller={perfil.seller}
+          userId={perfil.userId}
         />
       )}
     </>
