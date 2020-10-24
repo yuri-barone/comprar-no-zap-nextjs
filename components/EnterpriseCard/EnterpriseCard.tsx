@@ -54,10 +54,10 @@ const EnterpriseCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Grid container alignItems="center" spacing={2}>
-          <Grid item xs={6} sm={2}>
+          <Grid item xs="auto">
             <Avatar src={src} className={classes.avatarSize} />
           </Grid>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs>
             <Grid container>
               <Grid item xs={12}>
                 <Typography variant="h6">{name}</Typography>
