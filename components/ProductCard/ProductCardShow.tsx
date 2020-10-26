@@ -239,7 +239,7 @@ function ProductCard({
                   <CardMedia
                     component="img"
                     height="200"
-                    image={product['picture.imgBase64']}
+                    image={image}
                     title={product.titulo}
                   />
                   <CardContent>
