@@ -111,7 +111,6 @@ function PerfilScreen({
     session;
     params.imgBase64 = img64;
     params.userId = userId;
-    params.seller = values.seller === true;
     const response = await perfisService.edit(id, params);
     if (response.ok) {
       searchNewPerfil();
