@@ -14,6 +14,7 @@ const googleTag = () => ({
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-TR9J05HD0B');
+    gtag('event', 'login', { method : 'Local' });
   `,
 });
 
