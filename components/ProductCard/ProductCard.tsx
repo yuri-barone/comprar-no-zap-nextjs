@@ -9,10 +9,11 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
+import productsService from '../services/productsService';
 
 export type ProductCardProps = {
   product: any;
@@ -28,6 +29,25 @@ const useStyles = makeStyles({
 function ProductCard({ product, onAdd }: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
+  const [image, setImage] = useState('/empty-img.jpg');
+
+  // eslint-disable-next-line consistent-return
+  const getImage = async () => {
+    try {
+      const productResponse = await productsService.getById(product.id);
+      const productData = productResponse.data;
+      setImage(productData['picture.imgBase64']);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getImage();
+    return () => {
+      setImage('/empty-img.jpg');
+    };
+  }, []);
 
   const createProductCart = () => {
     const productCart:any = {};
@@ -38,7 +58,7 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
 
   return (
     <Card className={classes.root}>
-      <CardMedia component="img" height="200" image={product.imgBase64} title={product.titulo} />
+      <CardMedia component="img" height="200" image={image} title={product.titulo} />
       <CardContent>
         <Typography variant="h5">{product.titulo}</Typography>
         <Typography color="textSecondary">{product.descricao}</Typography>

@@ -56,10 +56,20 @@ const edit = async (id:number, data:any) => {
   }
 };
 
+const getById = async (id: number) => {
+  try {
+    const response = await api.get(`/products/${id}`);
+    return { data: response.data };
+  } catch (error) {
+    return error;
+  }
+};
+
 export default {
   save,
   find,
   findOptimized,
   deleteProduct,
   edit,
+  getById,
 };

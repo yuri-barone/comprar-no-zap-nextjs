@@ -19,7 +19,6 @@ export type EnterpriseCardProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
   avatarSize: {
     width: theme.spacing(10),
     height: theme.spacing(10),
@@ -70,38 +69,42 @@ const EnterpriseCard = ({
   };
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Grid container alignItems="center" spacing={2}>
-          <Grid item xs="auto">
-            <Avatar src={src} className={classes.avatarSize} />
-          </Grid>
-          <Grid item xs>
-            <Grid container>
-              <Grid item xs={12}>
-                <Typography variant="h6">{name}</Typography>
+    <Card className={classes.maxHeigth}>
+      <Grid container alignItems="center" className={classes.maxHeigth}>
+        <Grid item xs={12}>
+          <CardContent>
+            <Grid container alignItems="center" spacing={2} className={classes.maxHeigth}>
+              <Grid item xs="auto">
+                <Avatar src={src} className={classes.avatarSize} />
               </Grid>
-              <Grid item xs={12}>
-                <Typography color="textSecondary">{endereco}</Typography>
+              <Grid item xs>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Typography variant="h6">{name}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography color="textSecondary">{endereco}</Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Button variant="outlined" color="secondary" onClick={handleOnSeeProducts} fullWidth>
+                      Ver produtos
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button variant="contained" color="secondary" fullWidth onClick={handleSendMessage}>
+                      Enviar mensagem
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Button variant="outlined" color="secondary" onClick={handleOnSeeProducts} fullWidth>
-                  Ver produtos
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" color="secondary" fullWidth onClick={handleSendMessage}>
-                  Enviar mensagem
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
+          </CardContent>
         </Grid>
-      </CardContent>
+      </Grid>
     </Card>
   );
 };

@@ -29,7 +29,7 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
   // eslint-disable-next-line consistent-return
   const getProducts = async (termo: string | undefined, storeId?: number) => {
     try {
-      const productResponse = await productsService.find(termo, storeId);
+      const productResponse = await productsService.findOptimized(termo, storeId);
       setProductsData(productResponse.data.data);
     } catch (error) {
       return error;

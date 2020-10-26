@@ -13,7 +13,7 @@ import {
   Typography,
   withStyles,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import red from '@material-ui/core/colors/red';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
@@ -92,6 +92,25 @@ function ProductCard({
   const classes = useStyles();
   const [openDelete, setOpenDelete] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
+  const [image, setImage] = useState('/empty-img.jpg');
+
+  // eslint-disable-next-line consistent-return
+  const getImage = async () => {
+    try {
+      const productResponse = await productsService.getById(product.id);
+      const productData = productResponse.data;
+      setImage(productData['picture.imgBase64']);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getImage();
+    return () => {
+      setImage('/empty-img.jpg');
+    };
+  }, []);
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
@@ -130,7 +149,7 @@ function ProductCard({
   if (isEditing) {
     return (
       <ProductRegister
-        defaultImage={product['picture.imgBase64']}
+        defaultImage={image}
         onSave={saveEditProduct}
         initialValues={product}
         uploaderKey={product.id}
@@ -143,7 +162,7 @@ function ProductCard({
       <Paper className={classes.root}>
         <div className={classes.imgDiv}>
           <img
-            src={product['picture.imgBase64']}
+            src={image}
             alt={product.titulo}
             height="100%"
             width="100%"
