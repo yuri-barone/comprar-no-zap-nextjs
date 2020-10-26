@@ -334,7 +334,6 @@ export default function Home() {
                       name={item.nome}
                       zap={item.zap}
                       endereco={item.endereco}
-                      src={item.imgBase64}
                     />
                   </Grid>
                 ))}

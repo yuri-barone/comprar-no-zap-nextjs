@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Card,
   CardContent,
@@ -10,7 +9,6 @@ import {
 import React from 'react';
 
 export type EnterpriseCardProps = {
-  src?: string;
   name: string;
   zap: string;
   endereco: string;
@@ -29,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EnterpriseCard = ({
-  src, name, zap, endereco, id, onNavigate,
+  name, zap, endereco, id, onNavigate,
 }: EnterpriseCardProps) => {
   const classes = useStyles();
   const handleOnSeeProducts = () => {
     onNavigate({
-      src, name, zap, endereco, id,
+      id,
     });
   };
   const handleSendMessage = () => {
@@ -54,9 +52,6 @@ const EnterpriseCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Grid container alignItems="center" spacing={2}>
-          <Grid item xs="auto">
-            <Avatar src={src} className={classes.avatarSize} />
-          </Grid>
           <Grid item xs>
             <Grid container>
               <Grid item xs={12}>
