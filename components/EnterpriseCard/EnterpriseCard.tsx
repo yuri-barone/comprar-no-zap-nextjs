@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardContent,
@@ -6,7 +7,8 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import perfisService from '../services/perfisService';
 
 export type EnterpriseCardProps = {
   name: string;
@@ -29,6 +31,25 @@ const useStyles = makeStyles((theme) => ({
 const EnterpriseCard = ({
   name, zap, endereco, id, onNavigate,
 }: EnterpriseCardProps) => {
+  const [src, setSrc] = useState('');
+
+  // eslint-disable-next-line consistent-return
+  const getSrc = async () => {
+    try {
+      const currentEnterpriseResponse = await perfisService.get(id);
+      const currentEnterprise = currentEnterpriseResponse.data;
+      setSrc(currentEnterprise['picture.imgBase64']);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getSrc();
+    return () => {
+      setSrc('');
+    };
+  }, []);
   const classes = useStyles();
   const handleOnSeeProducts = () => {
     onNavigate({
@@ -52,6 +73,9 @@ const EnterpriseCard = ({
     <Card className={classes.root}>
       <CardContent>
         <Grid container alignItems="center" spacing={2}>
+          <Grid item xs="auto">
+            <Avatar src={src} className={classes.avatarSize} />
+          </Grid>
           <Grid item xs>
             <Grid container>
               <Grid item xs={12}>
