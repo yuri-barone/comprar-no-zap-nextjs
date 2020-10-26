@@ -8,20 +8,22 @@ import theme from '../styles/PedirNoZapTheme';
 import { cache } from './_app';
 
 const { extractCritical } = createEmotionServer(cache);
+const googleTag = () => ({
+  __html: `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TR9J05HD0B');
+  `,
+});
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-TR9J05HD0B"></script>
-          <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-TR9J05HD0B');
-          </script>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-TR9J05HD0B" />
+          <script dangerouslySetInnerHTML={googleTag()} />
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
