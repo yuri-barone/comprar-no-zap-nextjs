@@ -112,13 +112,6 @@ function ProductCard({
     };
   }, []);
 
-  useEffect(() => {
-    getImage();
-    return () => {
-      setImage('/empty-img.jpg');
-    };
-  }, [isEditing]);
-
   const handleOpenDelete = () => {
     setOpenDelete(true);
   };
@@ -144,7 +137,8 @@ function ProductCard({
     if (response.ok) {
       setIsEditing(false);
       toChange.titulo = response.data.titulo;
-      toChange['picture.imgBase64'] = response.data['picture.imgBase64'];
+      const pictureResponse = await pictureService.get(response.data.pictureId);
+      setImage(pictureResponse.data.imgBase64);
       toChange.descricao = response.data.descricao;
       toChange.valor = response.data.valor;
       onEditSuccess();
