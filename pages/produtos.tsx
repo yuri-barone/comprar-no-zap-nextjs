@@ -135,7 +135,7 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
       <Divider />
       <Container>
         <Box pt={2}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems="stretch">
             {perfil.seller === false && (
               <Grid item xs={12}>
                 <Alert severity="warning">

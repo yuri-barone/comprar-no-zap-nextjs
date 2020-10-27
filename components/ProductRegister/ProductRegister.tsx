@@ -105,100 +105,104 @@ const ProductRegister = ({
   };
 
   return (
-    <Card>
-      <CardActionArea>
-        <ImageUpload
-          defaultImage={defaultImage}
-          onChangeImage={handleImage}
-          configureActions={configureActions}
-          uploaderKey={uploaderKey}
-        />
-      </CardActionArea>
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <ResetOnSubmitSuccess form={form} onSubmitSuccess={onSubmitSuccess} />
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                id="titulo"
-                label="Titulo do produto"
-                variant="outlined"
-                fullWidth
-                {...titulo.input}
-                error={titulo.meta.touched && titulo.meta.invalid}
-                helperText={
+    <Card style={{ height: '100%' }}>
+      <Grid container style={{ height: '100%' }}>
+        <Grid item xs={12}>
+          <CardActionArea>
+            <ImageUpload
+              defaultImage={defaultImage}
+              onChangeImage={handleImage}
+              configureActions={configureActions}
+              uploaderKey={uploaderKey}
+            />
+          </CardActionArea>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <ResetOnSubmitSuccess form={form} onSubmitSuccess={onSubmitSuccess} />
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    id="titulo"
+                    label="Titulo do produto"
+                    variant="outlined"
+                    fullWidth
+                    {...titulo.input}
+                    error={titulo.meta.touched && titulo.meta.invalid}
+                    helperText={
                   titulo.meta.touched
                   && titulo.meta.invalid
                   && titulo.meta.error
                 }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                {...descricao.input}
-                error={descricao.meta.touched && descricao.meta.invalid}
-                helperText={
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    {...descricao.input}
+                    error={descricao.meta.touched && descricao.meta.invalid}
+                    helperText={
                   descricao.meta.touched
                   && descricao.meta.invalid
                   && descricao.meta.error
                 }
-                id="descricao"
-                label="Descrição do produto"
-                multiline
-                rowsMax={4}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={valor.meta.touched && valor.meta.invalid}
-                helperText={
+                    id="descricao"
+                    label="Descrição do produto"
+                    multiline
+                    rowsMax={4}
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    error={valor.meta.touched && valor.meta.invalid}
+                    helperText={
                   valor.meta.touched && valor.meta.invalid && valor.meta.error
                 }
-                {...valor.input}
-                id="valor"
-                label="Valor do produto"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">R$</InputAdornment>
-                  ),
-                }}
-                type="number"
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container justify="flex-end" spacing={2}>
-                {initialValues && (
-                  <Grid item>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={onCancel}
-                    >
-                      Cancelar
-                    </Button>
-                  </Grid>
-                )}
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={
+                    {...valor.input}
+                    id="valor"
+                    label="Valor do produto"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">R$</InputAdornment>
+                      ),
+                    }}
+                    type="number"
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid container justify="flex-end" spacing={2}>
+                    {initialValues && (
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={onCancel}
+                      >
+                        Cancelar
+                      </Button>
+                    </Grid>
+                    )}
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={
                       (pristine && img64 === defaultImage) || submitting
                     }
-                    type="submit"
-                  >
-                    Salvar
-                  </Button>
+                        type="submit"
+                      >
+                        Salvar
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-        </form>
-      </CardContent>
+            </form>
+          </CardContent>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

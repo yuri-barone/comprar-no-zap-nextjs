@@ -185,7 +185,7 @@ function ProductCard({
                   <Typography color="textSecondary" variant="caption">
                     Vendido por
                     {' '}
-                    {product['perfil.nome']}
+                    {product.nome}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
