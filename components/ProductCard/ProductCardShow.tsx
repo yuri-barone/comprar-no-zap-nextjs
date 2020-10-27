@@ -112,6 +112,13 @@ function ProductCard({
     };
   }, []);
 
+  useEffect(() => {
+    getImage();
+    return () => {
+      setImage('/empty-img.jpg');
+    };
+  }, [isEditing]);
+
   const handleOpenDelete = () => {
     setOpenDelete(true);
   };
