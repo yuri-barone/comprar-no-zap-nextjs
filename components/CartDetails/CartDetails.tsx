@@ -69,6 +69,12 @@ const generateZapLink = (
     }
     return '';
   };
+  // eslint-disable-next-line consistent-return
+  const getObs = () => {
+    if (obs) {
+      return `%0a*Observações:*%20_${obs}_%0a`;
+    }
+  };
   const validateZap = () => {
     const numero = zap.toString();
     if (!numero.startsWith('55')) {
@@ -80,7 +86,7 @@ const generateZapLink = (
   const formaDeReceber = validateEntrega();
   const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
     '',
-  )}%0a*(Observações:%20_${obs}_)*%0a%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
+  )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
   return link;
 };
 
