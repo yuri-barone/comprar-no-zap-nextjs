@@ -74,6 +74,7 @@ const generateZapLink = (
     if (obs) {
       return `%0a*Observações:*%20_${obs}_%0a`;
     }
+    return '';
   };
   const validateZap = () => {
     const numero = zap.toString();
