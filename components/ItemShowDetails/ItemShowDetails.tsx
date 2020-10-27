@@ -153,12 +153,4 @@ const ItemShowDetails = ({
   );
 };
 
-ItemShowDetails.defaultProps = {
-  src:
-    'https://t1.rg.ltmcdn.com/pt/images/3/1/3/hamburguer_de_frango_com_legumes_7313_orig.jpg',
-  quantity: 5,
-  productValue: 550,
-  productName: 'Hamburguer de frango',
-};
-
 export default ItemShowDetails;

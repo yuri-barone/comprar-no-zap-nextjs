@@ -146,9 +146,4 @@ const LoggedBarIndex = ({ src, name, zap }:LoggedBarIndexProps) => {
   );
 };
 
-LoggedBarIndex.defaultProps = {
-  src:
-    '/empty-profile.png',
-};
-
 export default LoggedBarIndex;

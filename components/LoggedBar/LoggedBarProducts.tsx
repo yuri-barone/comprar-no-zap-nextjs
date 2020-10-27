@@ -149,9 +149,4 @@ const LoggedBarProducts = ({ src, name, zap }:LoggedBarProductsProps) => {
   );
 };
 
-LoggedBarProducts.defaultProps = {
-  src:
-      '/empty-profile.png',
-};
-
 export default LoggedBarProducts;
