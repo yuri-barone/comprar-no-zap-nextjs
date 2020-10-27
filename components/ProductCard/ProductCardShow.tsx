@@ -19,6 +19,7 @@ import red from '@material-ui/core/colors/red';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import productsService from '../services/productsService';
 import ProductRegister from '../ProductRegister/ProductRegister';
+import pictureService from '../services/pictureService';
 
 export type ProductCardProps = {
   product: any;
@@ -97,9 +98,8 @@ function ProductCard({
   // eslint-disable-next-line consistent-return
   const getImage = async () => {
     try {
-      const productResponse = await productsService.getById(product.id);
-      const productData = productResponse.data;
-      setImage(productData['picture.imgBase64']);
+      const pictureResponse = await pictureService.get(product.pictureId);
+      setImage(pictureResponse.data.imgBase64);
     } catch (error) {
       return error;
     }

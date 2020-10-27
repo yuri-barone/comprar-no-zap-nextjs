@@ -83,6 +83,7 @@ const MyCart = ({
                         productValue={item.product.valor}
                         productName={item.product.titulo}
                         productId={item.product.id}
+                        pictureId={item.product.pictureId}
                         removeItem={removeItem}
                         changeItemQuantity={changeItemQuantity}
                       />

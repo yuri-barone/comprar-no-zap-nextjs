@@ -8,13 +8,14 @@ import {
   Typography,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import perfisService from '../services/perfisService';
+import pictureService from '../services/pictureService';
 
 export type EnterpriseCardProps = {
   name: string;
   zap: string;
   endereco: string;
   id: number;
+  pictureId?: number;
   onNavigate: (store:any) => void;
 };
 
@@ -28,16 +29,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EnterpriseCard = ({
-  name, zap, endereco, id, onNavigate,
+  name, zap, endereco, id, onNavigate, pictureId,
 }: EnterpriseCardProps) => {
   const [src, setSrc] = useState('');
 
   // eslint-disable-next-line consistent-return
   const getSrc = async () => {
     try {
-      const currentEnterpriseResponse = await perfisService.get(id);
-      const currentEnterprise = currentEnterpriseResponse.data;
-      setSrc(currentEnterprise['picture.imgBase64']);
+      const pictureResponse = await pictureService.get(pictureId);
+      setSrc(pictureResponse.data.imgBase64);
     } catch (error) {
       return error;
     }

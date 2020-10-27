@@ -154,11 +154,11 @@ const CartDetails = ({
             {cartProductsData.map((item) => (
               <Grid item xs="auto">
                 <ItemShowDetails
-                  src={item.product.imgBase64}
                   quantity={item.quantity}
                   productValue={item.product.valor}
                   productName={item.product.titulo}
                   productId={item.product.id}
+                  pictureId={item.product.pictureId}
                   key={item.product.id}
                   changeItemQuantity={changeItemQuantity}
                   removeItem={removeItem}

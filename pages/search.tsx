@@ -334,6 +334,7 @@ export default function Home() {
                       name={item.nome}
                       zap={item.zap}
                       endereco={item.endereco}
+                      pictureId={item.pictureId}
                     />
                   </Grid>
                 ))}

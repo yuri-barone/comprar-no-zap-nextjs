@@ -11,7 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import CloseIcon from '@material-ui/icons/Close';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
-import productsService from '../services/productsService';
+import pictureService from '../services/pictureService';
 
 const useStyles = makeStyles((theme) => ({
   imgSize: {
@@ -45,6 +45,7 @@ export type ItemShowDetailsProps = {
   productValue: number;
   productName: string;
   productId: number;
+  pictureId: number;
   removeItem: (pram1: number) => void;
   changeItemQuantity: (param1: number, param2: number) => void;
 };
@@ -56,6 +57,7 @@ const ItemShowDetails = ({
   productId,
   changeItemQuantity,
   removeItem,
+  pictureId,
 }: ItemShowDetailsProps) => {
   const classes = useStyles();
   const [productQuantity, setProductQuantity] = useState(quantity);
@@ -65,9 +67,8 @@ const ItemShowDetails = ({
   // eslint-disable-next-line consistent-return
   const getImage = async () => {
     try {
-      const productResponse = await productsService.getById(productId);
-      const productData = productResponse.data;
-      setImage(productData['picture.imgBase64']);
+      const pictureResponse = await pictureService.get(pictureId);
+      setImage(pictureResponse.data.imgBase64);
     } catch (error) {
       return error;
     }
