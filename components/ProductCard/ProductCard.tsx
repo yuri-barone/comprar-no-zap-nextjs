@@ -76,19 +76,15 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
           <Grid container spacing={2} alignContent="space-between" style={{ height: '100%' }}>
             <Grid item xs={12}>
               <Typography variant="h5">{product.titulo}</Typography>
+              <br />
+              <Typography color="textSecondary">{product.descricao}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Grid container>
+              <Grid container justify="flex-end" spacing={2}>
                 <Grid item xs={12}>
-                  <Typography color="textSecondary">{product.descricao}</Typography>
-                  <br />
                   <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor, 'R$')}</Typography>
                   <Typography color="textSecondary">{product.nome}</Typography>
                 </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container justify="flex-end">
                 <Grid item xs>
                   <IconButton onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}>
                     <RemoveIcon fontSize="small" />
