@@ -113,6 +113,7 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
     }
     const response = await productsService.save(params);
     if (response.ok) {
+      setProductsData([]);
       searchProducts();
       openSnackBarSuccess();
     } else {
