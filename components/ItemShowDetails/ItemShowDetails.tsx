@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import CloseIcon from '@material-ui/icons/Close';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
+import productsService from '../services/productsService';
 
 const useStyles = makeStyles((theme) => ({
   imgSize: {
@@ -49,7 +50,6 @@ export type ItemShowDetailsProps = {
 };
 
 const ItemShowDetails = ({
-  src,
   quantity,
   productValue,
   productName,
@@ -60,6 +60,25 @@ const ItemShowDetails = ({
   const classes = useStyles();
   const [productQuantity, setProductQuantity] = useState(quantity);
   const [totalValue, setTotalValue] = useState<number>();
+  const [image, setImage] = useState('/empty-img.jpg');
+
+  // eslint-disable-next-line consistent-return
+  const getImage = async () => {
+    try {
+      const productResponse = await productsService.getById(productId);
+      const productData = productResponse.data;
+      setImage(productData['picture.imgBase64']);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getImage();
+    return () => {
+      setImage('/empty-img.jpg');
+    };
+  }, []);
 
   const calcTotalValue = () => {
     const total = productValue * quantity;
@@ -102,7 +121,7 @@ const ItemShowDetails = ({
           onClick={handleClick}
           classes={{ badge: classes.badge }}
         >
-          <Avatar src={src} className={classes.imgSize} />
+          <Avatar src={image} className={classes.imgSize} />
         </Badge>
       </Grid>
       <Grid item xs="auto">

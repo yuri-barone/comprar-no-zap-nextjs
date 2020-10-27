@@ -79,7 +79,6 @@ const MyCart = ({
                   {cartProducts.map((item: any) => (
                     <Grid item xs={2} key={item.product.id}>
                       <ItemShowDetails
-                        src={item.product.imgBase64}
                         quantity={item.quantity}
                         productValue={item.product.valor}
                         productName={item.product.titulo}
