@@ -21,9 +21,8 @@ export type MyCartDetailsProps = {
 
 const useStyles = makeStyles({
   root: {
-    height: '100vh',
+    height: 'calc(100vh + 20px)',
     overflowY: 'auto',
-    paddingBottom: '25px',
   },
 });
 const MyCartDetails = ({
