@@ -181,6 +181,10 @@ function ProductCard({
                     {product.descricao}
                   </Typography>
                 </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container justify="flex-end">
                 <Grid item xs={12}>
                   <Typography color="textSecondary" variant="caption">
                     Vendido por
@@ -193,10 +197,6 @@ function ProductCard({
                     {formatNumberToMoneyWithSymbol(product.valor, 'R$')}
                   </Typography>
                 </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container justify="flex-end">
                 <Grid item xs="auto">
                   <Button
                     variant="outlined"
