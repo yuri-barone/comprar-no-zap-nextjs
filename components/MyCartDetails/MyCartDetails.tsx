@@ -58,7 +58,7 @@ const MyCartDetails = ({
   }, [cartProductsData]);
   return (
     <div className={classes.root}>
-      <Box p={2}>
+      <Box p={4}>
         <Container>
           <Grid container spacing={3}>
             <Grid item xs={12}>
