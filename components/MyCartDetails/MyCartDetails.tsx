@@ -23,6 +23,7 @@ const useStyles = makeStyles({
   root: {
     height: '100vh',
     overflowY: 'auto',
+    paddingBottom: '25px',
   },
 });
 const MyCartDetails = ({
