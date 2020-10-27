@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import {
   Box,
   Button,
@@ -30,8 +31,12 @@ yup.setLocale({
     required: 'O campo precisa estar preenchido',
   },
   string: {
-    // eslint-disable-next-line no-template-curly-in-string
     min: 'O mínimo de caracteres é ${min}',
+    max: 'O valor máximo de caracteres é ${max}',
+  },
+  number: {
+    max: 'O valor máximo permitido é R$${max},00',
+    positive: 'O valor precisa ser positivo',
   },
 });
 
@@ -48,6 +53,7 @@ const generateZapLink = (
   paymentMethod: string,
   enderecoParam: string,
   trocoParam: number,
+  obs: string,
 ) => {
   const stringProducts = products.map((produto) => `${produto.quantity}%20${produto.product.titulo}%0a`);
   const validateEntrega = () => {
@@ -74,7 +80,7 @@ const generateZapLink = (
   const formaDeReceber = validateEntrega();
   const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
     '',
-  )}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
+  )}(Observações:%20${obs})%0a%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
   return link;
 };
 
@@ -129,6 +135,7 @@ const CartDetails = ({
       values.metodoPagamento,
       values.entrega ? values.endereco : undefined,
       values.troco,
+      values.obs,
     );
     const win = window.open(link, '_blank');
     win.focus();
@@ -145,6 +152,7 @@ const CartDetails = ({
   const troco = useField('troco', form);
   const entrega = useField('entrega', form);
   const metodoPagamento = useField('metodoPagamento', form);
+  const obs = useField('obs', form);
 
   return (
     <form className={classes.formWidth} onSubmit={handleSubmit}>
@@ -240,6 +248,24 @@ const CartDetails = ({
                     </Collapse>
                   </Grid>
                 </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Box pb={2}>
+                  <TextField
+                    error={obs.meta.touched && obs.meta.invalid}
+                    helperText={
+                      obs.meta.touched
+                      && obs.meta.invalid
+                      && obs.meta.error
+                    }
+                    {...obs.input}
+                    multiline
+                    rowsMax={2}
+                    label="Observações"
+                    placeholder="Ex: tirar a cebola, cortar os lanches, etc."
+                    fullWidth
+                  />
+                </Box>
               </Grid>
               <Grid item xs={12}>
                 <Grid container spacing={2}>
