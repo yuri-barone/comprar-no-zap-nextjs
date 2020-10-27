@@ -153,7 +153,7 @@ const MyCart = ({
           </Grid>
         </Grid>
       </Hidden>
-      <Modal open={open} onClose={handleClose} style={{ paddingBottom: '20px' }}>
+      <Modal open={open} onClose={handleClose}>
         <MyCartDetails
           initialEndereco={initialEndereco}
           cartProductsData={cartProducts}
