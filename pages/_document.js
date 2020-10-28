@@ -33,10 +33,6 @@ export default class MyDocument extends Document {
           />
           <link rel="shortcut icon" href="/favicon.ico" />
           <meta name="description" content="Busca de produtos vendidos pelo whatsapp" />
-          <meta property="og:title" content="Comprar no Zap" />
-          <meta property="og:description" content="Busca de produtos vendidos pelo whatsapp" />
-          <meta property="og:url" content="www.comprarnozap.com" />
-          <meta property="og:site_name" content="Comprar no Zap" />
         </Head>
         <body>
           <Main />
