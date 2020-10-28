@@ -16,7 +16,6 @@ import * as yup from 'yup';
 import { ValidationErrors } from 'final-form';
 import { green } from '@material-ui/core/colors';
 import clsx from 'clsx';
-import useWindowSize from '../useWindowSize';
 import MaskedTextField from '../MaskedTextField';
 
 export type LoginScreenProps = {
@@ -94,12 +93,10 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
   const phoneInput = useField('phone', form);
   const passwordInput = useField('password', form);
   const classes = useStyles();
-  const windowSize = useWindowSize();
 
   const renderForm = () => (
     <form onSubmit={handleSubmit}>
       <Grid container justify="center" spacing={2}>
-        {windowSize.height > 400 && (
         <Grid item xs={6}>
           <Box pb={2} pt={2}>
             <img
@@ -109,7 +106,6 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
             />
           </Box>
         </Grid>
-        ) }
         <Grid item xs={12}>
           <Typography variant="h4" color="textSecondary" align="center">
             Seja bem vindo
