@@ -24,6 +24,7 @@ import productsService from '../components/services/productsService';
 import PedirNoZapTheme from '../styles/PedirNoZapTheme';
 import useSession from '../components/useSession';
 import useNavigation from '../components/useNavigation';
+import ImageFeedback from '../components/ImageFeedback/ImageFeedback';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -48,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   tabColor: {
     backgroundColor: '#FFFFFF',
   },
+  missingItems: {
+    minHeight: 'calc(100vh - 136px)',
+  },
 }));
 
 export default function Home() {
@@ -61,8 +65,8 @@ export default function Home() {
   const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
   const [currentStoreToShow, setCurrentStoreToShow] = useState<any>(null);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
-  const session:any = useSession(false);
-  const navigation:any = useNavigation();
+  const session: any = useSession(false);
+  const navigation: any = useNavigation();
 
   // eslint-disable-next-line consistent-return
   const getLocais = async (filter: string) => {
@@ -77,24 +81,31 @@ export default function Home() {
   // eslint-disable-next-line consistent-return
   const getProducts = async (termo: string | undefined, storeId?: number) => {
     try {
-      const productResponse = await productsService.findOptimized(termo, storeId);
+      const productResponse = await productsService.findOptimized(
+        termo,
+        storeId,
+      );
       setProductsData(productResponse.data.data);
     } catch (error) {
       return error;
     }
   };
 
-  const buscar = (term: string | undefined, wich?:number, storeId?: number) => {
-    if (wich === 0) {
+  const buscar = (
+    term: string | undefined,
+    wich?: number,
+    storeId?: number,
+  ) => {
+    if (wich === 1) {
       getProducts(term, storeId);
     }
-    if (wich === 1) {
+    if (wich === 0) {
       getLocais(term);
     }
   };
 
   // eslint-disable-next-line consistent-return
-  const loadCurrentStoreToShow = async (id:number) => {
+  const loadCurrentStoreToShow = async (id: number) => {
     try {
       const currentStoreResponse = await perfisService.get(id);
       setCurrentStoreToShow(currentStoreResponse.data);
@@ -124,7 +135,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const valor = cartProducts.map((item) => Number(item.product.valor) * item.quantity);
+    const valor = cartProducts.map(
+      (item) => Number(item.product.valor) * item.quantity,
+    );
     const calcTotalValue = valor.reduce((a, b) => a + b, 0);
     setTotalValue(calcTotalValue);
   }, [cartProducts]);
@@ -141,9 +154,9 @@ export default function Home() {
     };
   }, [tabValue]);
 
-  const addSearchToUrl = (value:string) => {
+  const addSearchToUrl = (value: string) => {
     const params = navigation.getUrlParams();
-    const query:any = navigation.generateQueryUrl(params.tipo, value);
+    const query: any = navigation.generateQueryUrl(params.tipo, value);
     if (parseInt(params.perfilId, 10)) {
       query.perfilId = params.perfilId;
     }
@@ -220,7 +233,11 @@ export default function Home() {
   };
 
   const currentStore = (store: any) => {
-    const query = navigation.generateQueryUrl('0', undefined, store.id.toString());
+    const query = navigation.generateQueryUrl(
+      '1',
+      undefined,
+      store.id.toString(),
+    );
     Router.push({
       pathname: '/search',
       query,
@@ -234,17 +251,29 @@ export default function Home() {
       query,
     });
   };
+
+  const solicitarCatalogo = () => {
+    const link = `https://api.whatsapp.com/send?phone=55${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
+    const win = window.open(link, '_blank');
+    win.focus();
+  };
+
+  const onTalk = () => {
+    const link = `https://api.whatsapp.com/send?phone=55${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
+    const win = window.open(link, '_blank');
+    win.focus();
+  };
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
       {session.isAutheticated && (
-      <MyAppBarLogged
-        value={searchInput}
-        onChange={searchOnChange}
-        onSearch={buscar}
-        src={session.isAutheticated && session.profile['picture.imgBase64']}
-        name={session.isAutheticated && session.profile.nome}
-        zap={session.isAutheticated && session.profile.zap}
-      />
+        <MyAppBarLogged
+          value={searchInput}
+          onChange={searchOnChange}
+          onSearch={buscar}
+          src={session.isAutheticated && session.profile['picture.imgBase64']}
+          name={session.isAutheticated && session.profile.nome}
+          zap={session.isAutheticated && session.profile.zap}
+        />
       )}
       {!session.isAutheticated && (
         <MyAppBar
@@ -265,8 +294,8 @@ export default function Home() {
                   textColor="primary"
                   centered
                 >
-                  <Tab label="Produtos" />
                   <Tab label="Locais" />
+                  <Tab label="Produtos" />
                 </Tabs>
               </Grid>
               <Grid item xs />
@@ -284,8 +313,8 @@ export default function Home() {
                   textColor="primary"
                   centered
                 >
-                  <Tab label="Produtos" />
                   <Tab label="Locais" />
+                  <Tab label="Produtos" />
                 </Tabs>
               </Grid>
               <Grid item xs />
@@ -297,26 +326,64 @@ export default function Home() {
       <Container>
         <Grid
           container
-          spacing={4}
+          spacing={2}
           className={showingCart ? classes.showingCart : classes.hiddenCart}
         >
-
           {currentStoreToShow && (
-          <Grid item xs={12} className={classes.containerMarginFix4}>
-            <EnterpriseCardShow
-              onRemove={removeStore}
-              src={currentStoreToShow['picture.imgBase64']}
-              name={currentStoreToShow.nome}
-              endereco={currentStoreToShow.endereco}
-              zap={currentStoreToShow.zap}
-              id={currentStoreToShow.id}
-            />
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <EnterpriseCardShow
+                onRemove={removeStore}
+                src={currentStoreToShow['picture.imgBase64']}
+                name={currentStoreToShow.nome}
+                endereco={currentStoreToShow.endereco}
+                zap={currentStoreToShow.zap}
+                id={currentStoreToShow.id}
+                onTalk={onTalk}
+              />
+            </Grid>
+          )}
+
+          {productsData.length === 0 && currentStoreToShow && (
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <ImageFeedback
+                image="/Jhon-Travolta.gif"
+                message="Ahhh! esta loja ainda não cadastrou seus produtos..."
+                withButton
+                buttonMessage="Solicitar catálogo de produtos"
+                buttonOnClick={solicitarCatalogo}
+              />
+            </Grid>
+          )}
+
+          {productsData.length === 0 && tabValue === 1 && !currentStoreToShow && (
+          <Grid item xs={12} className={classes.missingItems}>
+            <Grid container alignContent="center" className={classes.missingItems}>
+              <Grid item xs={12}>
+                <ImageFeedback
+                  image="/Jhon-Travolta.gif"
+                  message="Hmm... Nenhum produto foi encontrado com este nome."
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          )}
+
+          {locaisData.length === 0 && tabValue === 0 && (
+          <Grid item xs={12} className={classes.missingItems}>
+            <Grid container alignContent="center" className={classes.missingItems}>
+              <Grid item xs={12}>
+                <ImageFeedback
+                  image="/Jhon-Travolta.gif"
+                  message="Hmm... Nenhuma empresa foi encontrada com este nome."
+                />
+              </Grid>
+            </Grid>
           </Grid>
           )}
 
           <Grid item xs={12} className={classes.containerMarginFix4}>
             <Grid container alignItems="stretch" spacing={4}>
-              {tabValue === 0
+              {tabValue === 1
                 && productsData.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
                     <ProductCard product={item} onAdd={adicionar} />
@@ -325,7 +392,7 @@ export default function Home() {
             </Grid>
 
             <Grid container alignItems="stretch" spacing={4}>
-              {tabValue === 1
+              {tabValue === 0
                 && locaisData.map((item) => (
                   <Grid item xs={12} md={12} sm={12} lg={6} key={item.id}>
                     <EnterpriseCard

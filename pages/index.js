@@ -41,14 +41,14 @@ export default function Home() {
   const navigation = useNavigation();
 
   const handleProductSearch = () => {
-    const query = navigation.generateQueryUrl('0', filter);
+    const query = navigation.generateQueryUrl('1', filter);
     Router.push({
       pathname: '/search',
       query,
     });
   };
   const handlePlacesSearch = () => {
-    const query = navigation.generateQueryUrl('1', filter);
+    const query = navigation.generateQueryUrl('0', filter);
     Router.push({
       pathname: '/search',
       query,
@@ -103,18 +103,18 @@ export default function Home() {
               </Grid>
 
               <Grid item xs={12} sm={8}>
-                <Search onEnter={handleProductSearch} onChange={storeFilter} />
+                <Search onEnter={handlePlacesSearch} onChange={storeFilter} />
               </Grid>
               <Grid item xs={12} sm={12}>
                 <Grid container justify="center" spacing={2}>
                   <Grid item xs={12} sm={4} md={4}>
-                    <Button color="secondary" type="submit" variant="contained" onClick={handleProductSearch} fullWidth size="large">
-                      Ver produtos
+                    <Button color="primary" type="submit" variant="contained" onClick={handlePlacesSearch} fullWidth size="large">
+                      Ver lugares
                     </Button>
                   </Grid>
                   <Grid item xs={12} sm={4} md={4}>
-                    <Button color="secondary" variant="outlined" onClick={handlePlacesSearch} fullWidth size="large">
-                      Ver lugares
+                    <Button color="secondary" variant="outlined" onClick={handleProductSearch} fullWidth size="large">
+                      Ver produtos
                     </Button>
                   </Grid>
                 </Grid>

@@ -14,6 +14,7 @@ export type EnterpriseCardProps = {
   endereco?: string;
   id?: number;
   onRemove?: () => void;
+  onTalk?: () => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -25,9 +26,15 @@ const useStyles = makeStyles((theme) => ({
   maxHeigth: {
     height: '100%',
   },
+  hideName: {
+    maxWidth: theme.spacing(10),
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    color: 'black',
+  },
 }));
 const EnterpriseCard = ({
-  src, name, endereco, onRemove,
+  src, name, endereco, onRemove, onTalk,
 }: EnterpriseCardProps) => {
   const classes = useStyles();
   return (
@@ -47,6 +54,11 @@ const EnterpriseCard = ({
       </Grid>
       <Grid item xs={12} sm={4}>
         <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Button variant="contained" color="primary" fullWidth onClick={onTalk}>
+              Falar com o estabelecimento
+            </Button>
+          </Grid>
           <Grid item xs={12}>
             <Button variant="outlined" color="primary" fullWidth onClick={onRemove}>
               Continuar procurando

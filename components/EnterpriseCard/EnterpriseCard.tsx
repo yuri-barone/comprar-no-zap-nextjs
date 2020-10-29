@@ -90,12 +90,12 @@ const EnterpriseCard = ({
               <Grid item xs={12} sm={4}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Button variant="outlined" color="secondary" onClick={handleOnSeeProducts} fullWidth>
+                    <Button variant="outlined" color="primary" onClick={handleOnSeeProducts} fullWidth>
                       Ver produtos
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button variant="contained" color="secondary" fullWidth onClick={handleSendMessage}>
+                    <Button variant="contained" color="primary" fullWidth onClick={handleSendMessage}>
                       Enviar mensagem
                     </Button>
                   </Grid>
