@@ -7,7 +7,7 @@ import { Button } from '@material-ui/core';
 
 export type ImageFeedbackProps = TypographyProps & {
   image: string;
-  message: string;
+  message?: string;
   withButton?: boolean;
   buttonMessage?: string;
   altText?: string;
@@ -40,11 +40,13 @@ const ImageFeedback = ({
           <img className={classes.image} alt={message || altText} src={image} width="100%" height="100%" />
         </div>
       </Grid>
+      {message && (
       <Grid item xs={12}>
         <Typography align="center" color="textPrimary" variant="body1" {...props}>
           {message}
         </Typography>
       </Grid>
+      )}
       {withButton && (
         <Grid item xs="auto">
           <Button color="primary" variant="contained" size="large" onClick={buttonOnClick}>{buttonMessage}</Button>

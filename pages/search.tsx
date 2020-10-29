@@ -11,7 +11,7 @@ import {
   Tabs,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import EnterpriseCard from '../components/EnterpriseCard/EnterpriseCard';
 import EnterpriseCardShow from '../components/EnterpriseCard/EnterpriseCardShow';
@@ -66,43 +66,45 @@ export default function Home() {
   const [currentStoreToShow, setCurrentStoreToShow] = useState<any>(null);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
   const [inputNome, setInputNome] = useState<string | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [termToFind, setTermToFind] = useState<string | undefined>('');
+  const [storeIdToFind, setStoreIdToFind] = useState<number | undefined>(null);
+
+  const [lastSearchProductHash, setLastSearchProductHash] = useState<string | undefined>(null);
+  const [lastSearchPlaceHash, setLastlastSearchPlaceHash] = useState<string | undefined>(null);
+
   const session: any = useSession(false);
   const navigation: any = useNavigation();
 
   // eslint-disable-next-line consistent-return
-  const getLocais = async (filter: string) => {
+  const getLocais = useCallback(async () => {
     try {
-      const localResponse = await perfisService.find(filter);
-      setLocaisData(localResponse.data.data);
+      const localResponse = await perfisService.find(termToFind);
+      return localResponse.data.data;
     } catch (error) {
-      return error;
+      return [];
     }
-  };
+  }, [termToFind]);
 
-  // eslint-disable-next-line consistent-return
-  const getProducts = async (termo: string | undefined, storeId?: number) => {
+  const getProducts = useCallback(async () => {
     try {
       const productResponse = await productsService.findOptimized(
-        termo,
-        storeId,
+        termToFind,
+        storeIdToFind,
       );
-      setProductsData(productResponse.data.data);
+      return productResponse.data.data;
     } catch (error) {
-      return error;
+      return [];
     }
-  };
+  }, [termToFind, storeIdToFind]);
 
-  const buscar = (
+  const aplicarFiltrosAoEstado = async (
     term: string | undefined,
-    wich?: number,
     storeId?: number,
   ) => {
-    if (wich === 1) {
-      getProducts(term, storeId);
-    }
-    if (wich === 0) {
-      getLocais(term);
-    }
+    setTermToFind(term);
+    setStoreIdToFind(storeId);
   };
 
   // eslint-disable-next-line consistent-return
@@ -120,8 +122,9 @@ export default function Home() {
     const lojaId = parseInt(params.perfilId, 10);
     setSearchInput(params.termo);
     setTabValue(parseInt(params.tipo, 10));
-    buscar(params.termo, parseInt(params.tipo, 10), lojaId);
     setCurrentStoreToShow(null);
+
+    aplicarFiltrosAoEstado(params.termo, lojaId);
 
     if (lojaId > 0) {
       loadCurrentStoreToShow(lojaId);
@@ -145,14 +148,8 @@ export default function Home() {
 
   useEffect(() => {
     const params = navigation.getUrlParams();
-    const searchTimeout = setTimeout(() => {
-      buscar(params.termo, tabValue, parseInt(params.perfilId, 10));
-      setTabValue(parseInt(params.tipo, 10));
-      setSearchInput(params.termo);
-    }, 500);
-    return () => {
-      clearInterval(searchTimeout);
-    };
+    aplicarFiltrosAoEstado(params.termo, parseInt(params.perfilId, 10));
+    setSearchInput(params.termo);
   }, [tabValue]);
 
   const addSearchToUrl = (value: string) => {
@@ -184,7 +181,32 @@ export default function Home() {
     setInputNome(session.profile.nome || '');
   }, [session.profile.loaded]);
 
+  const executaBuscaParaTabSelecionada = async () => {
+    const hash = `${termToFind}_${storeIdToFind}`;
+    if (tabValue === 1 && lastSearchProductHash !== hash) {
+      setIsLoading(true);
+      setLastSearchProductHash(hash);
+      const products = await getProducts();
+      setProductsData(products);
+      setIsLoading(false);
+    }
+    if (tabValue === 0 && lastSearchPlaceHash !== hash) {
+      setIsLoading(true);
+      setLastlastSearchPlaceHash(hash);
+      const places = await getLocais();
+      setLocaisData(places);
+      setIsLoading(false);
+    }
+  };
+
+  // Hook principal de buscas
+  useEffect(() => {
+    const executarBuscaTimeout = setTimeout(executaBuscaParaTabSelecionada, 100);
+    return () => clearTimeout(executarBuscaTimeout);
+  }, [termToFind, storeIdToFind, tabValue]);
+
   const handleChangeTab = (e: any, value: number) => {
+    setTabValue(value);
     const params = navigation.getUrlParams();
     const query = navigation.generateQueryUrl(value.toString(), params.termo);
     Router.push({
@@ -271,7 +293,7 @@ export default function Home() {
         <MyAppBarLogged
           value={searchInput}
           onChange={searchOnChange}
-          onSearch={buscar}
+          onSearch={aplicarFiltrosAoEstado}
           src={session.isAutheticated && session.profile['picture.imgBase64']}
           name={session.isAutheticated && session.profile.nome}
           zap={session.isAutheticated && session.profile.zap}
@@ -281,7 +303,7 @@ export default function Home() {
         <MyAppBar
           value={searchInput}
           onChange={searchOnChange}
-          onSearch={buscar}
+          onSearch={aplicarFiltrosAoEstado}
         />
       )}
       <Box style={{ backgroundColor: 'white' }}>
@@ -326,12 +348,24 @@ export default function Home() {
       </Box>
       <Divider />
       <Container>
-        <Grid
-          container
-          spacing={2}
-          className={showingCart ? classes.showingCart : classes.hiddenCart}
-        >
-          {currentStoreToShow && (
+        {isLoading && (
+          <Grid item xs={12} className={classes.missingItems}>
+            <Grid container alignContent="center" className={classes.missingItems}>
+              <Grid item xs={12}>
+                <ImageFeedback
+                  image="/Mr-Bean-waiting.gif"
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        )}
+        {!isLoading && (
+          <Grid
+            container
+            spacing={2}
+            className={showingCart ? classes.showingCart : classes.hiddenCart}
+          >
+            {currentStoreToShow && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <EnterpriseCardShow
                 onRemove={removeStore}
@@ -343,9 +377,9 @@ export default function Home() {
                 onTalk={onTalk}
               />
             </Grid>
-          )}
+            )}
 
-          {productsData.length === 0 && currentStoreToShow && (
+            {productsData.length === 0 && currentStoreToShow && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
@@ -355,46 +389,46 @@ export default function Home() {
                 buttonOnClick={solicitarCatalogo}
               />
             </Grid>
-          )}
+            )}
 
-          {productsData.length === 0 && tabValue === 1 && !currentStoreToShow && (
-          <Grid item xs={12} className={classes.missingItems}>
-            <Grid container alignContent="center" className={classes.missingItems}>
-              <Grid item xs={12}>
-                <ImageFeedback
-                  image="/Jhon-Travolta.gif"
-                  message="Hmm... Nenhum produto foi encontrado com este nome."
-                />
+            {productsData.length === 0 && tabValue === 1 && !currentStoreToShow && (
+            <Grid item xs={12} className={classes.missingItems}>
+              <Grid container alignContent="center" className={classes.missingItems}>
+                <Grid item xs={12}>
+                  <ImageFeedback
+                    image="/Jhon-Travolta.gif"
+                    message="Hmm... Nenhum produto foi encontrado com este nome."
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          )}
+            )}
 
-          {locaisData.length === 0 && tabValue === 0 && (
-          <Grid item xs={12} className={classes.missingItems}>
-            <Grid container alignContent="center" className={classes.missingItems}>
-              <Grid item xs={12}>
-                <ImageFeedback
-                  image="/Jhon-Travolta.gif"
-                  message="Hmm... Nenhuma empresa foi encontrada com este nome."
-                />
+            {locaisData.length === 0 && tabValue === 0 && (
+            <Grid item xs={12} className={classes.missingItems}>
+              <Grid container alignContent="center" className={classes.missingItems}>
+                <Grid item xs={12}>
+                  <ImageFeedback
+                    image="/Jhon-Travolta.gif"
+                    message="Hmm... Nenhuma empresa foi encontrada com este nome."
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          )}
+            )}
 
-          <Grid item xs={12} className={classes.containerMarginFix4}>
-            <Grid container alignItems="stretch" spacing={4}>
-              {tabValue === 1
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <Grid container alignItems="stretch" spacing={4}>
+                {tabValue === 1
                 && productsData.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
                     <ProductCard product={item} onAdd={adicionar} />
                   </Grid>
                 ))}
-            </Grid>
+              </Grid>
 
-            <Grid container alignItems="stretch" spacing={4}>
-              {tabValue === 0
+              <Grid container alignItems="stretch" spacing={4}>
+                {tabValue === 0
                 && locaisData.map((item) => (
                   <Grid item xs={12} md={12} sm={12} lg={6} key={item.id}>
                     <EnterpriseCard
@@ -407,9 +441,10 @@ export default function Home() {
                     />
                   </Grid>
                 ))}
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
         <Slide direction="up" in={showingCart}>
           <AppBar position="fixed" className={classes.appBar} color="primary">
             <Container>
