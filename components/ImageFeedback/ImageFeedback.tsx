@@ -47,7 +47,7 @@ const ImageFeedback = ({
       </Grid>
       {withButton && (
         <Grid item xs="auto">
-          <Button color="primary" variant="contained" size="small" onClick={buttonOnClick}>{buttonMessage}</Button>
+          <Button color="primary" variant="contained" size="large" onClick={buttonOnClick}>{buttonMessage}</Button>
         </Grid>
       )}
     </Grid>
