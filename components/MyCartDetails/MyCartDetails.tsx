@@ -17,6 +17,7 @@ export type MyCartDetailsProps = {
   removeItem: (id:number) => void;
   removeAll: () => void;
   initialEndereco: string;
+  initialNome: string;
 };
 
 const useStyles = makeStyles({
@@ -32,7 +33,7 @@ const MyCartDetails = ({
   removeItem,
   removeAll,
   initialEndereco,
-
+  initialNome,
 }: MyCartDetailsProps) => {
   const classes = useStyles();
   const [cartSellers, setCartSellers] = useState([]);
@@ -103,7 +104,7 @@ const MyCartDetails = ({
                     cartProductsData={item.items}
                     changeItemQuantity={changeItemQuantity}
                     removeItem={removeItem}
-                    initialValues={{ endereco: initialEndereco }}
+                    initialValues={{ endereco: initialEndereco, nome: initialNome }}
                   />
                 </Paper>
               </Grid>

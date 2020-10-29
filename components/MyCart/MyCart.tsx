@@ -19,6 +19,7 @@ export type MyCartProps = {
   removeItem: (id: number) => void;
   removeAll: () => void;
   initialEndereco: string;
+  initialNome: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +43,7 @@ const MyCart = ({
   removeAll,
   removeItem,
   initialEndereco,
+  initialNome,
 }: MyCartProps) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -156,6 +158,7 @@ const MyCart = ({
       <Modal open={open} onClose={handleClose}>
         <MyCartDetails
           initialEndereco={initialEndereco}
+          initialNome={initialNome}
           cartProductsData={cartProducts}
           onContinuarComprando={handleClose}
           changeItemQuantity={changeItemQuantity}

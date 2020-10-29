@@ -45,6 +45,7 @@ const schema = yup.object().shape({
     .string()
     .when('entrega', { is: true, then: yup.string().min(3).required() }),
   metodoPagamento: yup.string().required('Selecione o pagamento'),
+  nome: yup.string().required().max(50),
 });
 
 const generateZapLink = (
@@ -54,6 +55,7 @@ const generateZapLink = (
   enderecoParam: string,
   trocoParam: number,
   obs: string,
+  nome: string,
 ) => {
   const stringProducts = products.map((produto) => `${produto.quantity}%20${produto.product.titulo}%0a`);
   const validateEntrega = () => {
@@ -85,7 +87,7 @@ const generateZapLink = (
   };
   const temTroco = validateTroco();
   const formaDeReceber = validateEntrega();
-  const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Pedido*%0a${stringProducts.join(
+  const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProducts.join(
     '',
   )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
   return link;
@@ -143,6 +145,7 @@ const CartDetails = ({
       values.entrega ? values.endereco : undefined,
       values.troco,
       values.obs,
+      values.nome,
     );
     const win = window.open(link, '_blank');
     win.focus();
@@ -160,6 +163,7 @@ const CartDetails = ({
   const entrega = useField('entrega', form);
   const metodoPagamento = useField('metodoPagamento', form);
   const obs = useField('obs', form);
+  const nome = useField('nome', form);
 
   return (
     <form className={classes.formWidth} onSubmit={handleSubmit}>
@@ -257,6 +261,21 @@ const CartDetails = ({
                 </Grid>
               </Grid>
               <Grid item xs={12}>
+                <Box pb={2} pt={2}>
+                  <TextField
+                    error={nome.meta.touched && nome.meta.invalid}
+                    helperText={
+                      nome.meta.touched
+                      && nome.meta.invalid
+                      && nome.meta.error
+                    }
+                    {...nome.input}
+                    multiline
+                    rowsMax={2}
+                    label="Seu nome"
+                    fullWidth
+                  />
+                </Box>
                 <Box pb={2}>
                   <TextField
                     error={obs.meta.touched && obs.meta.invalid}

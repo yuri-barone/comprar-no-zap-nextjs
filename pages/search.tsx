@@ -65,6 +65,7 @@ export default function Home() {
   const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
   const [currentStoreToShow, setCurrentStoreToShow] = useState<any>(null);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
+  const [inputNome, setInputNome] = useState<string | undefined>();
   const session: any = useSession(false);
   const navigation: any = useNavigation();
 
@@ -180,6 +181,7 @@ export default function Home() {
 
   useEffect(() => {
     setInputEndereco(session.profile.endereco || '');
+    setInputNome(session.profile.nome || '');
   }, [session.profile.loaded]);
 
   const handleChangeTab = (e: any, value: number) => {
@@ -419,6 +421,7 @@ export default function Home() {
                   removeItem={removeItem}
                   removeAll={removeAll}
                   initialEndereco={inputEndereco}
+                  initialNome={inputNome}
                 />
               </Box>
             </Container>
