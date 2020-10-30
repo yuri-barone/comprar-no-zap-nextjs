@@ -104,6 +104,8 @@ export type CartDetailsProps = {
   changeItemQuantity: (id: number, quantity: number) => void;
   removeItem: (id: number) => void;
   initialValues: any;
+  perfDelivery: boolean;
+  perfEndereco: string;
 };
 
 const CartDetails = ({
@@ -111,6 +113,8 @@ const CartDetails = ({
   changeItemQuantity,
   removeItem,
   initialValues,
+  perfDelivery,
+  perfEndereco,
 }: CartDetailsProps) => {
   const classes = useStyles();
 
@@ -195,6 +199,21 @@ const CartDetails = ({
 
               <Grid item xs={12}>
                 <Grid container spacing={2}>
+                  {perfDelivery === false && (
+                  <Grid item xs>
+                    <Typography>
+                      <Box fontWeight="fontWeightBold" m={1}>
+                        Apenas retiradas no local:
+                      </Box>
+                    </Typography>
+                    <Typography>
+                      <Box fontWeight="fontWeightMedium" m={1}>
+                        {perfEndereco}
+                      </Box>
+                    </Typography>
+                  </Grid>
+                  )}
+                  {perfDelivery === true && (
                   <Grid item xs>
                     <FormControlLabel
                       control={<Checkbox color="primary" {...entrega.input} />}
@@ -214,6 +233,7 @@ const CartDetails = ({
                       />
                     </Collapse>
                   </Grid>
+                  )}
                   <Grid item xs="auto">
                     <FormControl
                       component="fieldset"

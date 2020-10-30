@@ -45,6 +45,7 @@ const MyCartDetails = ({
         perfilName: shoppItem.product.nome,
         zap: shoppItem.product.zap,
         endereco: shoppItem.product.endereco,
+        delivery: shoppItem.product.delivery,
         items: [],
       };
       sellerProductsMap[sellerId].items.push(shoppItem);
@@ -93,7 +94,7 @@ const MyCartDetails = ({
               </Paper>
             </Grid>
             {cartSellers.map((item) => (
-              <Grid item xs={12} key={item.perfilId}>
+              <Grid item xs={12} key={item.items[0].product.perfilId}>
                 <Paper variant="outlined">
                   <Box p={2}>
                     <Typography variant="h5">
@@ -105,6 +106,8 @@ const MyCartDetails = ({
                     changeItemQuantity={changeItemQuantity}
                     removeItem={removeItem}
                     initialValues={{ endereco: initialEndereco, nome: initialNome }}
+                    perfDelivery={item.items[0].product.delivery}
+                    perfEndereco={item.items[0].product.endereco}
                   />
                 </Paper>
               </Grid>

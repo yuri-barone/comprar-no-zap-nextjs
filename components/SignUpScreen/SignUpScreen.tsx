@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Collapse,
   Divider,
   FormControlLabel,
   Grid,
@@ -98,7 +99,9 @@ function SignUpScreen() {
     if (!params.seller) {
       params.seller = false;
     }
-
+    if (!params.delivery) {
+      params.delivery = false;
+    }
     const responsePerfil = await perfisService.save(params);
     if (responsePerfil.ok) {
       const loginValues: any = {};
@@ -140,6 +143,7 @@ function SignUpScreen() {
   const password = useField('password', form);
   const confirmarPassword = useField('confirmarPassword', form);
   const seller = useField('seller', form);
+  const delivery = useField('delivery', form);
   const palavrasChaves = useField('palavrasChaves', form);
 
   const handleImage = (base64: any) => {
@@ -295,6 +299,11 @@ function SignUpScreen() {
                       control={<Checkbox {...seller.input} />}
                       label="Quero vender"
                     />
+                  </Grid>
+                  <Grid item xs="auto">
+                    <Collapse in={seller.input.value === true}>
+                      <FormControlLabel control={<Checkbox {...delivery.input} />} label="Faço entregas" />
+                    </Collapse>
                   </Grid>
                   <Grid item xs="auto">
                     <Button

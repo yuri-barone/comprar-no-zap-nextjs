@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Collapse,
   Divider,
   FormControlLabel,
   Grid,
@@ -49,6 +50,7 @@ export type PerfilScreenProps = {
   seller: boolean;
   searchNewPerfil: () => void;
   userId: number;
+  delivery: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +81,7 @@ function PerfilScreen({
   id,
   searchNewPerfil,
   seller,
+  delivery,
   userId,
 }: PerfilScreenProps) {
   const [img64, setImg64] = useState<any>(src);
@@ -140,12 +143,15 @@ function PerfilScreen({
       nome,
       zap,
       endereco,
+      seller,
+      delivery,
     },
   });
   const nomeInput = useField('nome', form);
   const zapInput = useField('zap', form);
   const enderecoInput = useField('endereco', form);
   const sellerBox = useField('seller', form);
+  const deliveryBox = useField('delivery', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
@@ -228,6 +234,11 @@ function PerfilScreen({
                 <Grid container justify="flex-end" spacing={2}>
                   <Grid item xs="auto">
                     <FormControlLabel control={<Checkbox defaultChecked={seller} {...sellerBox.input} />} label="Quero vender" />
+                  </Grid>
+                  <Grid item xs="auto">
+                    <Collapse in={sellerBox.input.value === true}>
+                      <FormControlLabel control={<Checkbox defaultChecked={delivery} {...deliveryBox.input} />} label="Faço entregas" />
+                    </Collapse>
                   </Grid>
                   <Grid item xs="auto">
                     <Button variant="contained" color="secondary" type="submit">
