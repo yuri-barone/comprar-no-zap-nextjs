@@ -23,10 +23,15 @@ const entrar = () => {
     const params:any = values;
     params.strategy = 'local';
     const response = await usersService.login(params);
-    if (response.ok) {
+    if (response.ok && response.perfil.seller) {
       keepSession(params.phone, response.data);
       router.push('/produtos');
-    } else {
+    }
+    if (response.ok && !response.perfil.seller) {
+      keepSession(params.phone, response.data);
+      router.push('/');
+    }
+    if (!response.ok) {
       openSnackBar();
     }
   };
