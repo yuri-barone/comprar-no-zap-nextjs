@@ -354,6 +354,7 @@ export default function Home() {
               <Grid item xs={12}>
                 <ImageFeedback
                   image="/Mr-Bean-waiting.gif"
+                  message="Carregando..."
                 />
               </Grid>
             </Grid>
