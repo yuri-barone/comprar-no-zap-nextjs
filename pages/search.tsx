@@ -379,11 +379,23 @@ export default function Home() {
             </Grid>
             )}
 
-            {productsData.length === 0 && currentStoreToShow && (
+            {productsData.length === 0 && currentStoreToShow && !searchInput && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
                 message="Ahhh! esta loja ainda não cadastrou seus produtos..."
+                withButton
+                buttonMessage="Solicitar catálogo de produtos"
+                buttonOnClick={solicitarCatalogo}
+              />
+            </Grid>
+            )}
+
+            {productsData.length === 0 && currentStoreToShow && searchInput && (
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <ImageFeedback
+                image="/Jhon-Travolta.gif"
+                message="Hmm... Nenhum produto foi encontrado com este nome."
                 withButton
                 buttonMessage="Solicitar catálogo de produtos"
                 buttonOnClick={solicitarCatalogo}
