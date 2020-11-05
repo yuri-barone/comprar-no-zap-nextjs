@@ -42,6 +42,7 @@ const editPerfil = () => {
           endereco={perfil.endereco}
           id={perfil.id}
           searchNewPerfil={searchPerfil}
+          palavrasChaves={perfil.palavrasChaves}
           seller={perfil.seller}
           userId={perfil.userId}
           delivery={perfil.delivery}

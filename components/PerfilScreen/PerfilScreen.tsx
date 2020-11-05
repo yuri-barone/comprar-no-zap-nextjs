@@ -51,6 +51,7 @@ export type PerfilScreenProps = {
   searchNewPerfil: () => void;
   userId: number;
   delivery: boolean;
+  palavrasChaves: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -83,6 +84,7 @@ function PerfilScreen({
   seller,
   delivery,
   userId,
+  palavrasChaves,
 }: PerfilScreenProps) {
   const [img64, setImg64] = useState<any>(src);
   const [openDanger, setOpenDanger] = useState(false);
@@ -145,6 +147,7 @@ function PerfilScreen({
       endereco,
       seller,
       delivery,
+      palavrasChaves,
     },
   });
   const nomeInput = useField('nome', form);
@@ -152,6 +155,7 @@ function PerfilScreen({
   const enderecoInput = useField('endereco', form);
   const sellerBox = useField('seller', form);
   const deliveryBox = useField('delivery', form);
+  const palavrasChavesInput = useField('palavrasChaves', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
@@ -229,6 +233,28 @@ function PerfilScreen({
                         && enderecoInput.meta.error
                       }
                     />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      {...palavrasChavesInput.input}
+                      id="palavrasChaves"
+                      label="Palavras Chaves"
+                      variant="outlined"
+                      fullWidth
+                      error={
+                        palavrasChavesInput.meta.touched && palavrasChavesInput.meta.invalid
+                      }
+                      helperText={
+                        palavrasChavesInput.meta.touched
+                        && palavrasChavesInput.meta.invalid
+                        && palavrasChavesInput.meta.error
+                      }
+                    />
+                    <Typography variant="caption">
+                      Coloque aqui o nome de alguns produtos ou serviços que
+                      você trabalha, assim as pessoas te encontrarão mais
+                      fácil.
+                    </Typography>
                   </Grid>
                 </Grid>
                 <Grid container justify="flex-end" spacing={2}>
