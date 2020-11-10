@@ -16,7 +16,7 @@ import * as yup from 'yup';
 import { ValidationErrors } from 'final-form';
 import { green } from '@material-ui/core/colors';
 import clsx from 'clsx';
-import MaskedTextField from '../MaskedTextField';
+import MaskedTextFieldNonValidate from '../MaskedTextFieldNonValidate';
 
 export type LoginScreenProps = {
   onLogin: (loginData: any) => void;
@@ -112,7 +112,7 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <MaskedTextField
+          <MaskedTextFieldNonValidate
             id="zap"
             label="Whatsapp"
             field={phoneInput}

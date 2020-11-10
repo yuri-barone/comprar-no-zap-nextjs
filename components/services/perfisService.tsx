@@ -18,6 +18,33 @@ const get = async (id: number) => {
   }
 };
 
+const getAllDomains = async () => {
+  try {
+    const response = await api.get('/all-domains');
+    return { data: response.data };
+  } catch (error) {
+    return error;
+  }
+};
+
+const checkDomain = async (domain:string) => {
+  try {
+    const response = await api.get(`/get-domain-owner/${domain}`);
+    return { data: response.data };
+  } catch (error) {
+    return error;
+  }
+};
+
+const checkZap = async (zap:string) => {
+  try {
+    const response = await api.get(`/get-already-existed-zap/${zap}`);
+    return { data: response.data };
+  } catch (error) {
+    return error;
+  }
+};
+
 const find = async (filter: string) => {
   try {
     const args = [];
@@ -50,10 +77,23 @@ const getPerfilByUserId = async (id: number) => {
   }
 };
 
+const getPerfilByDomain = async (domain: string) => {
+  try {
+    const response = await api.get(`/perfis/?domain=${domain}`);
+    return { data: response.data.data[0] };
+  } catch (error) {
+    return error;
+  }
+};
+
 export default {
   save,
   find,
   edit,
   get,
   getPerfilByUserId,
+  getAllDomains,
+  getPerfilByDomain,
+  checkDomain,
+  checkZap,
 };

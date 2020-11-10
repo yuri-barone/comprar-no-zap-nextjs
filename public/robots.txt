@@ -1,0 +1,6 @@
+Sitemap: https://comprarnozap.com/api/sitemap-common
+
+User-agent: *
+Allow: /*
+
+Disallow: /api/*

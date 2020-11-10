@@ -5,14 +5,7 @@ import MaskedInput from 'react-text-mask';
 const oldPhoneFormat = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, /\d/];
 const newPhoneFormat = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
-const MaskedTextField = ({
-  field, id, label, validateZap, touch, isTouched,
-}:{field:any,
-  id:string,
-  label:string,
-  validateZap:(zap:string)=>void,
-  touch:()=>void,
-  isTouched:boolean }) => {
+const MaskedTextFieldNonValidate = ({ field, id, label }:{field:any, id:string, label:string}) => {
   const getOnlyNumbers = (value:any) => {
     if (!value) {
       return value;
@@ -48,8 +41,6 @@ const MaskedTextField = ({
     const target = { ...event.currentTarget, value };
     field.input.onChange({ target });
     setDefinedMask(getMaskByValue(value));
-    validateZap(value);
-    touch();
   };
 
   return (
@@ -59,9 +50,9 @@ const MaskedTextField = ({
       variant="outlined"
       fullWidth
       onBlur={handleOnBlur}
-      error={isTouched && field.meta.invalid}
+      error={field.meta.touched && field.meta.invalid}
       helperText={
-         isTouched && field.meta.invalid && field.meta.error
+          field.meta.touched && field.meta.invalid && field.meta.error
         }
       InputProps={{ inputComponent: MaskedInputConfigured }}
       defaultValue={field.input.value}
@@ -69,4 +60,4 @@ const MaskedTextField = ({
   );
 };
 
-export default MaskedTextField;
+export default MaskedTextFieldNonValidate;

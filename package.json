@@ -47,8 +47,10 @@
     "react-final-form-hooks": "^2.0.2",
     "react-input-mask": "^2.0.4",
     "react-places-autocomplete": "^7.3.0",
+    "react-rewards": "^1.1.2",
     "react-scripts": "3.4.3",
     "react-text-mask": "^5.4.3",
+    "sitemap": "^6.3.3",
     "typescript": "~3.7.2",
     "yup": "^0.29.3"
   },

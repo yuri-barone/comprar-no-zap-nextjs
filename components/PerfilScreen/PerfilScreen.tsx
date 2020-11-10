@@ -3,22 +3,28 @@ import {
   Button,
   Checkbox,
   Collapse,
+  Container,
   Divider,
   FormControlLabel,
   Grid,
+  IconButton,
   Link,
   makeStyles,
   Snackbar,
   TextField,
   Typography,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ValidationErrors } from 'final-form';
-import React, { useState } from 'react';
+import React, {
+  useEffect, useRef, useState,
+} from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
-
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import * as yup from 'yup';
+import Reward from 'react-rewards';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import MaskedTextField from '../MaskedTextField';
 import perfisService from '../services/perfisService';
@@ -52,6 +58,29 @@ export type PerfilScreenProps = {
   userId: number;
   delivery: boolean;
   palavrasChaves: string;
+  domain: string;
+};
+
+const buildDomain = (value: string) => {
+  if (!value) {
+    return value;
+  }
+
+  const formatedDomain = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s/g, '-')
+    .replaceAll("'", '')
+    .replaceAll('"', '');
+  return formatedDomain;
+};
+
+const buildNome = (value: string) => {
+  if (!value) {
+    return value;
+  }
+  const formatedNome = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replaceAll("'", '')
+    .replaceAll('"', '')
+    .trim();
+  return formatedNome;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -72,6 +101,9 @@ const useStyles = makeStyles((theme) => ({
   fullWidth: {
     width: '100%',
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }));
 
 function PerfilScreen({
@@ -85,10 +117,26 @@ function PerfilScreen({
   delivery,
   userId,
   palavrasChaves,
+  domain,
 }: PerfilScreenProps) {
   const [img64, setImg64] = useState<any>(src);
   const [openDanger, setOpenDanger] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
+  const [zapIsValid, setZapIsValid] = useState(true);
+  const [touchedZap, setTouchedZap] = useState<boolean>(false);
+  const [touchedName, setTouchedName] = useState<boolean>(false);
+  const [dominioIsValid, setDominioIsValid] = useState<boolean>(true);
+
+  const refReward = useRef(null);
+
+  useEffect(() => {
+    const rewarded = localStorage.getItem('PDZReward');
+    if (!rewarded) {
+      refReward.current.rewardMe();
+      localStorage.setItem('PDZReward', 'Yes');
+    }
+  }, []);
+
   const session = useSession(true);
   const openSnackBarDanger = () => {
     setOpenDanger(true);
@@ -110,6 +158,20 @@ function PerfilScreen({
 
     setOpenSuccess(false);
   };
+
+  const dominioMutator = (fieldNameOrigin: string, state:any, { changeValue }:any) => {
+    if (fieldNameOrigin[0] === 'nome') {
+      const value = state.formState.values[fieldNameOrigin];
+      const valueName = buildNome(value);
+      const dominio = buildDomain(valueName);
+      changeValue(state, 'nome', () => valueName);
+      changeValue(state, 'domain', () => dominio);
+    }
+    const valueName = state.formState.values[fieldNameOrigin];
+    const dominio = buildDomain(valueName);
+    changeValue(state, 'domain', () => dominio);
+  };
+
   const onSubmit = async (values: any) => {
     const params:any = values;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -124,21 +186,39 @@ function PerfilScreen({
       openSnackBarDanger();
     }
   };
+
+  const processAsyncValidate = (errors:any) => {
+    if (!dominioIsValid && zapIsValid) {
+      return { ...errors, domain: 'Este domínio já está sendo utilizado' };
+    }
+    if (!zapIsValid && dominioIsValid) {
+      return { ...errors, zap: 'Este zap já esta em uso' };
+    }
+    if (!dominioIsValid && !zapIsValid) {
+      return { ...errors, zap: 'Este zap já esta em uso', domain: 'Este domínio já está sendo utilizado' };
+    }
+    return errors;
+  };
+
   // eslint-disable-next-line consistent-return
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
+      return processAsyncValidate({});
     } catch (errors) {
-      const formErrors: any = {};
+      let formErrors: any = {};
       errors.inner.forEach((erro: ValidationErrors) => {
         formErrors[erro.path] = erro.message;
       });
+      formErrors = processAsyncValidate(formErrors);
       return formErrors;
     }
   };
 
   const classes = useStyles();
-  const { form, handleSubmit } = useForm({
+  const {
+    form, handleSubmit, pristine, submitting,
+  } = useForm({
     onSubmit,
     validate,
     initialValues: {
@@ -148,7 +228,9 @@ function PerfilScreen({
       seller,
       delivery,
       palavrasChaves,
+      domain,
     },
+    mutators: { dominioMutator },
   });
   const nomeInput = useField('nome', form);
   const zapInput = useField('zap', form);
@@ -156,9 +238,64 @@ function PerfilScreen({
   const sellerBox = useField('seller', form);
   const deliveryBox = useField('delivery', form);
   const palavrasChavesInput = useField('palavrasChaves', form);
+  const domainInput = useField('domain', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
+  };
+
+  const validateZap = async (value:string) => {
+    if (value) {
+      const response = await perfisService.checkZap(value);
+      if (response.data.length === 0) {
+        setZapIsValid(true);
+        return;
+      }
+      if (response.data[0].id === id) {
+        setZapIsValid(true);
+        return;
+      }
+      setZapIsValid(false);
+    }
+  };
+
+  const validateDomain = async (value:string) => {
+    const dominio = buildDomain(value);
+    if (dominio) {
+      const response = await perfisService.checkDomain(dominio);
+      if (response.data.length === 0) {
+        setDominioIsValid(true);
+        return;
+      }
+      if (response.data[0].id === id) {
+        setDominioIsValid(true);
+        return;
+      }
+      setDominioIsValid(false);
+    }
+  };
+
+  const touchName = () => {
+    setTouchedName(true);
+  };
+
+  const touchZap = () => {
+    setTouchedZap(true);
+  };
+
+  const showCatalogo = () => {
+    const link = `/lojas/${domain}`;
+    const win = window.open(link, '_blank');
+    win.focus();
+  };
+
+  const copyLink = () => {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = `${window.location.origin}/lojas/${domain}`;
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
   };
 
   return (
@@ -181,7 +318,44 @@ function PerfilScreen({
       <Divider />
       <div className={classes.root}>
         <Box p={2} className={classes.fullWidth}>
-          <Grid container justify="center" spacing={2}>
+
+          <Grid container justify="center" spacing={2} alignItems="center">
+            <Container>
+              <Grid item xs={12}>
+                <Alert severity="info" icon={<MenuBookIcon />}>
+                  <Reward
+                    ref={refReward}
+                    type="confetti"
+                    config={{
+                      lifetime: 150,
+                      angle: 90,
+                      decay: 0.91,
+                      spread: 50,
+                      startVelocity: 35,
+                      elementCount: 125,
+                      elementSize: 7,
+                    }}
+                  />
+                  <AlertTitle>Seu Catálogo</AlertTitle>
+                  Parabéns agora seu estabelecimento tem um catálogo na internet. Clique
+                  {' '}
+                  <Link onClick={showCatalogo} className={classes.clickable}>
+                    <strong>aqui</strong>
+                  </Link>
+                  {' '}
+                  para ir ao seu catálogo.
+                  {' '}
+                  <Typography variant="body1">
+                    {window.location.origin}
+                    /lojas/
+                    {domain}
+                    <IconButton title="Copiar link" color="inherit" component="span" size="small" onClick={copyLink}>
+                      <FileCopyIcon fontSize="small" />
+                    </IconButton>
+                  </Typography>
+                </Alert>
+              </Grid>
+            </Container>
             <Grid item xs="auto" md={3} sm={3} lg={2}>
               <ImageUpload
                 onChangeImage={handleImage}
@@ -195,18 +369,42 @@ function PerfilScreen({
                   <Grid item xs={12}>
                     <Typography gutterBottom>Meus Dados</Typography>
                   </Grid>
-                  <Grid item xs={12} sm={8}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...nomeInput.input}
-                      id="nome"
-                      label="Nome da empresa"
+                      label="Nome"
                       variant="outlined"
                       fullWidth
-                      error={nomeInput.meta.touched && nomeInput.meta.invalid}
+                      id="nome"
+                      error={touchedName && nomeInput.meta.invalid}
                       helperText={
-                        nomeInput.meta.touched
+                        touchedName
                         && nomeInput.meta.invalid
                         && nomeInput.meta.error
+                      }
+                      onBlur={() => {
+                        form.mutators.dominioMutator('nome');
+                        validateDomain(nomeInput.input.value);
+                        touchName();
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      {...domainInput.input}
+                      label="Dominio"
+                      onBlur={() => {
+                        form.mutators.dominioMutator('domain');
+                        validateDomain(domainInput.input.value);
+                      }}
+                      variant="outlined"
+                      fullWidth
+                      id="domain"
+                      error={!dominioIsValid}
+                      helperText={
+                        !dominioIsValid
+                        && domainInput.meta.invalid
+                        && domainInput.meta.error
                       }
                     />
                   </Grid>
@@ -215,6 +413,9 @@ function PerfilScreen({
                       id="zap"
                       label="Whatsapp"
                       field={zapInput}
+                      validateZap={validateZap}
+                      isTouched={touchedZap}
+                      touch={touchZap}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -267,7 +468,7 @@ function PerfilScreen({
                     </Collapse>
                   </Grid>
                   <Grid item xs="auto">
-                    <Button variant="contained" color="secondary" type="submit">
+                    <Button variant="contained" color="secondary" type="submit" disabled={pristine || submitting}>
                       Salvar
                     </Button>
                   </Grid>

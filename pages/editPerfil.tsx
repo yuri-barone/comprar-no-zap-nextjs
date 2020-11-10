@@ -46,6 +46,7 @@ const editPerfil = () => {
           seller={perfil.seller}
           userId={perfil.userId}
           delivery={perfil.delivery}
+          domain={perfil.domain}
         />
       )}
     </>

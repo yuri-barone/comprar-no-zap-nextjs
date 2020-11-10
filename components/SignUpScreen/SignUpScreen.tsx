@@ -26,6 +26,28 @@ import perfisService from '../services/perfisService';
 import usersService from '../services/usersService';
 import { keepSession } from '../useSession';
 
+const buildDomain = (value: string) => {
+  if (!value) {
+    return value;
+  }
+
+  const formatedDomain = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s/g, '-')
+    .replaceAll("'", '')
+    .replaceAll('"', '');
+  return formatedDomain;
+};
+
+const buildNome = (value: string) => {
+  if (!value) {
+    return value;
+  }
+  const formatedNome = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replaceAll("'", '')
+    .replaceAll('"', '')
+    .trim();
+  return formatedNome;
+};
+
 yup.setLocale({
   mixed: {
     default: 'Não é válido',
@@ -61,6 +83,10 @@ const schema = yup.object().shape({
   confirmarPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'As senhas não são as mesmas'),
+  domain: yup
+    .string()
+    .max(150)
+    .required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -90,6 +116,10 @@ function SignUpScreen() {
   };
   const classes = useStyles();
   const [img64, setImg64] = useState<string>('');
+  const [dominioIsValid, setDominioIsValid] = useState<boolean>(true);
+  const [zapIsValid, setZapIsValid] = useState<boolean>(true);
+  const [touchedName, setTouchedName] = useState<boolean>(false);
+  const [touchedZap, setTouchedZap] = useState<boolean>(false);
   const router = useRouter();
 
   const onSubmit = async (values: any) => {
@@ -111,30 +141,60 @@ function SignUpScreen() {
       const response = await usersService.login(loginValues);
       if (response.ok) {
         keepSession(values.zap, response.data);
-        router.push(params.seller ? '/produtos' : '/');
+        router.push(params.seller ? '/editPerfil' : '/');
       }
     } else {
       openSnackBar();
     }
   };
 
+  const dominioMutator = (fieldNameOrigin: string, state:any, { changeValue }:any) => {
+    if (fieldNameOrigin[0] === 'nome') {
+      const value = state.formState.values[fieldNameOrigin];
+      const nome = buildNome(value);
+      const dominio = buildDomain(nome);
+      changeValue(state, 'nome', () => nome);
+      changeValue(state, 'domain', () => dominio);
+    }
+    const nome = state.formState.values[fieldNameOrigin];
+    const dominio = buildDomain(nome);
+    changeValue(state, 'domain', () => dominio);
+  };
+
+  const processAsyncValidate = (errors:any) => {
+    if (!dominioIsValid && zapIsValid) {
+      return { ...errors, domain: 'Este domínio já está sendo utilizado' };
+    }
+    if (!zapIsValid && dominioIsValid) {
+      return { ...errors, zap: 'Este zap já esta em uso' };
+    }
+    if (!dominioIsValid && !zapIsValid) {
+      return { ...errors, zap: 'Este zap já esta em uso', domain: 'Este domínio já está sendo utilizado' };
+    }
+    return errors;
+  };
+
   // eslint-disable-next-line consistent-return
   const validate = (values: any): any => {
     try {
       schema.validateSync(values, { abortEarly: false });
+      return processAsyncValidate({});
     } catch (errors) {
-      const formErrors: any = {};
+      let formErrors: any = {};
       errors.inner.forEach((erro: ValidationErrors) => {
         formErrors[erro.path] = erro.message;
       });
+      formErrors = processAsyncValidate(formErrors);
       return formErrors;
     }
   };
+
   const {
     form, handleSubmit, pristine, submitting,
   } = useForm({
     onSubmit, // the function to call with your form values upon valid submit
     validate, // a record-level validation function to check all form values
+    mutators: { dominioMutator },
   });
 
   const nome = useField('nome', form);
@@ -145,9 +205,33 @@ function SignUpScreen() {
   const seller = useField('seller', form);
   const delivery = useField('delivery', form);
   const palavrasChaves = useField('palavrasChaves', form);
+  const domain = useField('domain', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
+  };
+
+  const validateDomain = async (value:string) => {
+    const dominio = buildDomain(value);
+    if (dominio) {
+      const response = await perfisService.checkDomain(dominio);
+      setDominioIsValid(response.data.length === 0);
+    }
+  };
+
+  const validateZap = async (value:string) => {
+    if (value) {
+      const response = await perfisService.checkZap(value);
+      setZapIsValid(response.data.length === 0);
+    }
+  };
+
+  const touchName = () => {
+    setTouchedName(true);
+  };
+
+  const touchZap = () => {
+    setTouchedZap(true);
   };
 
   return (
@@ -190,18 +274,42 @@ function SignUpScreen() {
                   </Grid>
                   <Grid item xs={12} md={9} sm={12}>
                     <Grid container spacing={1}>
-                      <Grid item xs={12} sm={12}>
+                      <Grid item xs={6} sm={6}>
                         <TextField
                           {...nome.input}
                           label="Nome"
                           variant="outlined"
                           fullWidth
                           id="nome"
-                          error={nome.meta.touched && nome.meta.invalid}
+                          error={touchedName && nome.meta.invalid}
                           helperText={
-                            nome.meta.touched
+                            touchedName
                             && nome.meta.invalid
                             && nome.meta.error
+                          }
+                          onBlur={() => {
+                            form.mutators.dominioMutator('nome');
+                            validateDomain(nome.input.value);
+                            touchName();
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <TextField
+                          {...domain.input}
+                          label="Dominio"
+                          onBlur={() => {
+                            form.mutators.dominioMutator('domain');
+                            validateDomain(domain.input.value);
+                          }}
+                          variant="outlined"
+                          fullWidth
+                          id="domain"
+                          error={!dominioIsValid}
+                          helperText={
+                            !dominioIsValid
+                            && domain.meta.invalid
+                            && domain.meta.error
                           }
                         />
                       </Grid>
@@ -257,6 +365,9 @@ function SignUpScreen() {
                       id="zap"
                       label="Whatsapp"
                       field={zap}
+                      validateZap={validateZap}
+                      isTouched={touchedZap}
+                      touch={touchZap}
                     />
                   </Grid>
                   <Grid item xs={12} sm={4}>

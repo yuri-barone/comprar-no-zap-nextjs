@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     right: 0,
     zIndex: 99,
+    cursor: 'pointer',
   },
   img: {
     position: 'absolute',
