@@ -31,9 +31,9 @@ const buildDomain = (value: string) => {
     return value;
   }
 
-  const formatedDomain = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s/g, '-')
-    .replaceAll("'", '')
-    .replaceAll('"', '');
+  const formatedDomain = value.toLowerCase().normalize('NFD').replace(/[^a-z0-9&\s]/g, '')
+    .replace(/\s/g, '-')
+    .replace(/&/g, 'e');
   return formatedDomain;
 };
 
@@ -41,9 +41,7 @@ const buildNome = (value: string) => {
   if (!value) {
     return value;
   }
-  const formatedNome = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replaceAll("'", '')
-    .replaceAll('"', '')
+  const formatedNome = value.normalize('NFD').replace(/[^\u0300-\u036fA-z0-9&\s]/g, '')
     .trim();
   return formatedNome;
 };

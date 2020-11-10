@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Catalogo = ({ perfil, produtos }:{perfil:any, produtos: any[]}) => {
+const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) => {
   const [cartProducts, setCartProducts] = useState([]);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
   const [inputNome, setInputNome] = useState<string | undefined>();
@@ -170,7 +170,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
