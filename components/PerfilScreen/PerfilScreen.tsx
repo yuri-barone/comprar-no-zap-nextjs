@@ -343,14 +343,13 @@ function PerfilScreen({
                   {' '}
                   para ir ao seu catálogo.
                   {' '}
-                  <Typography variant="body1">
-                    {window.location.origin}
-                    /lojas/
-                    {domain}
-                    <IconButton title="Copiar link" color="inherit" component="span" size="small" onClick={copyLink}>
-                      <FileCopyIcon fontSize="small" />
-                    </IconButton>
-                  </Typography>
+                  <br />
+                  {window.location.origin}
+                  /lojas/
+                  {domain}
+                  <IconButton title="Copiar link" color="inherit" component="span" size="small" onClick={copyLink}>
+                    <FileCopyIcon fontSize="small" />
+                  </IconButton>
                 </Alert>
               </Grid>
             </Container>
