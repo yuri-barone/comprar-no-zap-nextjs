@@ -31,7 +31,7 @@ const buildDomain = (value: string) => {
     return value;
   }
 
-  const formatedDomain = value.toLowerCase().normalize('NFD').replace(/[^a-z0-9&\s]/g, '')
+  const formatedDomain = value.toLowerCase().normalize('NFD').replace(/[^a-z0-9&\-\s]/g, '')
     .replace(/\s/g, '-')
     .replace(/&/g, 'e');
   return formatedDomain;
