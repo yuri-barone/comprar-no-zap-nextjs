@@ -6,7 +6,7 @@ import React from 'react';
 
 export type EnterpriseExclusiveProps = {
   perfil: any;
-  isTheSamePerf: boolean;
+  isTheSamePerfil: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnterpriseExclusive = ({ perfil, isTheSamePerf }:EnterpriseExclusiveProps) => {
+const EnterpriseExclusive = ({ perfil, isTheSamePerfil }:EnterpriseExclusiveProps) => {
   const classes = useStyles();
   const router = useRouter();
 
@@ -67,14 +67,16 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerf }:EnterpriseExclusiveProps)
         </Grid>
         <Grid item xs="auto" md={3}>
           <Grid container spacing={1}>
-            {isTheSamePerf && (
+            {isTheSamePerfil && (
             <Grid item xs={12}>
-              <Button variant="outlined" color="inherit" onClick={goToProdutos} fullWidth>Cadastrar meus produtos</Button>
+              <Button variant="contained" color="inherit" onClick={goToProdutos} fullWidth>Cadastrar meus produtos</Button>
             </Grid>
             )}
+            {!isTheSamePerfil && (
             <Grid item xs={12}>
               <Button variant="contained" color="default" onClick={sendMessage} fullWidth>Entrar em contato</Button>
             </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>

@@ -32,14 +32,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) => {
+// eslint-disable-next-line max-len
+const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, produtos: any[]}) => {
   const [cartProducts, setCartProducts] = useState([]);
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
   const [inputNome, setInputNome] = useState<string | undefined>();
   const [totalValue, setTotalValue] = useState(0);
   const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
   const [productsData, setProductsData] = useState(produtos);
-  const [isTheSamePerf, setIsTheSamePerf] = useState(false);
+  const [isTheSamePerfil, setIsTheSamePerfil] = useState(false);
 
   const session: any = useSession(false);
   const classes = useStyles();
@@ -50,12 +51,12 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
     setInputEndereco(session.profile.endereco || '');
     setInputNome(session.profile.nome || '');
     if (session.profile.id === perfil.id) {
-      setIsTheSamePerf(true);
+      setIsTheSamePerfil(true);
     }
   }, [session.profile.loaded]);
 
   useEffect(() => {
-    if (perfil === {}) {
+    if (perfil.isFallBack) {
       router.push('/search?tipo=0');
     }
   }, []);
@@ -68,13 +69,15 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
     setTotalValue(calcTotalValue);
   }, [cartProducts]);
 
+  const normalizeText = (text:string) => text.toLowerCase().normalize('NFD').replace(/[^a-z0-9&\-\s]/g, '');
+
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
       if (searchInput !== undefined) {
         const produtosFiltrados = produtos.filter((produto) => {
-          const pesquisa = searchInput.toLowerCase();
-          const titulo = produto.titulo.toLowerCase();
-          return titulo.match(pesquisa);
+          const pesquisa = normalizeText(searchInput);
+          const camposProduto = normalizeText(`${produto.titulo} ${produto.descricao}`);
+          return camposProduto.match(pesquisa);
         });
         setProductsData(produtosFiltrados);
       }
@@ -138,7 +141,7 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
         <Grid item xs={12}>
           <Container>
             <Box p={2}>
-              <EnterpriseExclusive perfil={perfil} isTheSamePerf={isTheSamePerf} />
+              <EnterpriseExclusive perfil={perfil} isTheSamePerfil={isTheSamePerfil} />
             </Box>
           </Container>
         </Grid>
