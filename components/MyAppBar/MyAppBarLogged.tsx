@@ -25,6 +25,8 @@ export type MyAppBarLoggedProps = {
   src?: string;
   name: string;
   zap: string;
+  domain: string;
+  seller: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -71,10 +73,13 @@ const useStyles = makeStyles((theme) => ({
   avatarClick: {
     cursor: 'pointer',
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }));
 
 const MyAppBarLogged = ({
-  value, onChange, src, name, zap, onSearch,
+  value, onChange, src, name, zap, onSearch, domain, seller,
 }: MyAppBarLoggedProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -92,6 +97,12 @@ const MyAppBarLogged = ({
   };
 
   const open = Boolean(anchorEl);
+
+  const showCatalogo = () => {
+    const link = `/lojas/${domain}`;
+    const win = window.open(link, '_blank');
+    win.focus();
+  };
 
   return (
     <>
@@ -179,6 +190,17 @@ const MyAppBarLogged = ({
                             Editar meu perfil
                           </Button>
                         </Grid>
+                        {seller && (
+                        <Grid item xs={12}>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={showCatalogo}
+                          >
+                            Meu catálogo
+                          </Button>
+                        </Grid>
+                        )}
                         <Grid item xs={12}>
                           <ColorButton
                             variant="outlined"

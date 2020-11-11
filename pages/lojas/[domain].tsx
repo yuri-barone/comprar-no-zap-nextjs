@@ -2,6 +2,7 @@ import {
   AppBar, Box, Container, Divider, Grid, makeStyles, Slide, ThemeProvider,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import MyCart from '../../components/MyCart/MyCart';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import perfisService from '../../components/services/perfisService';
@@ -10,6 +11,7 @@ import PedirNoZapTheme from '../../styles/PedirNoZapTheme';
 import useSession from '../../components/useSession';
 import EnterpriseExclusive from '../../components/EnterpriseCard/EnterpriseExclusive';
 import ImageFeedback from '../../components/ImageFeedback/ImageFeedback';
+import Search from '../../components/Search/Search';
 
 const useStyles = makeStyles((theme) => ({
   showingCart: {
@@ -35,15 +37,28 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
   const [inputNome, setInputNome] = useState<string | undefined>();
   const [totalValue, setTotalValue] = useState(0);
+  const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
+  const [productsData, setProductsData] = useState(produtos);
+  const [isTheSamePerf, setIsTheSamePerf] = useState(false);
 
   const session: any = useSession(false);
   const classes = useStyles();
   const showingCart = cartProducts.length > 0;
+  const router = useRouter();
 
   useEffect(() => {
     setInputEndereco(session.profile.endereco || '');
     setInputNome(session.profile.nome || '');
+    if (session.profile.id === perfil.id) {
+      setIsTheSamePerf(true);
+    }
   }, [session.profile.loaded]);
+
+  useEffect(() => {
+    if (perfil === {}) {
+      router.push('/search?tipo=0');
+    }
+  }, []);
 
   useEffect(() => {
     const valor = cartProducts.map(
@@ -52,6 +67,24 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
     const calcTotalValue = valor.reduce((a, b) => a + b, 0);
     setTotalValue(calcTotalValue);
   }, [cartProducts]);
+
+  useEffect(() => {
+    const searchTimeout = setTimeout(() => {
+      if (searchInput !== undefined) {
+        const produtosFiltrados = produtos.filter((produto) => {
+          const titulo = produto.titulo.toLowerCase();
+          return titulo.match(searchInput);
+        });
+        setProductsData(produtosFiltrados);
+      }
+      if (searchInput === undefined) {
+        setProductsData(produtos);
+      }
+    }, 500);
+    return () => {
+      clearInterval(searchTimeout);
+    };
+  }, [searchInput]);
 
   const adicionar = (item: any) => {
     let newItems = [];
@@ -94,13 +127,17 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
     win.focus();
   };
 
+  const searchOnChange = (e: any) => {
+    setSearchInput(e.target.value);
+  };
+
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
       <Grid container className={classes.enterpriseShow}>
         <Grid item xs={12}>
           <Container>
             <Box p={2}>
-              <EnterpriseExclusive perfil={perfil} />
+              <EnterpriseExclusive perfil={perfil} isTheSamePerf={isTheSamePerf} />
             </Box>
           </Container>
         </Grid>
@@ -113,15 +150,18 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
           className={showingCart ? classes.showingCart : classes.hiddenCart}
         >
           <Grid item xs={12} className={classes.containerMarginFix4}>
+            <Search onChange={searchOnChange} value={searchInput} />
+          </Grid>
+          <Grid item xs={12} className={classes.containerMarginFix4}>
             <Grid container alignItems="stretch" spacing={4}>
-              { produtos.map((item) => (
+              { productsData.map((item) => (
                 <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
                   <ProductCard product={item} onAdd={adicionar} />
                 </Grid>
               ))}
             </Grid>
           </Grid>
-          {produtos.length === 0 && (
+          {productsData.length === 0 && !searchInput && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
@@ -129,6 +169,14 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
                 withButton
                 buttonMessage="Solicitar catálogo de produtos"
                 buttonOnClick={solicitarCatalogo}
+              />
+            </Grid>
+          )}
+          {productsData.length === 0 && searchInput && (
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <ImageFeedback
+                image="/Jhon-Travolta.gif"
+                message="Hmm não encontramos produtos com este nome."
               />
             </Grid>
           )}

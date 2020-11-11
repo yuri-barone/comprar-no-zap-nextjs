@@ -16,6 +16,8 @@ export type LoggedBarIndexProps = {
   src: string;
   name: string;
   zap: string;
+  domain: string;
+  seller: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -46,9 +48,14 @@ const useStyles = makeStyles((theme) => ({
   avatarClick: {
     cursor: 'pointer',
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }));
 
-const LoggedBarIndex = ({ src, name, zap }:LoggedBarIndexProps) => {
+const LoggedBarIndex = ({
+  src, name, zap, domain, seller,
+}:LoggedBarIndexProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleOnClick = () => {
@@ -61,6 +68,12 @@ const LoggedBarIndex = ({ src, name, zap }:LoggedBarIndexProps) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const showCatalogo = () => {
+    const link = `/lojas/${domain}`;
+    const win = window.open(link, '_blank');
+    win.focus();
   };
 
   const open = Boolean(anchorEl);
@@ -128,6 +141,17 @@ const LoggedBarIndex = ({ src, name, zap }:LoggedBarIndexProps) => {
                     Editar meu perfil
                   </Button>
                 </Grid>
+                {seller && (
+                <Grid item xs={12}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={showCatalogo}
+                  >
+                    Meu catálogo
+                  </Button>
+                </Grid>
+                )}
                 <Grid item xs={12}>
                   <ColorButton
                     variant="outlined"

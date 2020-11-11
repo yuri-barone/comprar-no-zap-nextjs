@@ -1,10 +1,12 @@
 import {
   Avatar, Box, Button, Grid, Hidden, makeStyles, Typography,
 } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 export type EnterpriseExclusiveProps = {
   perfil: any;
+  isTheSamePerf: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -17,14 +19,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnterpriseExclusive = ({ perfil }:EnterpriseExclusiveProps) => {
+const EnterpriseExclusive = ({ perfil, isTheSamePerf }:EnterpriseExclusiveProps) => {
   const classes = useStyles();
+  const router = useRouter();
 
   const sendMessage = () => {
     const link = `https://api.whatsapp.com/send?phone=55${perfil.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
     const win = window.open(link, '_blank');
     win.focus();
   };
+
+  const goToProdutos = () => {
+    router.push('/produtos');
+  };
+
   return (
     <>
       <Grid container alignItems="center" spacing={2} justify="center">
@@ -58,7 +66,16 @@ const EnterpriseExclusive = ({ perfil }:EnterpriseExclusiveProps) => {
           </Grid>
         </Grid>
         <Grid item xs="auto" md={3}>
-          <Button variant="contained" color="default" onClick={sendMessage}>Entrar em contato</Button>
+          <Grid container spacing={1}>
+            {isTheSamePerf && (
+            <Grid item xs={12}>
+              <Button variant="outlined" color="inherit" onClick={goToProdutos} fullWidth>Cadastrar meus produtos</Button>
+            </Grid>
+            )}
+            <Grid item xs={12}>
+              <Button variant="contained" color="default" onClick={sendMessage} fullWidth>Entrar em contato</Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>

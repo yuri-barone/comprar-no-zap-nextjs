@@ -297,6 +297,8 @@ export default function Home() {
           src={session.isAutheticated && session.profile['picture.imgBase64']}
           name={session.isAutheticated && session.profile.nome}
           zap={session.isAutheticated && session.profile.zap}
+          domain={session.isAutheticated && session.profile.domain}
+          seller={session.isAutheticated && session.profile.seller}
         />
       )}
       {!session.isAutheticated && (

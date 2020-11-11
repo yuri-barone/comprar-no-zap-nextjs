@@ -126,6 +126,7 @@ function PerfilScreen({
   const [dominioIsValid, setDominioIsValid] = useState<boolean>(true);
 
   const refReward = useRef(null);
+  const refRewardAfterSuccess = useRef(null);
 
   useEffect(() => {
     const rewarded = localStorage.getItem('PDZReward');
@@ -180,6 +181,11 @@ function PerfilScreen({
     if (response.ok) {
       searchNewPerfil();
       openSnackBarSuccess();
+      if (params.seller === true) {
+        setTimeout(() => {
+          refRewardAfterSuccess.current.rewardMe();
+        }, 500);
+      }
     } else {
       openSnackBarDanger();
     }
@@ -320,6 +326,22 @@ function PerfilScreen({
           <Grid container justify="center" spacing={2} alignItems="center">
             <Container>
               <Grid item xs={12}>
+                <Reward
+                  ref={refRewardAfterSuccess}
+                  type="confetti"
+                  config={{
+                    lifetime: 150,
+                    angle: 90,
+                    decay: 0.91,
+                    spread: 50,
+                    startVelocity: 35,
+                    elementCount: 125,
+                    elementSize: 7,
+                  }}
+                />
+              </Grid>
+              {seller && (
+              <Grid item xs={12}>
                 <Alert severity="info" icon={<MenuBookIcon />}>
                   <Reward
                     ref={refReward}
@@ -352,6 +374,7 @@ function PerfilScreen({
                   </IconButton>
                 </Alert>
               </Grid>
+              )}
             </Container>
             <Grid item xs="auto" md={3} sm={3} lg={2}>
               <ImageUpload

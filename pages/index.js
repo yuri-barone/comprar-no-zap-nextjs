@@ -67,6 +67,8 @@ export default function Home() {
             src={session.profile['picture.imgBase64']}
             name={session.profile.nome}
             zap={session.profile.zap}
+            domain={session.profile.domain}
+            seller={session.profile.seller}
           />
           )}
           {!session.isAutheticated && (
