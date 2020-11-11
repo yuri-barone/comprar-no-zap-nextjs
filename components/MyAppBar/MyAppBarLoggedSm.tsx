@@ -22,6 +22,8 @@ export type MyAppBarLoggedSmProps = {
   src?: string;
   name: string;
   zap: string;
+  seller: boolean;
+  domain: string;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -71,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MyAppBarLoggedSm = ({
-  value, onChange, src, name, zap,
+  value, onChange, src, name, zap, seller, domain,
 }: MyAppBarLoggedSmProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -89,6 +91,12 @@ const MyAppBarLoggedSm = ({
   };
 
   const open = Boolean(anchorEl);
+
+  const showCatalogo = () => {
+    const link = `/lojas/${domain}`;
+    const win = window.open(link, '_blank');
+    win.focus();
+  };
 
   return (
     <div className={classes.root}>
@@ -155,6 +163,18 @@ const MyAppBarLoggedSm = ({
                         Editar meu perfil
                       </Button>
                     </Grid>
+                    {seller && (
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={showCatalogo}
+                        fullWidth
+                      >
+                        Meu catálogo
+                      </Button>
+                    </Grid>
+                    )}
                     <Grid item xs={12}>
                       <ColorButton
                         variant="outlined"

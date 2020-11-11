@@ -150,6 +150,7 @@ const LoggedBarProducts = ({
                     variant="outlined"
                     color="secondary"
                     onClick={showCatalogo}
+                    fullWidth
                   >
                     Meu catálogo
                   </Button>

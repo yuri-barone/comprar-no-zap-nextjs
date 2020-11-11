@@ -196,6 +196,7 @@ const MyAppBarLogged = ({
                             variant="outlined"
                             color="secondary"
                             onClick={showCatalogo}
+                            fullWidth
                           >
                             Meu catálogo
                           </Button>
@@ -226,7 +227,9 @@ const MyAppBarLogged = ({
           onSearch={onSearch}
           src={src}
           name={name}
-          zap={name}
+          zap={zap}
+          seller={seller}
+          domain={domain}
         />
       </Hidden>
     </>
