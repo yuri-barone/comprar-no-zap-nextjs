@@ -72,8 +72,9 @@ const Catalogo = ({ perfil = {}, produtos = [] }:{perfil:any, produtos: any[]}) 
     const searchTimeout = setTimeout(() => {
       if (searchInput !== undefined) {
         const produtosFiltrados = produtos.filter((produto) => {
+          const pesquisa = searchInput.toLowerCase();
           const titulo = produto.titulo.toLowerCase();
-          return titulo.match(searchInput);
+          return titulo.match(pesquisa);
         });
         setProductsData(produtosFiltrados);
       }
