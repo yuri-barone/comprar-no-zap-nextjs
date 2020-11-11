@@ -1,8 +1,9 @@
 import {
-  AppBar, Box, Container, Divider, Grid, makeStyles, Slide, ThemeProvider,
+  AppBar, Box, Button, Container, Divider, Grid, makeStyles, Slide, ThemeProvider, Typography,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 import MyCart from '../../components/MyCart/MyCart';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import perfisService from '../../components/services/perfisService';
@@ -30,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: theme.spacing(25),
     color: theme.palette.common.white,
   },
+  fullHeight: {
+    height: '100%',
+  },
+  logo: {
+    width: '100%',
+  },
 }));
 
 // eslint-disable-next-line max-len
@@ -45,23 +52,25 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
   const session: any = useSession(false);
   const classes = useStyles();
   const showingCart = cartProducts.length > 0;
-  const router = useRouter();
+
+  const isFallBack = () => !(perfil?.id > 0);
 
   useEffect(() => {
+    if (isFallBack()) {
+      return;
+    }
     setInputEndereco(session.profile.endereco || '');
     setInputNome(session.profile.nome || '');
+
     if (session.profile.id === perfil.id) {
       setIsTheSamePerfil(true);
     }
   }, [session.profile.loaded]);
 
   useEffect(() => {
-    if (perfil.isFallBack) {
-      router.push('/search?tipo=0');
+    if (isFallBack()) {
+      return;
     }
-  }, []);
-
-  useEffect(() => {
     const valor = cartProducts.map(
       (item) => Number(item.product.valor) * item.quantity,
     );
@@ -73,7 +82,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
 
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
-      if (searchInput !== undefined) {
+      if (!!searchInput && !isFallBack()) {
         const produtosFiltrados = produtos.filter((produto) => {
           const pesquisa = normalizeText(searchInput);
           const camposProduto = normalizeText(`${produto.titulo} ${produto.descricao}`);
@@ -85,9 +94,8 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
         setProductsData(produtos);
       }
     }, 500);
-    return () => {
-      clearInterval(searchTimeout);
-    };
+
+    return () => clearInterval(searchTimeout);
   }, [searchInput]);
 
   const adicionar = (item: any) => {
@@ -126,7 +134,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
   };
 
   const solicitarCatalogo = () => {
-    const link = `https://api.whatsapp.com/send?phone=55${perfil.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
+    const link = `https://api.whatsapp.com/send?phone=55${perfil?.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
     const win = window.open(link, '_blank');
     win.focus();
   };
@@ -137,35 +145,71 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
 
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
-      <Grid container className={classes.enterpriseShow}>
-        <Grid item xs={12}>
-          <Container>
-            <Box p={2}>
-              <EnterpriseExclusive perfil={perfil} isTheSamePerfil={isTheSamePerfil} />
-            </Box>
-          </Container>
-        </Grid>
-      </Grid>
-      <Divider />
-      <Container>
-        <Grid
-          container
-          spacing={2}
-          className={showingCart ? classes.showingCart : classes.hiddenCart}
-        >
-          <Grid item xs={12} className={classes.containerMarginFix4}>
-            <Search onChange={searchOnChange} value={searchInput} />
-          </Grid>
-          <Grid item xs={12} className={classes.containerMarginFix4}>
-            <Grid container alignItems="stretch" spacing={4}>
-              { productsData.map((item) => (
-                <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
-                  <ProductCard product={item} onAdd={adicionar} />
-                </Grid>
-              ))}
+      {isFallBack()
+      && (
+        <Container>
+          <Grid container alignItems="center" justify="center" className={classes.fullHeight}>
+            <Grid item xs={6}>
+              <Box pt={3}>
+                <img
+                  alt=""
+                  src="/comprar-no-zap.svg"
+                  className={classes.logo}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box pb={3}>
+                <Typography align="center" variant="h6">Ops! Este catálogo ainda não existe.</Typography>
+                <Typography gutterBottom align="center">Cadastre-se para colocar seus produtos aqui. É GRÁTIS, mas corra antes que alguém utilize este domínio!</Typography>
+              </Box>
+            </Grid>
+
+            <Grid item xs="auto">
+              <Link href="/search?tipo=0">
+                <Button variant="outlined" color="primary">Continuar procurando</Button>
+              </Link>
+              {'   '}
+              <Link href="/cadastro">
+                <Button variant="contained" color="primary">Cadastrar minha loja</Button>
+              </Link>
             </Grid>
           </Grid>
-          {productsData.length === 0 && !searchInput && (
+        </Container>
+      )}
+
+      {!isFallBack()
+      && (
+      <>
+        <Grid container className={classes.enterpriseShow}>
+          <Grid item xs={12}>
+            <Container>
+              <Box p={2}>
+                <EnterpriseExclusive perfil={perfil} isTheSamePerfil={isTheSamePerfil} />
+              </Box>
+            </Container>
+          </Grid>
+        </Grid>
+        <Divider />
+        <Container>
+          <Grid
+            container
+            spacing={2}
+            className={showingCart ? classes.showingCart : classes.hiddenCart}
+          >
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <Search onChange={searchOnChange} value={searchInput} />
+            </Grid>
+            <Grid item xs={12} className={classes.containerMarginFix4}>
+              <Grid container alignItems="stretch" spacing={4}>
+                { productsData.map((item) => (
+                  <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
+                    <ProductCard product={item} onAdd={adicionar} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+            {productsData.length === 0 && !searchInput && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
@@ -175,44 +219,51 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
                 buttonOnClick={solicitarCatalogo}
               />
             </Grid>
-          )}
-          {productsData.length === 0 && searchInput && (
+            )}
+            {productsData.length === 0 && searchInput && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
                 message="Hmm não encontramos produtos com este nome."
               />
             </Grid>
-          )}
-        </Grid>
-        <Slide direction="up" in={showingCart}>
-          <AppBar position="fixed" className={classes.appBar} color="primary">
-            <Container>
-              <Box pb={2} pt={2}>
-                <MyCart
-                  cartProducts={cartProducts}
-                  totalValue={totalValue}
-                  changeItemQuantity={changeItemQuantity}
-                  removeItem={removeItem}
-                  removeAll={removeAll}
-                  initialEndereco={inputEndereco}
-                  initialNome={inputNome}
-                />
-              </Box>
-            </Container>
-          </AppBar>
-        </Slide>
-      </Container>
+            )}
+          </Grid>
+          <Slide direction="up" in={showingCart}>
+            <AppBar position="fixed" className={classes.appBar} color="primary">
+              <Container>
+                <Box pb={2} pt={2}>
+                  <MyCart
+                    cartProducts={cartProducts}
+                    totalValue={totalValue}
+                    changeItemQuantity={changeItemQuantity}
+                    removeItem={removeItem}
+                    removeAll={removeAll}
+                    initialEndereco={inputEndereco}
+                    initialNome={inputNome}
+                  />
+                </Box>
+              </Container>
+            </AppBar>
+          </Slide>
+        </Container>
+      </>
+      )}
     </ThemeProvider>
   );
 };
 
 export async function getStaticProps({ params }:any) {
-  const profile = await perfisService.getPerfilByDomain(params.domain);
-  const produtos = await productsService.findOptimized(undefined, profile.data.id);
+  const perfilResponse = await perfisService.getPerfilByDomain(params.domain);
+  let produtosResponse;
+  if (perfilResponse?.data?.id) {
+    produtosResponse = await productsService.findOptimized(undefined, perfilResponse.data.id);
+  }
 
+  const perfil = perfilResponse?.data || { isFallback: true };
+  const produtos = produtosResponse?.data?.data || [];
   return {
-    props: { perfil: profile.data, produtos: produtos.data.data },
+    props: { perfil, produtos },
   };
 }
 

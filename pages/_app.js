@@ -10,9 +10,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <CacheProvider value={cache}>
       <ThemeProvider theme={PedirNoZapTheme}>
-        <head>
-          <title>Comprar no zap</title>
-        </head>
         <Component {...pageProps} />
       </ThemeProvider>
     </CacheProvider>
