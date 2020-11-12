@@ -55,6 +55,21 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
 
   const isFallBack = () => !(perfil?.id > 0);
 
+  const compareProducts = async () => {
+    const res = await productsService.findOptimized(undefined, perfil.id);
+    if (res.data.data.length === produtos.length) {
+      return;
+    }
+    setProductsData(res.data.data);
+  };
+
+  useEffect(() => {
+    compareProducts();
+    return () => {
+      setProductsData(produtos);
+    };
+  }, []);
+
   useEffect(() => {
     if (isFallBack()) {
       return;
