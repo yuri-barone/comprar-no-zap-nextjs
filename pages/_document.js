@@ -23,6 +23,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <title>Comprar no Zap</title>
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-TR9J05HD0B" />
           <script dangerouslySetInnerHTML={googleTag()} />
           {/* PWA primary color */}
