@@ -261,7 +261,7 @@ export async function getStaticProps({ params }:any) {
   }
 
   const perfil = perfilResponse?.data || { isFallback: true };
-  const produtos = produtosResponse?.data?.data || [];
+  const produtos = produtosResponse.data?.data || [];
   return {
     props: { perfil, produtos },
   };
