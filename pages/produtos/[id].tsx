@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
+  Hidden,
   InputAdornment,
   Link,
   makeStyles,
@@ -82,6 +83,21 @@ const useStyles = makeStyles((theme) => ({
   cart: {
     height: '100vh',
     overflowY: 'auto',
+  },
+  imgDiv: {
+    height: '176px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    width: '100%',
+  },
+  imgRoot: {
+    position: 'absolute',
+    objectFit: 'cover',
+  },
+  content: {
+    height: `calc(100% - ${176 + theme.spacing(4)}px)`,
   },
 }));
 
@@ -245,38 +261,103 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
           <Divider />
         </Grid>
         <Grid item xs={12}>
-          <Container>
-            <Box p={2}>
-              <Paper variant="outlined" square elevation={2}>
-                <Grid container>
-                  <Grid item xs={4}>
-                    <img
-                      alt={produto.titulo}
-                      src={produto['picture.imgBase64']}
-                      className={classes.img}
-                      width="100%"
-                      height="100%"
-                    />
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Grid container alignContent="space-between" spacing={2} style={{ height: '100%' }}>
-                      <Grid item xs={12}>
-                        <Box p={2}>
-                          <Typography variant="h4">
-                            {produto.titulo}
-                          </Typography>
-                          <br />
-                          <Typography variant="h6" color="textSecondary">
-                            {produto.descricao}
-                          </Typography>
-                        </Box>
+          <Hidden xsDown>
+            <Container>
+              <Box p={2}>
+                <Paper variant="outlined" square elevation={2}>
+                  <Grid container>
+                    <Grid item xs={4}>
+                      <img
+                        alt={produto.titulo}
+                        src={produto['picture.imgBase64']}
+                        className={classes.img}
+                        width="100%"
+                        height="100%"
+                      />
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Grid container alignContent="space-between" spacing={2} style={{ height: '100%' }}>
+                        <Grid item xs={12}>
+                          <Box p={2}>
+                            <Typography variant="h4">
+                              {produto.titulo}
+                            </Typography>
+                            <br />
+                            <Typography variant="h6" color="textSecondary">
+                              {produto.descricao}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Grid container>
+                            <Grid item xs />
+                            <Grid item xs="auto">
+                              <Box pr={2}>
+                                <Typography variant="h6" color="secondary">
+                                  Valor:
+                                  {' '}
+                                  {formatNumberToMoneyWithSymbol(produto.valor)}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </Paper>
-            </Box>
-          </Container>
+                </Paper>
+              </Box>
+            </Container>
+          </Hidden>
+          <Hidden smUp>
+            <Container>
+              <Box pt={2} pb={2}>
+                <Paper style={{ height: '100%' }}>
+                  <div className={classes.imgDiv}>
+                    <img
+                      src={produto['picture.imgBase64']}
+                      alt={produto.titulo}
+                      height="100%"
+                      width="100%"
+                      className={classes.imgRoot}
+                    />
+                  </div>
+                  <Box p={2} className={classes.content}>
+                    <Grid container alignContent="space-between" style={{ height: '100%' }} spacing={2}>
+                      <Grid item xs={12}>
+                        <Grid container spacing={1}>
+                          <Grid item xs={12}>
+                            <Typography variant="h5">{produto.titulo}</Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography color="textSecondary">
+                              {produto.descricao}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Grid container justify="flex-end">
+                          <Grid item xs={12}>
+                            <Typography color="textSecondary" variant="caption">
+                              Vendido por
+                              {' '}
+                              {perfil.nome}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="body1" color="primary">
+                              {formatNumberToMoneyWithSymbol(produto.valor, 'R$')}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Paper>
+              </Box>
+            </Container>
+          </Hidden>
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
@@ -388,7 +469,7 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
                             </Box>
                             <Box pb={2}>
                               <Grid container>
-                                <Grid item xs={12} sm={9}>
+                                <Grid item xs={12} sm={8}>
                                   <TextField
                                     error={obs.meta.touched && obs.meta.invalid}
                                     helperText={
@@ -404,21 +485,20 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
                                     fullWidth
                                   />
                                 </Grid>
+                                <Grid item xs />
                                 <Grid item xs={12} sm={3}>
-                                  <Box pl={2}>
-                                    <TextField
-                                      error={quantity.meta.touched && quantity.meta.invalid}
-                                      helperText={
+                                  <TextField
+                                    error={quantity.meta.touched && quantity.meta.invalid}
+                                    helperText={
                                   quantity.meta.touched
                                   && quantity.meta.invalid
                                   && quantity.meta.error
                                 }
-                                      {...quantity.input}
-                                      label="Quantidade"
-                                      type="number"
-                                      fullWidth
-                                    />
-                                  </Box>
+                                    {...quantity.input}
+                                    label="Quantidade"
+                                    type="number"
+                                    fullWidth
+                                  />
                                 </Grid>
                               </Grid>
                             </Box>
