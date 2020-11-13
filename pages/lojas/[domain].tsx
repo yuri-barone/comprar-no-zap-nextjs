@@ -200,7 +200,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
           <Grid item xs={12}>
             <Container>
               <Box p={2}>
-                <EnterpriseExclusive perfil={perfil} isTheSamePerfil={isTheSamePerfil} />
+                <EnterpriseExclusive perfil={perfil} isTheSamePerfil={isTheSamePerfil} whiteText />
               </Box>
             </Container>
           </Grid>

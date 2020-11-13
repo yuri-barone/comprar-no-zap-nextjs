@@ -7,6 +7,7 @@ import {
   CardMedia,
   Fade,
   Grid,
+  IconButton,
   makeStyles,
   Modal,
   Paper,
@@ -16,6 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import red from '@material-ui/core/colors/red';
+import ShareIcon from '@material-ui/icons/Share';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import productsService from '../services/productsService';
 import ProductRegister from '../ProductRegister/ProductRegister';
@@ -147,6 +149,22 @@ function ProductCard({
     }
   };
 
+  // eslint-disable-next-line consistent-return
+  const shareProduct = async () => {
+    const shareData = {
+      title: 'Produto',
+      text: product.title,
+      url: `/produtos/${product.id}`,
+    };
+    try {
+      await navigator.share(shareData);
+    } catch (error) {
+      const link = `/produtos/${product.id}`;
+      const win = window.open(link, '_blank');
+      win.focus();
+    }
+  };
+
   if (isEditing) {
     return (
       <ProductRegister
@@ -172,6 +190,11 @@ function ProductCard({
         </div>
         <Box p={2} className={classes.content}>
           <Grid container alignContent="space-between" className={classes.root}>
+            <Grid item xs={12}>
+              <IconButton aria-label="share" onClick={shareProduct}>
+                <ShareIcon fontSize="small" />
+              </IconButton>
+            </Grid>
             <Grid item xs={12}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>

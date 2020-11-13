@@ -18,6 +18,7 @@ export type LoggedBarIndexProps = {
   zap: string;
   domain: string;
   seller: boolean;
+  optionSearch?: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoggedBarIndex = ({
-  src, name, zap, domain, seller,
+  src, name, zap, domain, seller, optionSearch,
 }:LoggedBarIndexProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -88,6 +89,15 @@ const LoggedBarIndex = ({
             </Link>
           </Typography>
         </Grid>
+        {optionSearch && (
+        <Grid item xs="auto">
+          <Typography className={classes.link} component="span">
+            <Link href="/" color="inherit">
+              Pesquisar
+            </Link>
+          </Typography>
+        </Grid>
+        )}
         <Grid item xs="auto">
           <Avatar
             onClick={handleClick}

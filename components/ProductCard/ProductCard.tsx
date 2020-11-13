@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import ShareIcon from '@material-ui/icons/Share';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import pictureService from '../services/pictureService';
 
@@ -59,6 +60,22 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
     onAdd(productCart);
   };
 
+  // eslint-disable-next-line consistent-return
+  const shareProduct = async () => {
+    const shareData = {
+      title: 'Produto',
+      text: product.title,
+      url: `/produtos/${product.id}`,
+    };
+    try {
+      await navigator.share(shareData);
+    } catch (error) {
+      const link = `/produtos/${product.id}`;
+      const win = window.open(link, '_blank');
+      win.focus();
+    }
+  };
+
   return (
     <Paper className={classes.root}>
       <Grid container className={classes.root}>
@@ -73,6 +90,11 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
         </Grid>
         <Box pb={2} pl={2} pr={2} pt={1} className={classes.box}>
           <Grid container spacing={2} alignContent="space-between" style={{ height: '100%' }}>
+            <Grid item xs={12}>
+              <IconButton aria-label="share" onClick={shareProduct}>
+                <ShareIcon fontSize="small" />
+              </IconButton>
+            </Grid>
             <Grid item xs={12}>
               <Typography variant="h5">{product.titulo}</Typography>
               <br />

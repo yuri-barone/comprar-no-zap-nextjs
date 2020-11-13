@@ -65,6 +65,15 @@ const getById = async (id: number) => {
   }
 };
 
+const getAllIds = async () => {
+  try {
+    const response = await api.get('/get-allproducts-id');
+    return { data: response };
+  } catch (error) {
+    return error;
+  }
+};
+
 export default {
   save,
   find,
@@ -72,4 +81,5 @@ export default {
   deleteProduct,
   edit,
   getById,
+  getAllIds,
 };

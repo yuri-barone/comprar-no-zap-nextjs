@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-export type EnterpriseExclusiveProps = {
+export type EnterpriseExclusiveFooterProps = {
   perfil: any;
   isTheSamePerfil: boolean;
   whiteText?: boolean;
@@ -24,15 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseExclusiveProps) => {
+const EnterpriseExclusiveFooter = ({
+  perfil,
+  isTheSamePerfil,
+  whiteText,
+}:EnterpriseExclusiveFooterProps) => {
   const classes = useStyles();
   const router = useRouter();
-
-  const sendMessage = () => {
-    const link = `https://api.whatsapp.com/send?phone=55${perfil.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
-    const win = window.open(link, '_blank');
-    win.focus();
-  };
 
   const goToProdutos = () => {
     router.push('/produtos');
@@ -73,14 +71,25 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseEx
         <Grid item xs="auto" md={3}>
           <Grid container spacing={1}>
             {isTheSamePerfil && (
-            <Grid item xs={12}>
-              <Button variant="contained" color="inherit" onClick={goToProdutos} fullWidth>Cadastrar meus produtos</Button>
-            </Grid>
+              <Grid item xs={12}>
+                <Button variant="outlined" color="primary" onClick={goToProdutos} fullWidth>Cadastrar meus produtos</Button>
+              </Grid>
             )}
             {!isTheSamePerfil && (
-            <Grid item xs={12}>
-              <Button variant="contained" color="default" onClick={sendMessage} fullWidth>Entrar em contato</Button>
-            </Grid>
+            <>
+              <Grid item xs={12}>
+                <Button variant="outlined" color="primary" href="/search?tipo=1" fullWidth>Ver mais produtos</Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" color="primary" href={`/lojas/${perfil.domain}`} fullWidth>
+                  <Typography variant="body1" align="center">
+                    Ver mais de
+                    {' '}
+                    {perfil.nome}
+                  </Typography>
+                </Button>
+              </Grid>
+            </>
             )}
           </Grid>
         </Grid>
@@ -89,4 +98,4 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseEx
   );
 };
 
-export default EnterpriseExclusive;
+export default EnterpriseExclusiveFooter;
