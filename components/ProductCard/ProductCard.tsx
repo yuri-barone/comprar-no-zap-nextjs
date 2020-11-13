@@ -62,14 +62,19 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
 
   // eslint-disable-next-line consistent-return
   const shareProduct = async () => {
-    const shareData = {
-      title: 'Produto',
-      text: product.title,
-      url: `/produtos/${product.id}`,
-    };
-    try {
-      await navigator.share(shareData);
-    } catch (error) {
+    const tryNavigator = (navigator as any);
+    if (tryNavigator && tryNavigator.share) {
+      const shareData = {
+        title: 'Produto',
+        text: product.title,
+        url: `/produtos/${product.id}`,
+      };
+      try {
+        await tryNavigator.share(shareData);
+      } catch (error) {
+        return error;
+      }
+    } else {
       const link = `/produtos/${product.id}`;
       const win = window.open(link, '_blank');
       win.focus();
