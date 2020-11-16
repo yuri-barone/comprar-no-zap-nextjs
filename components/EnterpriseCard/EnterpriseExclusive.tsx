@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Avatar, Box, Button, Grid, Hidden, makeStyles, Typography,
 } from '@material-ui/core';
@@ -53,17 +54,17 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseEx
                     {perfil.nome}
                   </Box>
                 </Typography>
-                <Typography className={clsx(whiteText ? classes.textColorWhite : '', classes.textColorBlack)}>
+                <Typography className={clsx(whiteText ? classes.textColorWhite : classes.textColorBlack)}>
                   {perfil.endereco}
                 </Typography>
               </Hidden>
               <Hidden mdUp>
-                <Typography variant="h4" className={clsx(whiteText ? classes.textColorWhite : '', classes.textColorBlack)} align="center">
+                <Typography variant="h4" className={clsx(whiteText ? classes.textColorWhite : classes.textColorBlack)} align="center">
                   <Box fontWeight="fontWeightBold">
                     {perfil.nome}
                   </Box>
                 </Typography>
-                <Typography className={clsx(whiteText ? classes.textColorWhite : '', classes.textColorBlack)} align="center">
+                <Typography className={clsx(whiteText ? classes.textColorWhite : classes.textColorBlack)} align="center">
                   {perfil.endereco}
                 </Typography>
               </Hidden>
