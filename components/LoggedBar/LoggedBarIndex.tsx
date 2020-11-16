@@ -60,7 +60,8 @@ const LoggedBarIndex = ({
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleOnClick = () => {
-    localStorage.clear();
+    localStorage.removeItem('PDZT');
+    localStorage.removeItem('PDZU');
     window.location.reload(true);
   };
   const handleClick = (event: any) => {

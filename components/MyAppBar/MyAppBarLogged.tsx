@@ -85,7 +85,8 @@ const MyAppBarLogged = ({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const Router = useRouter();
   const handleOnClick = () => {
-    localStorage.clear();
+    localStorage.removeItem('PDZT');
+    localStorage.removeItem('PDZU');
     Router.push('/');
   };
   const handleClick = (event: any) => {
