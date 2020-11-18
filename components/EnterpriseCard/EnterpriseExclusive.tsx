@@ -49,7 +49,7 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseEx
           <Grid container justify="center">
             <Grid item xs="auto" md={12} lg={12}>
               <Hidden smDown>
-                <Typography variant="h4" className={clsx(whiteText ? classes.textColorWhite : '', classes.textColorBlack)}>
+                <Typography variant="h4" className={clsx(whiteText ? classes.textColorWhite : classes.textColorBlack)}>
                   <Box fontWeight="fontWeightBold">
                     {perfil.nome}
                   </Box>
