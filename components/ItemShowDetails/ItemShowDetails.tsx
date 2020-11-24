@@ -62,7 +62,7 @@ const ItemShowDetails = ({
   const classes = useStyles();
   const [productQuantity, setProductQuantity] = useState(quantity);
   const [totalValue, setTotalValue] = useState<number>();
-  const [image, setImage] = useState('/empty-img.jpg');
+  const [image, setImage] = useState('/empty-img.png');
 
   // eslint-disable-next-line consistent-return
   const getImage = async () => {
@@ -77,7 +77,7 @@ const ItemShowDetails = ({
   useEffect(() => {
     getImage();
     return () => {
-      setImage('/empty-img.jpg');
+      setImage('/empty-img.png');
     };
   }, []);
 

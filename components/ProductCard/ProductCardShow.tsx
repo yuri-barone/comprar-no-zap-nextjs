@@ -95,7 +95,7 @@ function ProductCard({
   const classes = useStyles();
   const [openDelete, setOpenDelete] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [image, setImage] = useState('/empty-img.jpg');
+  const [image, setImage] = useState('/empty-img.png');
 
   // eslint-disable-next-line consistent-return
   const getImage = async () => {
@@ -110,7 +110,7 @@ function ProductCard({
   useEffect(() => {
     getImage();
     return () => {
-      setImage('/empty-img.jpg');
+      setImage('/empty-img.png');
     };
   }, []);
 
@@ -186,7 +186,7 @@ function ProductCard({
       <Paper className={classes.root}>
         <div className={classes.imgDiv}>
           <img
-            src={image}
+            src={image || '/empty-img.png'}
             alt={product.titulo}
             height="100%"
             width="100%"
@@ -268,7 +268,7 @@ function ProductCard({
                   <CardMedia
                     component="img"
                     height="200"
-                    image={image}
+                    image={image || '/empty-img.png'}
                     title={product.titulo}
                   />
                   <CardContent>

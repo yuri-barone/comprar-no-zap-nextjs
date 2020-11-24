@@ -92,7 +92,7 @@ const ImageUpload = ({
       />
       <img
         alt="upload"
-        src={imgB64 || defaultImage || 'empty-img.jpg'}
+        src={imgB64 || defaultImage || 'empty-img.png'}
         className={classes.img}
         width="100%"
         height="100%"

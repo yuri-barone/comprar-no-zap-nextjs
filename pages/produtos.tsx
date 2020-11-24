@@ -15,7 +15,6 @@ import productsService from '../components/services/productsService';
 import useSession from '../components/useSession';
 import perfisService from '../components/services/perfisService';
 import LoggedBarProducts from '../components/LoggedBar/LoggedBarProducts';
-import { resizeImage } from '../images/base64ImageManipulator';
 
 const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
   const [productsData, setProductsData] = useState([]);
@@ -107,10 +106,6 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
     const params:any = values;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     session;
-    if (!params.imgBase64) {
-      const resized = await resizeImage('/empty-img.jpg');
-      params.imgBase64 = resized;
-    }
     const response = await productsService.save(params);
     if (response.ok) {
       searchProducts();

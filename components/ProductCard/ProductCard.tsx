@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 function ProductCard({ product, onAdd }: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
-  const [image, setImage] = useState('/empty-img.jpg');
+  const [image, setImage] = useState('/empty-img.png');
 
   // eslint-disable-next-line consistent-return
   const getImage = async () => {
@@ -49,7 +49,7 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
   useEffect(() => {
     getImage();
     return () => {
-      setImage('/empty-img.jpg');
+      setImage('/empty-img.png');
     };
   }, []);
 
@@ -87,7 +87,7 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
         <Grid item xs={12}>
           <img
             alt={product.titulo}
-            src={image}
+            src={image || '/empty-img.png'}
             className={classes.img}
             width="100%"
             height="200px"
