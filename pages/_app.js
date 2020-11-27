@@ -9,6 +9,7 @@ export const cache = createCache();
 function MyApp({ Component, pageProps }) {
   return (
     <CacheProvider value={cache}>
+      <title>Comprar no Zap</title>
       <ThemeProvider theme={PedirNoZapTheme}>
         <Component {...pageProps} />
       </ThemeProvider>

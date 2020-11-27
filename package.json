@@ -45,6 +45,7 @@
     "react-dom": "16.13.1",
     "react-final-form": "^6.5.1",
     "react-final-form-hooks": "^2.0.2",
+    "react-google-places-autocomplete": "^3.0.0",
     "react-input-mask": "^2.0.4",
     "react-places-autocomplete": "^7.3.0",
     "react-rewards": "^1.1.2",

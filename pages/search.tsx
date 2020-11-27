@@ -25,6 +25,7 @@ import PedirNoZapTheme from '../styles/PedirNoZapTheme';
 import useSession from '../components/useSession';
 import useNavigation from '../components/useNavigation';
 import ImageFeedback from '../components/ImageFeedback/ImageFeedback';
+import useCoordinate from '../components/useCoordinate';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -76,28 +77,30 @@ export default function Home() {
 
   const session: any = useSession(false);
   const navigation: any = useNavigation();
+  const coordinates = useCoordinate();
 
   // eslint-disable-next-line consistent-return
   const getLocais = useCallback(async () => {
     try {
-      const localResponse = await perfisService.find(termToFind);
+      const localResponse = await perfisService.find(termToFind, coordinates.position);
       return localResponse.data.data;
     } catch (error) {
       return [];
     }
-  }, [termToFind]);
+  }, [termToFind, coordinates]);
 
   const getProducts = useCallback(async () => {
     try {
       const productResponse = await productsService.findOptimized(
         termToFind,
         storeIdToFind,
+        coordinates.position,
       );
       return productResponse.data.data;
     } catch (error) {
       return [];
     }
-  }, [termToFind, storeIdToFind]);
+  }, [termToFind, storeIdToFind, coordinates]);
 
   const aplicarFiltrosAoEstado = async (
     term: string | undefined,
@@ -203,7 +206,7 @@ export default function Home() {
   useEffect(() => {
     const executarBuscaTimeout = setTimeout(executaBuscaParaTabSelecionada, 100);
     return () => clearTimeout(executarBuscaTimeout);
-  }, [termToFind, storeIdToFind, tabValue]);
+  }, [termToFind, storeIdToFind, tabValue, coordinates.loading]);
 
   const handleChangeTab = (e: any, value: number) => {
     setTabValue(value);
@@ -453,6 +456,7 @@ export default function Home() {
                       zap={item.zap}
                       endereco={item.endereco}
                       pictureId={item.pictureId}
+                      distance={item.distance}
                     />
                   </Grid>
                 ))}

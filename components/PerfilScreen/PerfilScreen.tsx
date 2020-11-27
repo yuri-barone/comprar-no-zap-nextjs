@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Collapse,
   Container,
   Divider,
@@ -25,6 +26,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import * as yup from 'yup';
 import Reward from 'react-rewards';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import MaskedTextField from '../MaskedTextField';
 import perfisService from '../services/perfisService';
@@ -102,6 +104,9 @@ const useStyles = makeStyles((theme) => ({
   clickable: {
     cursor: 'pointer',
   },
+  static: {
+    position: 'static',
+  },
 }));
 
 function PerfilScreen({
@@ -124,6 +129,7 @@ function PerfilScreen({
   const [touchedZap, setTouchedZap] = useState<boolean>(false);
   const [touchedName, setTouchedName] = useState<boolean>(false);
   const [dominioIsValid, setDominioIsValid] = useState<boolean>(true);
+  const [latLong, setLatLong] = useState<any>(undefined);
 
   const refReward = useRef(null);
   const refRewardAfterSuccess = useRef(null);
@@ -171,12 +177,20 @@ function PerfilScreen({
     changeValue(state, 'domain', () => dominio);
   };
 
+  const changeEndereco = (selectedAddress: string, state:any, { changeValue }:any) => {
+    changeValue(state, 'endereco', () => selectedAddress[0]);
+  };
+
   const onSubmit = async (values: any) => {
     const params:any = values;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     session;
     params.imgBase64 = img64;
     params.userId = userId;
+    params.lat = latLong.lat;
+    params.lng = latLong.lng;
+    // eslint-disable-next-line prefer-destructuring
+    params.endereco = values.endereco;
     const response = await perfisService.edit(id, params);
     if (response.ok) {
       searchNewPerfil();
@@ -234,7 +248,7 @@ function PerfilScreen({
       palavrasChaves,
       domain,
     },
-    mutators: { dominioMutator },
+    mutators: { dominioMutator, changeEndereco },
   });
   const nomeInput = useField('nome', form);
   const zapInput = useField('zap', form);
@@ -300,6 +314,13 @@ function PerfilScreen({
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
+  };
+
+  const handleAddressSelect = (address:string) => {
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => setLatLong(latLng))
+      .catch((error) => error);
   };
 
   return (
@@ -439,21 +460,64 @@ function PerfilScreen({
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
+                    <PlacesAutocomplete
                       {...enderecoInput.input}
-                      id="endereco"
-                      label="Endereço"
-                      variant="outlined"
-                      fullWidth
-                      error={
-                        enderecoInput.meta.touched && enderecoInput.meta.invalid
-                      }
-                      helperText={
-                        enderecoInput.meta.touched
-                        && enderecoInput.meta.invalid
-                        && enderecoInput.meta.error
-                      }
-                    />
+                      onSelect={(address) => {
+                        handleAddressSelect(address);
+                        form.mutators.changeEndereco(address);
+                      }}
+                    >
+                      {({
+                        getInputProps, suggestions, getSuggestionItemProps, loading,
+                      }) => (
+                        <div>
+                          <TextField
+                            {...getInputProps({
+                              placeholder: 'Endereço',
+                            })}
+                            variant="outlined"
+                            fullWidth
+                            id="endereco"
+                            error={enderecoInput.meta.touched && enderecoInput.meta.invalid}
+                            helperText={
+                                  enderecoInput.meta.touched
+                                  && enderecoInput.meta.invalid
+                                  && enderecoInput.meta.error
+                                }
+                            InputProps={{
+                              endAdornment: (
+                                <>
+                                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                </>
+                              ),
+                            }}
+                          />
+                          <div className="autocomplete-dropdown-container">
+                            {suggestions.map((suggestion) => {
+                              const className = suggestion.active
+                                ? 'suggestion-item--active'
+                                : 'suggestion-item';
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
+                                : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
+                              return (
+                                <div
+                                  {...getSuggestionItemProps(suggestion, {
+                                    className,
+                                    style,
+                                  })}
+                                >
+                                  <Box p={2}>
+                                    <Typography>{suggestion.description}</Typography>
+                                  </Box>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </PlacesAutocomplete>
                   </Grid>
                   <Grid item xs={12}>
                     <TextField

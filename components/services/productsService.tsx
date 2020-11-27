@@ -23,7 +23,7 @@ const find = async (filter: string, perfilId?:number) => {
   }
 };
 
-const findOptimized = async (filter: string, perfilId?:number) => {
+const findOptimized = async (filter: string, perfilId?:number, position?:any) => {
   try {
     const args = [];
     if (filter) {
@@ -31,6 +31,10 @@ const findOptimized = async (filter: string, perfilId?:number) => {
     }
     if (perfilId) { args.push(`perfilId=${perfilId}`); }
     args.push('optimized=true');
+    if (position) {
+      args.push(`lat=${position.latitude}`);
+      args.push(`lng=${position.longitude}`);
+    }
     const response = await api.get(`/products?${args.join('&')}`);
     return { data: response.data };
   } catch (error) {

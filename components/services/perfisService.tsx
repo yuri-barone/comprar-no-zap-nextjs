@@ -45,11 +45,15 @@ const checkZap = async (zap:string) => {
   }
 };
 
-const find = async (filter: string) => {
+const find = async (filter: string, position?: any) => {
   try {
     const args = [];
     if (filter) {
       args.push(`termo=${filter.trim().replace(/\s/g, '+')}`);
+    }
+    if (position) {
+      args.push(`lat=${position.latitude}`);
+      args.push(`lng=${position.longitude}`);
     }
     args.push('optimized=true');
     const response = await api.get(`/perfis?${args.join('&')}`);

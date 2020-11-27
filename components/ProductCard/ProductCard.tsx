@@ -107,9 +107,17 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
             </Grid>
             <Grid item xs={12}>
               <Grid container justify="flex-end" spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor, 'R$')}</Typography>
                   <Typography color="textSecondary">{product.nome}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography color="secondary">
+                    A
+                    {' '}
+                    {product.distance}
+                    km de você
+                  </Typography>
                 </Grid>
                 <Grid item xs>
                   <IconButton onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}>

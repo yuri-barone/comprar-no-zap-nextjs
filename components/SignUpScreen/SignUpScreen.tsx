@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Collapse,
   Divider,
   FormControlLabel,
@@ -19,6 +20,7 @@ import { ValidationErrors } from 'final-form';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import * as yup from 'yup';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import MaskedTextField from '../MaskedTextField';
@@ -118,9 +120,10 @@ function SignUpScreen() {
   const [zapIsValid, setZapIsValid] = useState<boolean>(true);
   const [touchedName, setTouchedName] = useState<boolean>(false);
   const [touchedZap, setTouchedZap] = useState<boolean>(false);
+  const [latLong, setLatLong] = useState<any>(undefined);
   const router = useRouter();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values:any) => {
     const params: any = values;
     params.imgBase64 = img64;
     delete params.confirmarSenha;
@@ -130,7 +133,12 @@ function SignUpScreen() {
     if (!params.delivery) {
       params.delivery = false;
     }
+    // eslint-disable-next-line prefer-destructuring
+    params.endereco = values.endereco;
+    params.lat = latLong.lat;
+    params.lng = latLong.lng;
     const responsePerfil = await perfisService.save(params);
+
     if (responsePerfil.ok) {
       const loginValues: any = {};
       loginValues.strategy = 'local';
@@ -157,6 +165,10 @@ function SignUpScreen() {
     const nome = state.formState.values[fieldNameOrigin];
     const dominio = buildDomain(nome);
     changeValue(state, 'domain', () => dominio);
+  };
+
+  const changeEndereco = (selectedAddress: string, state:any, { changeValue }:any) => {
+    changeValue(state, 'endereco', () => selectedAddress[0]);
   };
 
   const processAsyncValidate = (errors:any) => {
@@ -192,7 +204,7 @@ function SignUpScreen() {
   } = useForm({
     onSubmit, // the function to call with your form values upon valid submit
     validate, // a record-level validation function to check all form values
-    mutators: { dominioMutator },
+    mutators: { dominioMutator, changeEndereco },
   });
 
   const nome = useField('nome', form);
@@ -232,6 +244,13 @@ function SignUpScreen() {
     setTouchedZap(true);
   };
 
+  const handleAddressSelect = (address:string) => {
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => setLatLong(latLng))
+      .catch((error) => error);
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -264,14 +283,14 @@ function SignUpScreen() {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Grid container justify="center">
-                  <Grid item xs="auto" md={3} sm="auto" lg={2}>
+                <Grid container>
+                  <Grid item xs="auto" md={3} lg={2}>
                     <Box pb={2}>
                       <ImageUpload onChangeImage={handleImage} rounded />
                     </Box>
                   </Grid>
-                  <Grid item xs={12} md={9} sm={12}>
-                    <Grid container spacing={1}>
+                  <Grid item xs={12} md={9} sm={12} lg={10}>
+                    <Grid container spacing={2}>
                       <Grid item xs={6} sm={6}>
                         <TextField
                           {...nome.input}
@@ -312,19 +331,64 @@ function SignUpScreen() {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <TextField
+                        <PlacesAutocomplete
                           {...endereco.input}
-                          label="Endereço"
-                          variant="outlined"
-                          fullWidth
-                          id="endereco"
-                          error={endereco.meta.touched && endereco.meta.invalid}
-                          helperText={
-                            endereco.meta.touched
-                            && endereco.meta.invalid
-                            && endereco.meta.error
-                          }
-                        />
+                          onSelect={(address) => {
+                            handleAddressSelect(address);
+                            form.mutators.changeEndereco(address);
+                          }}
+                        >
+                          {({
+                            getInputProps, suggestions, getSuggestionItemProps, loading,
+                          }) => (
+                            <div>
+                              <TextField
+                                {...getInputProps({
+                                  placeholder: 'Endereço',
+                                })}
+                                variant="outlined"
+                                fullWidth
+                                id="endereco"
+                                error={endereco.meta.touched && endereco.meta.invalid}
+                                helperText={
+                                  endereco.meta.touched
+                                  && endereco.meta.invalid
+                                  && endereco.meta.error
+                                }
+                                InputProps={{
+                                  endAdornment: (
+                                    <>
+                                      {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                    </>
+                                  ),
+                                }}
+                              />
+                              <div className="autocomplete-dropdown-container">
+                                {suggestions.map((suggestion) => {
+                                  const className = suggestion.active
+                                    ? 'suggestion-item--active'
+                                    : 'suggestion-item';
+                                  // inline style for demonstration purpose
+                                  const style = suggestion.active
+                                    ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
+                                    : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
+                                  return (
+                                    <div
+                                      {...getSuggestionItemProps(suggestion, {
+                                        className,
+                                        style,
+                                      })}
+                                    >
+                                      <Box p={2}>
+                                        <Typography>{suggestion.description}</Typography>
+                                      </Box>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </PlacesAutocomplete>
                       </Grid>
                       <Grid item xs={12}>
                         <Grid container>
@@ -350,7 +414,6 @@ function SignUpScreen() {
                   </Grid>
                 </Grid>
               </Grid>
-
               <Grid item xs={12}>
                 <Grid container spacing={2} justify="flex-end">
                   <Grid item xs={12}>

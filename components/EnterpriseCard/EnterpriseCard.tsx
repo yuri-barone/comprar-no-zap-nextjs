@@ -17,6 +17,7 @@ export type EnterpriseCardProps = {
   id: number;
   pictureId?: number;
   onNavigate: (store:any) => void;
+  distance?: number;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EnterpriseCard = ({
-  name, zap, endereco, id, onNavigate, pictureId,
+  name, zap, endereco, id, onNavigate, pictureId, distance,
 }: EnterpriseCardProps) => {
   const [src, setSrc] = useState('');
 
@@ -84,6 +85,14 @@ const EnterpriseCard = ({
                   </Grid>
                   <Grid item xs={12}>
                     <Typography color="textSecondary">{endereco}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography color="secondary">
+                      A
+                      {' '}
+                      {distance}
+                      km de você
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
