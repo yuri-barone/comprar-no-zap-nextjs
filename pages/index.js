@@ -85,7 +85,18 @@ export default function Home() {
           )}
           {!session.isAutheticated && (
 
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
+            {!coordinates.allowed && (
+            <Grid item xs={12}>
+              <Alert severity="info">
+                Buscando por todo o Brasil, para pesquisar pela sua cidade clique
+                {' '}
+                <Link onClick={askGeolocation} className={classes.clickable}>
+                  <strong>aqui</strong>
+                </Link>
+              </Alert>
+            </Grid>
+            )}
             <Grid item xs />
             <Grid item xs="auto" sm="auto">
               <Box p={2}>
@@ -108,17 +119,6 @@ export default function Home() {
         <Container>
           <Grid item xs={12}>
             <Grid container spacing={2} justify="center">
-              {!coordinates.allowed && (
-                <Grid item xs={12}>
-                  <Alert severity="info">
-                    Faremos nossa busca pelo Brasil, para pesquisar pela sua cidade clique
-                    {' '}
-                    <Link onClick={askGeolocation} className={classes.clickable}>
-                      <strong>aqui</strong>
-                    </Link>
-                  </Alert>
-                </Grid>
-              )}
               <Grid item xs={12} sm={6}>
                 <img
                   alt=""

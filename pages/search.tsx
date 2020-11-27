@@ -303,7 +303,19 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
+      {!coordinates.allowed && (
+        <Grid item xs={12}>
+          <Alert severity="info">
+            Buscando por todo o Brasil, para pesquisar pela sua cidade clique
+            {' '}
+            <Link onClick={askGeolocation} className={classes.clickable}>
+              <strong>aqui</strong>
+            </Link>
+          </Alert>
+        </Grid>
+      )}
       {session.isAutheticated && (
+
         <MyAppBarLogged
           value={searchInput}
           onChange={searchOnChange}
@@ -314,8 +326,10 @@ export default function Home() {
           domain={session.isAutheticated && session.profile.domain}
           seller={session.isAutheticated && session.profile.seller}
         />
+
       )}
       {!session.isAutheticated && (
+
         <MyAppBar
           value={searchInput}
           onChange={searchOnChange}
@@ -364,19 +378,6 @@ export default function Home() {
       </Box>
       <Divider />
       <Container>
-        {!coordinates.allowed && (
-        <Grid item xs={12}>
-          <Box pt={2}>
-            <Alert severity="info">
-              Faremos nossa busca pelo Brasil, para pesquisar pela sua cidade clique
-              {' '}
-              <Link onClick={askGeolocation} className={classes.clickable}>
-                <strong>aqui</strong>
-              </Link>
-            </Alert>
-          </Box>
-        </Grid>
-        )}
         {isLoading && (
           <Grid item xs={12} className={classes.missingItems}>
             <Grid container alignContent="center" className={classes.missingItems}>
