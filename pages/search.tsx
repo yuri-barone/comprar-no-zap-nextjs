@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   Hidden,
+  Link,
   makeStyles,
   Slide,
   Tab,
@@ -13,6 +14,7 @@ import {
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { Alert } from '@material-ui/lab';
 import EnterpriseCard from '../components/EnterpriseCard/EnterpriseCard';
 import EnterpriseCardShow from '../components/EnterpriseCard/EnterpriseCardShow';
 import MyAppBar from '../components/MyAppBar/MyAppBar';
@@ -52,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
   },
   missingItems: {
     minHeight: 'calc(100vh - 136px)',
+  },
+  clickable: {
+    cursor: 'pointer',
   },
 }));
 
@@ -206,7 +211,7 @@ export default function Home() {
   useEffect(() => {
     const executarBuscaTimeout = setTimeout(executaBuscaParaTabSelecionada, 100);
     return () => clearTimeout(executarBuscaTimeout);
-  }, [termToFind, storeIdToFind, tabValue, coordinates.loading]);
+  }, [termToFind, storeIdToFind, tabValue, coordinates.loading, coordinates.position]);
 
   const handleChangeTab = (e: any, value: number) => {
     setTabValue(value);
@@ -290,6 +295,12 @@ export default function Home() {
     const win = window.open(link, '_blank');
     win.focus();
   };
+
+  const askGeolocation = () => {
+    const success = () => { window.location.reload(); };
+    navigator.geolocation.getCurrentPosition(success);
+  };
+
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
       {session.isAutheticated && (
@@ -353,6 +364,19 @@ export default function Home() {
       </Box>
       <Divider />
       <Container>
+        {!coordinates.allowed && (
+        <Grid item xs={12}>
+          <Box pt={2}>
+            <Alert severity="info">
+              Faremos nossa busca pelo Brasil, para pesquisar pela sua cidade clique
+              {' '}
+              <Link onClick={askGeolocation} className={classes.clickable}>
+                <strong>aqui</strong>
+              </Link>
+            </Alert>
+          </Box>
+        </Grid>
+        )}
         {isLoading && (
           <Grid item xs={12} className={classes.missingItems}>
             <Grid container alignContent="center" className={classes.missingItems}>

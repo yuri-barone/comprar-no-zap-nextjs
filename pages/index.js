@@ -8,10 +8,12 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import LoggedBarIndex from '../components/LoggedBar/LoggedBarIndex';
 import Search from '../components/Search/Search';
+import useCoordinate from '../components/useCoordinate';
 import useNavigation from '../components/useNavigation';
 import useSession from '../components/useSession';
 
@@ -31,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
     },
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }));
 
 export default function Home() {
@@ -39,6 +44,7 @@ export default function Home() {
   const [filter, setFilter] = useState('');
   const session = useSession(false);
   const navigation = useNavigation();
+  const coordinates = useCoordinate();
 
   const handleProductSearch = () => {
     const query = navigation.generateQueryUrl('1', filter);
@@ -54,8 +60,14 @@ export default function Home() {
       query,
     });
   };
+
   const storeFilter = (e) => {
     setFilter(e.target.value);
+  };
+
+  const askGeolocation = () => {
+    const success = () => { window.location.reload(); };
+    navigator.geolocation.getCurrentPosition(success);
   };
 
   return (
@@ -96,6 +108,17 @@ export default function Home() {
         <Container>
           <Grid item xs={12}>
             <Grid container spacing={2} justify="center">
+              {!coordinates.allowed && (
+                <Grid item xs={12}>
+                  <Alert severity="info">
+                    Faremos nossa busca pelo Brasil, para pesquisar pela sua cidade clique
+                    {' '}
+                    <Link onClick={askGeolocation} className={classes.clickable}>
+                      <strong>aqui</strong>
+                    </Link>
+                  </Alert>
+                </Grid>
+              )}
               <Grid item xs={12} sm={6}>
                 <img
                   alt=""
@@ -103,7 +126,6 @@ export default function Home() {
                   className={classes.img}
                 />
               </Grid>
-
               <Grid item xs={12} sm={8}>
                 <Search onEnter={handlePlacesSearch} onChange={storeFilter} />
               </Grid>

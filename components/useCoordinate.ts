@@ -13,6 +13,8 @@ type Coordinates = {
 const useCoordinate = () => {
   const [position, setPosition] = useState<Coordinates | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [isAllowed, setIsAllowed] = useState<boolean>(false);
+
   useEffect(() => {
     const success = (pos:any) => {
       const crd = pos.coords;
@@ -20,8 +22,19 @@ const useCoordinate = () => {
       setLoading(false);
     };
     navigator.geolocation.getCurrentPosition(success);
+
+    const checkIsAllowed = async () => {
+      const asd = await navigator.permissions.query({ name: 'geolocation' });
+      if (asd.state === 'granted') {
+        setIsAllowed(true);
+      } else {
+        setIsAllowed(false);
+      }
+    };
+    checkIsAllowed();
   }, []);
-  return { position, loading };
+
+  return { position, loading, allowed: isAllowed };
 };
 
 export default useCoordinate;
