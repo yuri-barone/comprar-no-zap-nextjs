@@ -87,12 +87,14 @@ const EnterpriseCard = ({
                     <Typography color="textSecondary">{endereco}</Typography>
                   </Grid>
                   <Grid item xs={12}>
+                    {distance > 0 && (
                     <Typography color="secondary">
                       A
                       {' '}
                       {distance}
                       km de você
                     </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>

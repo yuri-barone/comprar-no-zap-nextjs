@@ -112,12 +112,14 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
                   <Typography color="textSecondary">{product.nome}</Typography>
                 </Grid>
                 <Grid item xs={6}>
+                  {product.distance && (
                   <Typography color="secondary">
                     A
                     {' '}
                     {product.distance}
                     km de você
                   </Typography>
+                  )}
                 </Grid>
                 <Grid item xs>
                   <IconButton onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}>
