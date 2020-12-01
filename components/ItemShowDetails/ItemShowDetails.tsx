@@ -122,7 +122,7 @@ const ItemShowDetails = ({
           onClick={handleClick}
           classes={{ badge: classes.badge }}
         >
-          <Avatar src={image} className={classes.imgSize} />
+          <Avatar src={image || '/empty-img.png'} className={classes.imgSize} />
         </Badge>
       </Grid>
       <Grid item xs="auto">

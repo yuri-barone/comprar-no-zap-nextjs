@@ -108,6 +108,8 @@ const MyCartDetails = ({
                     initialValues={{ endereco: initialEndereco, nome: initialNome }}
                     perfDelivery={item.items[0].product.delivery}
                     perfEndereco={item.items[0].product.endereco}
+                    perfName={item.perfilName}
+                    perfId={item.items[0].product.perfilId}
                   />
                 </Paper>
               </Grid>

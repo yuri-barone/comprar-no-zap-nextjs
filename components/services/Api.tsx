@@ -13,7 +13,7 @@ const create = (baseURL: string | undefined) => axios.create({
   adapter: cache.adapter,
 });
 
-export const mainApi = create('https://app.comprarnozap.com');
+export const mainApi = create('http://localhost:3030');
 addResponseErrorMidleware(mainApi);
 
 export const configureMainApi = (token:string) => {
