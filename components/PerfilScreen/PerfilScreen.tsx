@@ -24,10 +24,12 @@ import React, {
 } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
 import * as yup from 'yup';
 import Reward from 'react-rewards';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import * as htmlToImage from 'html-to-image';
+import QRCode from 'qrcode.react';
+import download from 'downloadjs';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import MaskedTextField from '../MaskedTextField';
 import perfisService from '../services/perfisService';
@@ -344,6 +346,13 @@ function PerfilScreen({
       .catch((error) => error);
   };
 
+  const downloadQR = () => {
+    htmlToImage.toPng(document.getElementById('QRCodeNode'))
+      .then((dataUrl:any) => {
+        download(dataUrl, `QRCode-${domain}.png`);
+      });
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -384,36 +393,65 @@ function PerfilScreen({
               </Grid>
               {seller && (
               <Grid item xs={12}>
-                <Alert severity="info" icon={<MenuBookIcon />}>
-                  <Reward
-                    ref={refReward}
-                    type="confetti"
-                    config={{
-                      lifetime: 150,
-                      angle: 90,
-                      decay: 0.91,
-                      spread: 50,
-                      startVelocity: 35,
-                      elementCount: 125,
-                      elementSize: 7,
-                    }}
-                  />
-                  <AlertTitle>Seu Catálogo</AlertTitle>
-                  Parabéns agora seu estabelecimento tem um catálogo na internet. Clique
-                  {' '}
-                  <Link onClick={showCatalogo} className={classes.clickable}>
-                    <strong>aqui</strong>
-                  </Link>
-                  {' '}
-                  para ir ao seu catálogo.
-                  {' '}
-                  <br />
-                  {window.location.origin}
-                  /lojas/
-                  {domain}
-                  <IconButton title="Copiar link" color="inherit" component="span" size="small" onClick={copyLink}>
-                    <FileCopyIcon fontSize="small" />
-                  </IconButton>
+                <Alert severity="info" icon={<></>}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm="auto">
+                      <Grid container justify="center">
+                        <Grid item xs="auto">
+                          <QRCode
+                            id="QRCodeNode"
+                            includeMargin
+                            value={`https://comprarnozap.com/lojas/${domain}`}
+                            size={150}
+                            imageSettings={{
+                              src: '/QRCode.png',
+                              x: null,
+                              y: null,
+                              height: 20,
+                              width: 20,
+                              excavate: true,
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12} sm>
+                      <Reward
+                        ref={refReward}
+                        type="confetti"
+                        config={{
+                          lifetime: 150,
+                          angle: 90,
+                          decay: 0.91,
+                          spread: 50,
+                          startVelocity: 35,
+                          elementCount: 125,
+                          elementSize: 7,
+                        }}
+                      />
+                      <AlertTitle>Seu Catálogo</AlertTitle>
+                      Parabéns agora seu estabelecimento tem um catálogo na internet. Clique
+                      {' '}
+                      <Link onClick={showCatalogo} className={classes.clickable}>
+                        <strong>aqui</strong>
+                      </Link>
+                      {' '}
+                      para ir ao seu catálogo.
+                      {' '}
+                      <br />
+                      {window.location.origin}
+                      /lojas/
+                      {domain}
+                      <IconButton title="Copiar link" color="inherit" component="span" size="small" onClick={copyLink}>
+                        <FileCopyIcon fontSize="small" />
+                      </IconButton>
+                      <Box p={2} pl={0}>
+                        <Button variant="outlined" color="inherit" onClick={downloadQR}>
+                          Baixar QRCode
+                        </Button>
+                      </Box>
+                    </Grid>
+                  </Grid>
                 </Alert>
               </Grid>
               )}
