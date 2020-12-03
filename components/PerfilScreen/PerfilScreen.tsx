@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Box,
   Button,
@@ -107,6 +108,18 @@ const useStyles = makeStyles((theme) => ({
   static: {
     position: 'static',
   },
+  buttonProgress: {
+    color: theme.palette.primary.light,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
 }));
 
 function PerfilScreen({
@@ -135,6 +148,11 @@ function PerfilScreen({
   const refRewardAfterSuccess = useRef(null);
 
   useEffect(() => {
+    geocodeByAddress(endereco)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => setLatLong(latLng))
+      .catch((error) => error);
+
     const rewarded = localStorage.getItem('PDZReward');
     if (!rewarded) {
       refReward.current.rewardMe();
@@ -257,9 +275,12 @@ function PerfilScreen({
   const deliveryBox = useField('delivery', form);
   const palavrasChavesInput = useField('palavrasChaves', form);
   const domainInput = useField('domain', form);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const image = useField('image', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
+    form.change('image', true);
   };
 
   const validateZap = async (value:string) => {
@@ -479,6 +500,7 @@ function PerfilScreen({
                             fullWidth
                             id="endereco"
                             error={enderecoInput.meta.touched && enderecoInput.meta.invalid}
+                            label="Endereço"
                             helperText={
                                   enderecoInput.meta.touched
                                   && enderecoInput.meta.invalid
@@ -552,9 +574,12 @@ function PerfilScreen({
                     </Collapse>
                   </Grid>
                   <Grid item xs="auto">
-                    <Button variant="contained" color="secondary" type="submit" disabled={pristine || submitting}>
-                      Salvar
-                    </Button>
+                    <div className={classes.wrapper}>
+                      <Button variant="contained" color="secondary" type="submit" disabled={pristine || submitting}>
+                        Salvar
+                      </Button>
+                      {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    </div>
                   </Grid>
                 </Grid>
               </form>

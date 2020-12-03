@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 import {
   Box,
@@ -99,6 +100,18 @@ const useStyles = makeStyles((theme) => ({
     '& > * + *': {
       marginLeft: theme.spacing(2),
     },
+  },
+  buttonProgress: {
+    color: theme.palette.primary.light,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
   },
 }));
 
@@ -216,9 +229,12 @@ function SignUpScreen() {
   const delivery = useField('delivery', form);
   const palavrasChaves = useField('palavrasChaves', form);
   const domain = useField('domain', form);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const image = useField('image', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
+    form.change('image', true);
   };
 
   const validateDomain = async (value:string) => {
@@ -349,6 +365,7 @@ function SignUpScreen() {
                                 variant="outlined"
                                 fullWidth
                                 id="endereco"
+                                label="Endereço"
                                 error={endereco.meta.touched && endereco.meta.invalid}
                                 helperText={
                                   endereco.meta.touched
@@ -478,14 +495,17 @@ function SignUpScreen() {
                     </Collapse>
                   </Grid>
                   <Grid item xs="auto">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      disabled={pristine || submitting}
-                      type="submit"
-                    >
-                      Criar conta
-                    </Button>
+                    <div className={classes.wrapper}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={pristine || submitting}
+                        type="submit"
+                      >
+                        Criar conta
+                      </Button>
+                      {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    </div>
                   </Grid>
                 </Grid>
               </Grid>
