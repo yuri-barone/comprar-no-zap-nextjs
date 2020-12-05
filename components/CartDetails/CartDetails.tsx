@@ -59,7 +59,7 @@ const generateZapLink = (
   trocoParam: number,
   obs: string,
   nome: string,
-  codigo: string,
+  codigo?: string,
 ) => {
   const stringProducts = products.map((produto) => `${produto.quantidade}%20${produto.titulo}%0a`);
   const validateEntrega = () => {
@@ -68,7 +68,12 @@ const generateZapLink = (
     }
     return '%0a%0a*Irei%20buscar*';
   };
-
+  const validateCodigo = () => {
+    if (codigo) {
+      return `%0a%0aImprimir:%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
+    }
+    return '';
+  };
   const validateTroco = () => {
     if (!!trocoParam && paymentMethod === 'Dinheiro') {
       return `(Troco para ${formatNumberToMoneyWithSymbol(trocoParam, 'R$')})`;
@@ -93,7 +98,7 @@ const generateZapLink = (
   const formaDeReceber = validateEntrega();
   const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProducts.join(
     '',
-  )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}%0a%0aImprimir:%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
+  )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}${validateCodigo}`;
   return link;
 };
 
@@ -184,6 +189,19 @@ const CartDetails = ({
         values.obs,
         values.nome,
         response.data.codigo,
+      );
+      const win = window.open(link, '_blank');
+      win.focus();
+    }
+    if (!response.ok) {
+      const link = generateZapLink(
+        Number(values.products[0].zap),
+        values.products,
+        values.metodoPagamento,
+        values.entrega ? values.endereco : undefined,
+        values.troco,
+        values.obs,
+        values.nome,
       );
       const win = window.open(link, '_blank');
       win.focus();
