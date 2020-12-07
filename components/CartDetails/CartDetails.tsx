@@ -174,7 +174,7 @@ const CartDetails = ({
       values.troco,
       values.obs,
       values.nome,
-      order?.codigo,
+      order?.data?.codigo,
     );
     window.open(link);
   };
@@ -196,7 +196,8 @@ const CartDetails = ({
     const response = await ordersService.createOrder(args);
     if (response.ok) {
       openLink(values, response);
-    } else {
+    }
+    if (!response.ok) {
       openLink(values, undefined);
     }
   };
