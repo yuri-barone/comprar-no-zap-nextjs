@@ -70,7 +70,7 @@ const generateZapLink = (
   };
   const validateCodigo = () => {
     if (codigo) {
-      return `%0a%0aImprimir:%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
+      return `%0a%0a*Imprimir:*%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
     }
     return '';
   };
@@ -98,7 +98,7 @@ const generateZapLink = (
   const formaDeReceber = validateEntrega();
   const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProducts.join(
     '',
-  )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}${validateCodigo}`;
+  )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}${validateCodigo()}`;
   return link;
 };
 
