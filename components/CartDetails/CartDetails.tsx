@@ -193,7 +193,10 @@ const CartDetails = ({
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
     ordersService.createOrder(args)
-      .then(((response) => openLink(response?.data?.codigo, values)));
+      .then((response) => openLink(response?.data?.codigo, values), (error) => {
+        openLink(undefined, values);
+        alert(JSON.stringify(error));
+      });
   };
 
   const {
