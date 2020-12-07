@@ -70,7 +70,7 @@ const generateZapLink = (
   };
   const validateCodigo = () => {
     if (codigo) {
-      return `%0a%0aImprimir:%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
+      return `%0a%0a*Imprimir:*%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
     }
     return '';
   };
