@@ -178,21 +178,21 @@ const CartDetails = ({
     args.formaPagamento = values.metodoPagamento;
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
-
-    const response = ordersService.createOrder(args);
-    // const codigoPedido = response?.data?.codigo;
-    alert(JSON.stringify(response));
-    const link = generateZapLink(
-      Number(values.products[0].zap),
-      values.products,
-      values.metodoPagamento,
-      values.entrega ? values.endereco : undefined,
-      values.troco,
-      values.obs,
-      values.nome,
-      '123',
-    );
-    window.open(link);
+    const openLink = (response:any) => {
+      const link = generateZapLink(
+        Number(values.products[0].zap),
+        values.products,
+        values.metodoPagamento,
+        values.entrega ? values.endereco : undefined,
+        values.troco,
+        values.obs,
+        values.nome,
+        response?.data?.codigo,
+      );
+      window.open(link);
+    };
+    ordersService.createOrder(args)
+      .then(((response) => openLink(response)));
   };
 
   const {
