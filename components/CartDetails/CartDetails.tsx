@@ -189,7 +189,11 @@ const CartDetails = ({
       values.nome,
         response?.data?.codigo,
     );
-    window.location.assign(link);
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.onClick = window.open(link);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const {
