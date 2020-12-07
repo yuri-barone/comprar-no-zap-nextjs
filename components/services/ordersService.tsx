@@ -9,6 +9,15 @@ const createOrder = async (order:any) => {
   }
 };
 
+const getOrderById = async (orderId:number) => {
+  try {
+    const response = await api.get(`/orders/${orderId}`);
+    return { data: response.data };
+  } catch (error) {
+    return error;
+  }
+};
+
 const getOrder = async (codigo:string) => {
   try {
     const response = await api.get(`/orders?codigo=${codigo}`);
@@ -31,4 +40,5 @@ export default {
   createOrder,
   getOrder,
   getOrderItems,
+  getOrderById,
 };
