@@ -179,7 +179,7 @@ const CartDetails = ({
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
 
-    const response = await ordersService.createOrder(args);
+    const response = ordersService.createOrder(args);
     const codigoPedido = response?.data?.codigo;
     alert(JSON.stringify(response));
     const link = generateZapLink(
@@ -190,7 +190,7 @@ const CartDetails = ({
       values.troco,
       values.obs,
       values.nome,
-      codigoPedido,
+      '123',
     );
     window.open(link);
   };
