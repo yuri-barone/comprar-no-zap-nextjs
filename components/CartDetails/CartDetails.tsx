@@ -180,7 +180,7 @@ const CartDetails = ({
     args.troco = values.troco ? values.troco : undefined;
 
     const response = ordersService.createOrder(args);
-    const codigoPedido = response?.data?.codigo;
+    // const codigoPedido = response?.data?.codigo;
     alert(JSON.stringify(response));
     const link = generateZapLink(
       Number(values.products[0].zap),
