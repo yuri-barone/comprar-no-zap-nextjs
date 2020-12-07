@@ -187,7 +187,7 @@ const CartDetails = ({
       values.troco,
       values.obs,
       values.nome,
-      response?.data?.codigo,
+      // response?.data?.codigo,
     );
     window.open(link);
   };
