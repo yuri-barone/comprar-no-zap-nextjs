@@ -190,7 +190,7 @@ const CartDetails = ({
         values.nome,
         response.data.codigo,
       );
-      const win = window.open(link, '_blank');
+      const win = window.open(link);
       win.focus();
     }
     if (!response.ok) {
@@ -203,7 +203,7 @@ const CartDetails = ({
         values.obs,
         values.nome,
       );
-      const win = window.open(link, '_blank');
+      const win = window.open(link);
       win.focus();
     }
   };
