@@ -178,7 +178,9 @@ const CartDetails = ({
     args.formaPagamento = values.metodoPagamento;
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
-    // const response = await ordersService.createOrder(args);
+    
+    const response = await ordersService.createOrder(args);
+    const codigoPedido = response?.data?.codigo;
     const link = generateZapLink(
       Number(values.products[0].zap),
       values.products,
@@ -187,7 +189,7 @@ const CartDetails = ({
       values.troco,
       values.obs,
       values.nome,
-      // response?.data?.codigo,
+      '123',
     );
     window.open(link);
   };
