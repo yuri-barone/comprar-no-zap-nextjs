@@ -70,7 +70,7 @@ const generateZapLink = (
   };
   const validateCodigo = () => {
     if (codigo) {
-      return `%0a%0a*Imprimir:*%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
+      return `%0a%0aImprimir:%0ahttps://comprarnozap.com/pedidos?codigo=${codigo}`;
     }
     return '';
   };
@@ -164,21 +164,6 @@ const CartDetails = ({
     }
   };
 
-  const openLink = async (values:any, resp:any) => {
-    const order = await ordersService.getOrderById(resp.data.id);
-    const link = generateZapLink(
-      Number(values.products[0].zap),
-      values.products,
-      values.metodoPagamento,
-      values.entrega ? values.endereco : undefined,
-      values.troco,
-      values.obs,
-      values.nome,
-      order?.data?.codigo,
-    );
-    window.open(link);
-  };
-
   const onSubmit = async (values: any) => {
     const args:any = values;
     args.valorTotal = totalValue;
@@ -194,12 +179,17 @@ const CartDetails = ({
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
     const response = await ordersService.createOrder(args);
-    if (response.ok) {
-      openLink(values, response);
-    }
-    if (!response.ok) {
-      openLink(values, undefined);
-    }
+    const link = generateZapLink(
+      Number(values.products[0].zap),
+      values.products,
+      values.metodoPagamento,
+      values.entrega ? values.endereco : undefined,
+      values.troco,
+      values.obs,
+      values.nome,
+        response?.data?.codigo,
+    );
+    window.location.assign(link);
   };
 
   const {
