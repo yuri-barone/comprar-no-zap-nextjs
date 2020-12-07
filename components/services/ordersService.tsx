@@ -2,8 +2,13 @@ import { mainApi as api } from './Api';
 
 const createOrder = async (order:any) => {
   try {
-    const response = await api.post('/orders', order);
-    return { ok: true, data: response.data };
+    // const response = await api.post('/orders', order);
+    const response = await fetch('https://app.comprarnozap.com/orders', {
+      method: 'post',
+      body: JSON.stringify(order),
+    });
+    const responseJson = await response.json();
+    return { ok: true, data: responseJson.data };
   } catch (error) {
     return { ok: false, erro: 'Seu pedido não pode ser finalizado' };
   }
