@@ -189,13 +189,21 @@ const CartDetails = ({
       values.nome,
         response?.data?.codigo,
     );
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.onclick = () => {
-      window.open(link);
-    };
-    a.click();
-    document.body.removeChild(a);
+    const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1
+                   && navigator.userAgent
+                   && navigator.userAgent.indexOf('CriOS') === -1
+                   && navigator.userAgent.indexOf('FxiOS') === -1;
+    if (isSafari) {
+      window.location.assign(link);
+    } else {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.onclick = () => {
+        window.open(link);
+      };
+      a.click();
+      document.body.removeChild(a);
+    }
   };
 
   const {
