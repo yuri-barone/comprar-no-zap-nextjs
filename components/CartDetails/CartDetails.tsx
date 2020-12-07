@@ -191,7 +191,9 @@ const CartDetails = ({
     );
     const a = document.createElement('a');
     document.body.appendChild(a);
-    a.onclick = window.open(link);
+    a.onclick = () => {
+      window.open(link);
+    };
     a.click();
     document.body.removeChild(a);
   };
