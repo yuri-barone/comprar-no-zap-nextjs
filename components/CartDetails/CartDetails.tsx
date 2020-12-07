@@ -164,6 +164,20 @@ const CartDetails = ({
     }
   };
 
+  const openLink = (codigo:any, values:any) => {
+    const link = generateZapLink(
+      Number(values.products[0].zap),
+      values.products,
+      values.metodoPagamento,
+      values.entrega ? values.endereco : undefined,
+      values.troco,
+      values.obs,
+      values.nome,
+      codigo,
+    );
+    window.open(link);
+  };
+
   const onSubmit = async (values: any) => {
     const args:any = values;
     args.valorTotal = totalValue;
@@ -178,21 +192,8 @@ const CartDetails = ({
     args.formaPagamento = values.metodoPagamento;
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
-    const openLink = (response:any) => {
-      const link = generateZapLink(
-        Number(values.products[0].zap),
-        values.products,
-        values.metodoPagamento,
-        values.entrega ? values.endereco : undefined,
-        values.troco,
-        values.obs,
-        values.nome,
-        response?.data?.codigo,
-      );
-      window.open(link);
-    };
     ordersService.createOrder(args)
-      .then(((response) => openLink(response)));
+      .then(((response) => openLink(response?.data?.codigo, values)));
   };
 
   const {
