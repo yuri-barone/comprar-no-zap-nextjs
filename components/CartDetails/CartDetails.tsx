@@ -178,34 +178,7 @@ const CartDetails = ({
     args.formaPagamento = values.metodoPagamento;
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
-    // const response = await ordersService.createOrder(args);
-    // if (response.ok) {
-    //   const link = generateZapLink(
-    //     Number(values.products[0].zap),
-    //     values.products,
-    //     values.metodoPagamento,
-    //     values.entrega ? values.endereco : undefined,
-    //     values.troco,
-    //     values.obs,
-    //     values.nome,
-    //     response.data.codigo,
-    //   );
-    //   const win = window.open(link);
-    //   win.focus();
-    // }
-    // if (!response.ok) {
-    //   const link = generateZapLink(
-    //     Number(values.products[0].zap),
-    //     values.products,
-    //     values.metodoPagamento,
-    //     values.entrega ? values.endereco : undefined,
-    //     values.troco,
-    //     values.obs,
-    //     values.nome,
-    //   );
-    //   const win = window.open(link);
-    //   win.focus();
-    // }
+    const response = await ordersService.createOrder(args);
     const link = generateZapLink(
       Number(values.products[0].zap),
       values.products,
@@ -214,9 +187,9 @@ const CartDetails = ({
       values.troco,
       values.obs,
       values.nome,
+      response?.data?.codigo,
     );
-    const win = window.open(link);
-    win.focus();
+    window.open(link);
   };
 
   const {
