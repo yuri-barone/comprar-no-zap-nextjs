@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShareIcon from '@material-ui/icons/Share';
+import { Skeleton } from '@material-ui/lab';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import pictureService from '../services/pictureService';
 
@@ -34,13 +35,16 @@ const useStyles = makeStyles({
 function ProductCard({ product, onAdd }: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
-  const [image, setImage] = useState('/empty-img.png');
+  const [image, setImage] = useState<string | undefined>();
 
   // eslint-disable-next-line consistent-return
   const getImage = async () => {
     try {
       const pictureResponse = await pictureService.get(product.pictureId);
       setImage(pictureResponse.data.imgBase64);
+      if (!pictureResponse.data.imgBase64) {
+        setImage('/empty-img.png');
+      }
     } catch (error) {
       return error;
     }
@@ -48,9 +52,6 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
 
   useEffect(() => {
     getImage();
-    return () => {
-      setImage('/empty-img.png');
-    };
   }, []);
 
   const createProductCart = () => {
@@ -85,13 +86,17 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
     <Paper className={classes.root}>
       <Grid container className={classes.root}>
         <Grid item xs={12}>
-          <img
-            alt={product.titulo}
-            src={image || '/empty-img.png'}
-            className={classes.img}
-            width="100%"
-            height="200px"
-          />
+          { image ? (
+            <img
+              alt={product.titulo}
+              src={image || '/empty-img.png'}
+              className={classes.img}
+              width="100%"
+              height="200px"
+            />
+          ) : (
+            <Skeleton animation="wave" variant="rect" width="100%" height={200} />
+          )}
         </Grid>
         <Box pb={2} pl={2} pr={2} pt={1} className={classes.box}>
           <Grid container spacing={2} alignContent="space-between" style={{ height: '100%' }}>

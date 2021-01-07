@@ -6,7 +6,9 @@ import {
   Grid,
   makeStyles,
   Typography,
+  useTheme,
 } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import React, { useEffect, useState } from 'react';
 import pictureService from '../services/pictureService';
 
@@ -32,13 +34,16 @@ const useStyles = makeStyles((theme) => ({
 const EnterpriseCard = ({
   name, zap, endereco, id, onNavigate, pictureId, distance,
 }: EnterpriseCardProps) => {
-  const [src, setSrc] = useState('');
-
+  const [src, setSrc] = useState<string | undefined>();
+  const theme = useTheme();
   // eslint-disable-next-line consistent-return
   const getSrc = async () => {
     try {
       const pictureResponse = await pictureService.get(pictureId);
       setSrc(pictureResponse.data.imgBase64);
+      if (!pictureResponse.data.imgBase64) {
+        setSrc('/empty-profile.png');
+      }
     } catch (error) {
       return error;
     }
@@ -46,10 +51,8 @@ const EnterpriseCard = ({
 
   useEffect(() => {
     getSrc();
-    return () => {
-      setSrc('');
-    };
   }, []);
+
   const classes = useStyles();
   const handleOnSeeProducts = () => {
     onNavigate({
@@ -76,7 +79,11 @@ const EnterpriseCard = ({
           <CardContent>
             <Grid container alignItems="center" spacing={2} className={classes.maxHeigth}>
               <Grid item xs="auto">
-                <Avatar src={src} className={classes.avatarSize} />
+                {src ? (
+                  <Avatar src={src} className={classes.avatarSize} />
+                ) : (
+                  <Skeleton animation="wave" variant="circle" width={theme.spacing(10)} height={theme.spacing(10)} />
+                )}
               </Grid>
               <Grid item xs>
                 <Grid container>

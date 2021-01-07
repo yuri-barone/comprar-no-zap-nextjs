@@ -57,10 +57,10 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
 
   const compareProducts = async () => {
     const res = await productsService.findOptimized(undefined, perfil.id);
-    if (res.data.data.length === produtos.length) {
+    if (res.data?.data?.length === produtos.length) {
       return;
     }
-    setProductsData(res.data.data);
+    setProductsData(res.data?.data);
   };
 
   useEffect(() => {
@@ -217,14 +217,14 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
             </Grid>
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <Grid container alignItems="stretch" spacing={4}>
-                { productsData.map((item) => (
+                { productsData?.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
                     <ProductCard product={item} onAdd={adicionar} />
                   </Grid>
                 ))}
               </Grid>
             </Grid>
-            {productsData.length === 0 && !searchInput && (
+            {productsData?.length === 0 && !searchInput && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
@@ -235,7 +235,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
               />
             </Grid>
             )}
-            {productsData.length === 0 && searchInput && (
+            {productsData?.length === 0 && searchInput && (
             <Grid item xs={12} className={classes.containerMarginFix4}>
               <ImageFeedback
                 image="/Jhon-Travolta.gif"
