@@ -75,13 +75,26 @@ export default function Home() {
       <Grid container className={classes.containerHeight} spacing={2}>
         <Grid item xs={12}>
           {session.isAutheticated && (
-          <LoggedBarIndex
-            src={session.profile['picture.imgBase64']}
-            name={session.profile.nome}
-            zap={session.profile.zap}
-            domain={session.profile.domain}
-            seller={session.profile.seller}
-          />
+          <div>
+            {!coordinates.allowed && (
+            <Grid item xs={12}>
+              <Alert severity="info">
+                Buscando por todo o Brasil, para pesquisar pela sua cidade clique
+                {' '}
+                <Link onClick={askGeolocation} className={classes.clickable}>
+                  <strong>aqui.</strong>
+                </Link>
+              </Alert>
+            </Grid>
+            )}
+            <LoggedBarIndex
+              src={session.profile['picture.imgBase64']}
+              name={session.profile.nome}
+              zap={session.profile.zap}
+              domain={session.profile.domain}
+              seller={session.profile.seller}
+            />
+          </div>
           )}
           {!session.isAutheticated && (
 
@@ -92,7 +105,7 @@ export default function Home() {
                 Buscando por todo o Brasil, para pesquisar pela sua cidade clique
                 {' '}
                 <Link onClick={askGeolocation} className={classes.clickable}>
-                  <strong>aqui</strong>
+                  <strong>aqui.</strong>
                 </Link>
               </Alert>
             </Grid>
