@@ -112,13 +112,11 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
             </Grid>
             <Grid item xs={12}>
               <Grid container justify="flex-end" spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor, 'R$')}</Typography>
                   <Typography color="textSecondary">{product.nome}</Typography>
-                </Grid>
-                <Grid item xs={6}>
                   {product.distance && (
-                  <Typography color="secondary">
+                  <Typography variant="caption" color="secondary">
                     A
                     {' '}
                     {product.distance}
