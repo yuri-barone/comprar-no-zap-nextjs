@@ -3,13 +3,6 @@ import {
   Button,
   Container,
   Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
@@ -54,71 +47,57 @@ const pedidos = () => {
 
   return (
     <Container>
-      <Grid container justify="center">
+      <Grid container justify="flex-start">
         <Grid item xs={12} lg={4}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Box pt={2}>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell><h2>PEDIDO</h2></TableCell>
-                        <TableCell align="center"><h2>{order.codigo}</h2></TableCell>
-                        <TableCell align="right"><h4>{date}</h4></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Items</TableCell>
-                        <TableCell align="right">Valor</TableCell>
-                        <TableCell align="right">Total</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {items.map((item:any) => (
-                        <TableRow key={item.titulo}>
-                          <TableCell component="th" scope="row">
-                            {item.quantidade}
-                            {' '}
-                            {item.titulo}
-                          </TableCell>
-                          <TableCell align="right">{formatNumberToMoneyWithSymbol(item.valorUnitario)}</TableCell>
-                          <TableCell align="right">{formatNumberToMoneyWithSymbol(item.valorTotal)}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell><h2>Total</h2></TableCell>
-                        <TableCell align="center" />
-                        <TableCell align="right"><h3>{formatNumberToMoneyWithSymbol(order.valorTotal)}</h3></TableCell>
-                      </TableRow>
-                    </TableHead>
-                  </Table>
-                </TableContainer>
-              </Box>
+              <h2>
+                PEDIDO:
+                {' '}
+                {order.codigo}
+              </h2>
+              <h4>{date}</h4>
+              {items.map((item:any) => (
+                <>
+                  <Box pb={1}>
+                    <span>
+                      {item.quantidade}
+                      {' '}
+                      {item.titulo}
+                    </span>
+                    <br />
+                    <span>
+                      Valor:
+                      {' '}
+                      {formatNumberToMoneyWithSymbol(item.valorTotal)}
+                    </span>
+                  </Box>
+                </>
+              ))}
+              <h2>
+                Total:
+                {' '}
+                {formatNumberToMoneyWithSymbol(order.valorTotal)}
+              </h2>
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Box pt={2}>
-              {renderInfoParam('Cliente', order.nome)}
-              {renderInfoParam('Observação', order.observacao)}
-              {renderInfoParam('Entregar', order.endereco)}
-              {!order.delivery && (
+            {renderInfoParam('Cliente', order.nome)}
+            {renderInfoParam('Observação', order.observacao)}
+            {renderInfoParam('Entregar', order.endereco)}
+            {!order.delivery && (
               <Typography gutterBottom>
                 <Typography variant="caption" component="p">Entrega</Typography>
                 Cliente irá buscar
               </Typography>
-              )}
-              {renderInfoParam('Forma de pagamento', order.formaPagamento)}
-              {order.formaPagamento === 'Dinheiro' && order.troco && (
+            )}
+            {renderInfoParam('Forma de pagamento', order.formaPagamento)}
+            {order.formaPagamento === 'Dinheiro' && order.troco && (
               <Typography>
                 <Typography variant="caption" component="p">Troco para</Typography>
                 {formatNumberToMoneyWithSymbol(order.troco)}
               </Typography>
-              )}
-            </Box>
+            )}
           </Grid>
           <Grid item xs={12}>
             <Grid container justify="flex-end">
