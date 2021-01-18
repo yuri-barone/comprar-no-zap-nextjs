@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   Grid,
   Typography,
 } from '@material-ui/core';
@@ -46,7 +45,7 @@ const pedidos = () => {
   };
 
   return (
-    <Container>
+    <>
       <Grid container justify="flex-start">
         <Grid item xs={12} lg={4}>
           <Grid container spacing={1}>
@@ -112,7 +111,7 @@ const pedidos = () => {
           </Grid>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 
