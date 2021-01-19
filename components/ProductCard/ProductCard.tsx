@@ -3,6 +3,7 @@ import {
   Button,
   Grid,
   IconButton,
+  Link,
   makeStyles,
   Paper,
   Typography,
@@ -114,8 +115,12 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
               <Grid container justify="flex-end" spacing={2}>
                 <Grid item xs={12}>
                   <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor, 'R$')}</Typography>
-                  <Typography color="textSecondary">{product.nome}</Typography>
-                  {product.distance && (
+                  <Typography color="textSecondary">
+                    <Link color="textSecondary" href={`/lojas/${product.domain}`}>
+                      {product.nome}
+                    </Link>
+                  </Typography>
+                  {!!product.distance && (
                   <Typography variant="caption" color="secondary">
                     A
                     {' '}

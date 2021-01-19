@@ -16,6 +16,7 @@ import red from '@material-ui/core/colors/red';
 import { useRouter } from 'next/router';
 import Search from '../Search/Search';
 import MyAppBarLoggedSm from './MyAppBarLoggedSm';
+import LocalButton from '../LocalButton/LocalButton';
 
 export type MyAppBarLoggedProps = {
   onSearch: (filter: string) => void;
@@ -27,6 +28,8 @@ export type MyAppBarLoggedProps = {
   zap: string;
   domain: string;
   seller: boolean;
+  handleDialogOpen: () => void;
+  lastEndereco: string;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -79,7 +82,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MyAppBarLogged = ({
-  value, onChange, src, name, zap, onSearch, domain, seller,
+  value,
+  onChange,
+  src,
+  name,
+  zap,
+  onSearch,
+  domain,
+  seller,
+  lastEndereco,
+  handleDialogOpen,
 }: MyAppBarLoggedProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -114,13 +126,15 @@ const MyAppBarLogged = ({
               <Grid container alignItems="center" spacing={2}>
                 <Grid item xs="auto">
                   <div className={classes.imgDiv}>
-                    <img
-                      alt=""
-                      src="/comprar-no-zap-logo.svg"
-                      className={classes.logo}
-                      height="100%"
-                      width="100%"
-                    />
+                    <a href="/">
+                      <img
+                        alt=""
+                        src="/comprar-no-zap-logo.svg"
+                        className={classes.logo}
+                        height="100%"
+                        width="100%"
+                      />
+                    </a>
                   </div>
                 </Grid>
                 <Grid item xs={6}>
@@ -128,6 +142,12 @@ const MyAppBarLogged = ({
                     value={value}
                     onEnter={() => null}
                     onChange={onChange}
+                    InputAddornment={(
+                      <LocalButton
+                        lastEndereco={lastEndereco}
+                        handleDialogOpen={handleDialogOpen}
+                      />
+                    )}
                   />
                 </Grid>
                 <Grid item xs />
@@ -192,16 +212,16 @@ const MyAppBarLogged = ({
                           </Button>
                         </Grid>
                         {seller && (
-                        <Grid item xs={12}>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={showCatalogo}
-                            fullWidth
-                          >
-                            Meu catálogo
-                          </Button>
-                        </Grid>
+                          <Grid item xs={12}>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              onClick={showCatalogo}
+                              fullWidth
+                            >
+                              Meu catálogo
+                            </Button>
+                          </Grid>
                         )}
                         <Grid item xs={12}>
                           <ColorButton
@@ -231,6 +251,8 @@ const MyAppBarLogged = ({
           zap={zap}
           seller={seller}
           domain={domain}
+          lastEndereco={lastEndereco}
+          handleDialogOpen={handleDialogOpen}
         />
       </Hidden>
     </>

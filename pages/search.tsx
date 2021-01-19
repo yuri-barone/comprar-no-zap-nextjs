@@ -1,7 +1,11 @@
+/* eslint-disable react/display-name */
 import {
   AppBar,
   Box,
+  Button,
+  CircularProgress,
   Container,
+  Dialog,
   Divider,
   Grid,
   Hidden,
@@ -10,11 +14,15 @@ import {
   Slide,
   Tab,
   Tabs,
+  TextField,
+  Typography,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import EnterpriseCard from '../components/EnterpriseCard/EnterpriseCard';
 import EnterpriseCardShow from '../components/EnterpriseCard/EnterpriseCardShow';
 import MyAppBar from '../components/MyAppBar/MyAppBar';
@@ -80,14 +88,39 @@ export default function Home() {
   const [lastSearchProductHash, setLastSearchProductHash] = useState<string | undefined>(null);
   const [lastSearchPlaceHash, setLastlastSearchPlaceHash] = useState<string | undefined>(null);
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [endereco, setEndereco] = useState('');
+  const [lastEndereco, setLastEndereco] = useState(undefined);
+  const [requiredDialog, setRequiredDialog] = useState(true);
+
   const session: any = useSession(false);
   const navigation: any = useNavigation();
   const coordinates = useCoordinate();
 
+  useEffect(() => {
+    setLastEndereco(localStorage.getItem('ComprarNoZapEndereco'));
+    if (localStorage.getItem('ComprarNoZapEndereco')) {
+      setRequiredDialog(false);
+    }
+  }, []);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    if (!requiredDialog) {
+      setOpenDialog(false);
+    }
+  };
+
   // eslint-disable-next-line consistent-return
   const getLocais = useCallback(async () => {
     try {
-      const localResponse = await perfisService.find(termToFind, coordinates.position);
+      const localResponse = await perfisService.find(
+        termToFind,
+        coordinates.position || JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
+      );
       return localResponse.data.data;
     } catch (error) {
       return [];
@@ -99,7 +132,7 @@ export default function Home() {
       const productResponse = await productsService.findOptimized(
         termToFind,
         storeIdToFind,
-        coordinates.position,
+        coordinates.position || JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
       );
       return productResponse.data.data;
     } catch (error) {
@@ -211,7 +244,13 @@ export default function Home() {
   useEffect(() => {
     const executarBuscaTimeout = setTimeout(executaBuscaParaTabSelecionada, 100);
     return () => clearTimeout(executarBuscaTimeout);
-  }, [termToFind, storeIdToFind, tabValue, coordinates.loading, coordinates.position]);
+  }, [
+    termToFind,
+    storeIdToFind,
+    tabValue,
+    coordinates.loading,
+    coordinates.position,
+  ]);
 
   const handleChangeTab = (e: any, value: number) => {
     setTabValue(value);
@@ -301,14 +340,51 @@ export default function Home() {
     navigator.geolocation.getCurrentPosition(success);
   };
 
+  const setLatLong = async (latLng:any, Address:string) => {
+    const coordinatesToSave = { latitude: latLng.lat, longitude: latLng.lng };
+    localStorage.setItem('ComprarNoZapLatLng', JSON.stringify(coordinatesToSave));
+    localStorage.setItem('ComprarNoZapEndereco', Address);
+    coordinates.allowed = true;
+    handleDialogClose();
+    const hash = `${termToFind}_${storeIdToFind}`;
+    if (tabValue === 0) {
+      setIsLoading(true);
+      setLastlastSearchPlaceHash(hash);
+      const places = await getLocais();
+      setLocaisData(places);
+      setIsLoading(false);
+    }
+    if (tabValue === 1) {
+      setIsLoading(true);
+      setLastSearchProductHash(hash);
+      const products = await getProducts();
+      setProductsData(products);
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddressSelect = (address:string) => {
+    geocodeByAddress(address)
+      .then((results:any) => getLatLng(results[0]))
+      .then((latLng:any) => setLatLong(latLng, address))
+      .catch((error:Error) => error);
+    setLastEndereco(address);
+    setRequiredDialog(false);
+    setOpenDialog(false);
+  };
+
+  const changeEndereco = (selectedAddress:string) => {
+    setEndereco(selectedAddress);
+  };
+
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
-      {!coordinates.allowed && (
+      {!coordinates.allowed && !lastEndereco && (
         <Grid item xs={12}>
           <Alert severity="info">
             Buscando por todo o Brasil, para pesquisar pela sua cidade clique
             {' '}
-            <Link onClick={askGeolocation} className={classes.clickable}>
+            <Link onClick={handleDialogOpen} className={classes.clickable}>
               <strong>aqui</strong>
             </Link>
           </Alert>
@@ -325,6 +401,8 @@ export default function Home() {
           zap={session.isAutheticated && session.profile.zap}
           domain={session.isAutheticated && session.profile.domain}
           seller={session.isAutheticated && session.profile.seller}
+          lastEndereco={lastEndereco}
+          handleDialogOpen={handleDialogOpen}
         />
 
       )}
@@ -334,6 +412,8 @@ export default function Home() {
           value={searchInput}
           onChange={searchOnChange}
           onSearch={aplicarFiltrosAoEstado}
+          handleDialogOpen={handleDialogOpen}
+          lastEndereco={lastEndereco}
         />
       )}
       <Box style={{ backgroundColor: 'white' }}>
@@ -506,6 +586,88 @@ export default function Home() {
             </Container>
           </AppBar>
         </Slide>
+        <Dialog
+          open={openDialog}
+          keepMounted
+          onClose={handleDialogClose}
+        >
+          <Box p={2}>
+            <Grid container justify="center" spacing={2}>
+              <Grid item xs="auto">
+                <Typography variant="h6">Onde quer receber seu pedido?</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <PlacesAutocomplete
+                  value={endereco}
+                  onChange={(address) => { changeEndereco(address); }}
+                  onSelect={(address) => {
+                    handleAddressSelect(address);
+                    changeEndereco(address);
+                  }}
+                >
+                  {({
+                    getInputProps, suggestions, getSuggestionItemProps, loading,
+                  }) => (
+                    <div>
+                      <TextField
+                        {...getInputProps({
+                          placeholder: 'Endereço',
+                        })}
+                        variant="outlined"
+                        value={endereco}
+                        fullWidth
+                        id="endereco"
+                        label="Endereço"
+                        InputProps={{
+                          endAdornment: (
+                            <>
+                              {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                            </>
+                          ),
+                        }}
+                      />
+                      <div className="autocomplete-dropdown-container">
+                        {suggestions.map((suggestion) => {
+                          const className = suggestion.active
+                            ? 'suggestion-item--active'
+                            : 'suggestion-item';
+                            // inline style for demonstration purpose
+                          const style = suggestion.active
+                            ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
+                            : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
+                          return (
+                            <div
+                              {...getSuggestionItemProps(suggestion, {
+                                className,
+                                style,
+                              })}
+                            >
+                              <Box p={2}>
+                                <Typography>{suggestion.description}</Typography>
+                              </Box>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </PlacesAutocomplete>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  onClick={askGeolocation}
+                  startIcon={<LocationOnIcon />}
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                >
+                  Usar minha localização
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Dialog>
       </Container>
     </ThemeProvider>
   );

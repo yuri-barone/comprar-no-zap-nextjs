@@ -10,12 +10,15 @@ import {
 import React from 'react';
 import Search from '../Search/Search';
 import MyAppBarSm from './MyAppBarSm';
+import LocalButton from '../LocalButton/LocalButton';
 
 export type MyAppBarProps = {
   onSearch: (filter:string) => void,
   searchDefaultValue?: string,
   value?: string,
   onChange: (filter:string) => void,
+  handleDialogOpen: () => void,
+  lastEndereco: string,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyAppBar = ({ value, onChange, onSearch }: MyAppBarProps) => {
+const MyAppBar = ({
+  value, onChange, onSearch, lastEndereco, handleDialogOpen,
+}: MyAppBarProps) => {
   const classes = useStyles();
   return (
     <>
@@ -53,30 +58,46 @@ const MyAppBar = ({ value, onChange, onSearch }: MyAppBarProps) => {
               <Grid container alignItems="center">
                 <Grid item xs={3} sm="auto">
                   <div className={classes.imgDiv}>
-                    <img
-                      alt=""
-                      src="/comprar-no-zap-logo.svg"
-                      className={classes.img}
-                      height="100%"
-                      width="100%"
-                    />
+                    <a href="/">
+                      <img
+                        alt=""
+                        src="/comprar-no-zap-logo.svg"
+                        className={classes.img}
+                        height="100%"
+                        width="100%"
+                      />
+                    </a>
                   </div>
                 </Grid>
                 <Grid item xs={9} sm={6}>
-                  <Search value={value} onEnter={() => null} onChange={onChange} />
+                  <Search
+                    value={value}
+                    onEnter={() => null}
+                    onChange={onChange}
+                    InputAddornment={(
+                      <LocalButton
+                        lastEndereco={lastEndereco}
+                        handleDialogOpen={handleDialogOpen}
+                      />
+                    )}
+                  />
                 </Grid>
-                <Grid item xs />
-                <Grid item xs="auto">
-                  <Box p={2}>
-                    <Typography className={classes.link}>
-                      <Link href="/cadastro" color="inherit">
-                        Cadastrar-me
-                      </Link>
-                      <Link href="/entrar" color="inherit">
-                        Logar-me
-                      </Link>
-                    </Typography>
-                  </Box>
+                <Grid item xs>
+                  <Grid container>
+                    <Grid item xs />
+                    <Grid item xs="auto">
+                      <Box pt={2} pl={2} pr={2} pb={1}>
+                        <Typography className={classes.link}>
+                          <Link href="/cadastro" color="inherit">
+                            Cadastrar-me
+                          </Link>
+                          <Link href="/entrar" color="inherit">
+                            Logar-me
+                          </Link>
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Box>
@@ -88,6 +109,8 @@ const MyAppBar = ({ value, onChange, onSearch }: MyAppBarProps) => {
           value={value}
           onChange={onChange}
           onSearch={onSearch}
+          lastEndereco={lastEndereco}
+          handleDialogOpen={handleDialogOpen}
         />
       </Hidden>
     </>

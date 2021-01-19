@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   Grid,
   Link,
@@ -7,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Search from '../Search/Search';
 
 export type MyAppBarSmProps = {
@@ -14,6 +16,8 @@ export type MyAppBarSmProps = {
   searchDefaultValue?: string,
   value?: string,
   onChange: (filter:string) => void,
+  handleDialogOpen: () => void,
+  lastEndereco: string,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +44,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyAppBarSm = ({ value, onChange }: MyAppBarSmProps) => {
+const MyAppBarSm = ({
+  value, onChange, lastEndereco, handleDialogOpen,
+}: MyAppBarSmProps) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -55,6 +61,20 @@ const MyAppBarSm = ({ value, onChange }: MyAppBarSmProps) => {
                 Logar-me
               </Link>
             </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box pb={2}>
+            <Button
+              startIcon={<LocationOnIcon />}
+              size="small"
+              variant="text"
+              onClick={handleDialogOpen}
+              color="primary"
+              fullWidth
+            >
+              {lastEndereco}
+            </Button>
           </Box>
         </Grid>
         <Grid item xs={12}>

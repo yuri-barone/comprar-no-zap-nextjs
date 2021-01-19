@@ -8,6 +8,7 @@ export type SearchProps = {
   onChange?: (e:any) => void;
   onEnter?: () => void;
   value?: string;
+  InputAddornment?: React.ReactFragment;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Search({ onEnter, value, onChange }: SearchProps) {
+function Search({
+  onEnter, value, onChange, InputAddornment,
+}: SearchProps) {
   const classes = useStyles();
   const handleKeyDown = (e:any) => {
     if (e.keyCode === 13) {
@@ -66,6 +69,7 @@ function Search({ onEnter, value, onChange }: SearchProps) {
           root: classes.inputRoot,
           input: classes.inputInput,
         }}
+        endAdornment={InputAddornment}
       />
     </div>
   );

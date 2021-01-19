@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 import React from 'react';
+import LocalButton from '../LocalButton/LocalButton';
 
 export type LoggedBarIndexProps = {
   src: string;
@@ -19,6 +20,8 @@ export type LoggedBarIndexProps = {
   domain: string;
   seller: boolean;
   optionSearch?: boolean;
+  lastEndereco?: string;
+  handleDialogOpen?: () => void;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -55,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoggedBarIndex = ({
-  src, name, zap, domain, seller, optionSearch,
+  src, name, zap, domain, seller, optionSearch, handleDialogOpen, lastEndereco,
 }:LoggedBarIndexProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -82,6 +85,13 @@ const LoggedBarIndex = ({
   return (
     <Box p={2}>
       <Grid container alignItems="center" spacing={2}>
+        <Grid item xs={12} sm={12} md={6} lg={5}>
+          <Box p={2}>
+            <Grid container>
+              <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />
+            </Grid>
+          </Box>
+        </Grid>
         <Grid item xs />
         <Grid item xs="auto">
           <Typography className={classes.link} component="span">

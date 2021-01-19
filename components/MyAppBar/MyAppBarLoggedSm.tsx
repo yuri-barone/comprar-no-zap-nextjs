@@ -13,6 +13,7 @@ import React from 'react';
 import red from '@material-ui/core/colors/red';
 import { useRouter } from 'next/router';
 import Search from '../Search/Search';
+import LocalButton from '../LocalButton/LocalButton';
 
 export type MyAppBarLoggedSmProps = {
   onSearch: (filter: string) => void;
@@ -24,6 +25,8 @@ export type MyAppBarLoggedSmProps = {
   zap: string;
   seller: boolean;
   domain: string;
+  lastEndereco: string;
+  handleDialogOpen: () => void;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -73,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MyAppBarLoggedSm = ({
-  value, onChange, src, name, zap, seller, domain,
+  value, onChange, src, name, zap, seller, domain, handleDialogOpen, lastEndereco,
 }: MyAppBarLoggedSmProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -104,6 +107,7 @@ const MyAppBarLoggedSm = ({
       <Container>
         <Box p={1}>
           <Grid container alignItems="center" spacing={2}>
+            <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />
             <Grid item xs={10}>
               <Search
                 value={value}
