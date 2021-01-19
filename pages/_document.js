@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBb0OaO_k7YhPyJkn60P90Gw5tCi4EGGsg&libraries=places" />
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBb0OaO_k7YhPyJkn60P90Gw5tCi4EGGsg&libraries=places" />
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-TR9J05HD0B" />
           <script dangerouslySetInnerHTML={googleTag()} />
           {/* PWA primary color */}

@@ -8,9 +8,9 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
+import LocalButtonAdornment from '../LocalButton/LocalButtonAdornment';
 import Search from '../Search/Search';
 import MyAppBarSm from './MyAppBarSm';
-import LocalButton from '../LocalButton/LocalButton';
 
 export type MyAppBarProps = {
   onSearch: (filter:string) => void,
@@ -75,7 +75,7 @@ const MyAppBar = ({
                     onEnter={() => null}
                     onChange={onChange}
                     InputAddornment={(
-                      <LocalButton
+                      <LocalButtonAdornment
                         lastEndereco={lastEndereco}
                         handleDialogOpen={handleDialogOpen}
                       />

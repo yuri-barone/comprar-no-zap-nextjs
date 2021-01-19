@@ -16,7 +16,7 @@ import red from '@material-ui/core/colors/red';
 import { useRouter } from 'next/router';
 import Search from '../Search/Search';
 import MyAppBarLoggedSm from './MyAppBarLoggedSm';
-import LocalButton from '../LocalButton/LocalButton';
+import LocalButtonAdornment from '../LocalButton/LocalButtonAdornment';
 
 export type MyAppBarLoggedProps = {
   onSearch: (filter: string) => void;
@@ -143,7 +143,7 @@ const MyAppBarLogged = ({
                     onEnter={() => null}
                     onChange={onChange}
                     InputAddornment={(
-                      <LocalButton
+                      <LocalButtonAdornment
                         lastEndereco={lastEndereco}
                         handleDialogOpen={handleDialogOpen}
                       />

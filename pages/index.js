@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/display-name */
 import {
   Box,
@@ -13,7 +14,6 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -62,9 +62,12 @@ export default function Home() {
   const coordinates = useCoordinate;
 
   useEffect(() => {
-    setLastEndereco(localStorage.getItem('ComprarNoZapEndereco'));
-    if (localStorage.getItem('ComprarNoZapEndereco')) {
+    setLastEndereco(localStorage.getItem('ComprarNoZapEnderecoCurto'));
+    if (localStorage.getItem('ComprarNoZapEnderecoCurto')) {
       setRequiredDialog(false);
+    }
+    if (!localStorage.getItem('ComprarNoZapEnderecoCurto')) {
+      setOpenDialog(true);
     }
   }, []);
 
@@ -110,12 +113,32 @@ export default function Home() {
     handleDialogClose();
   };
 
+  const getLevelAddress = (addressParts, levelDescription) => addressParts.find((addressPart) => addressPart.types.includes(levelDescription));
+
+  const getShortAddress = (addressComponents) => {
+    const level1 = getLevelAddress(addressComponents, 'administrative_area_level_1');
+    const level2 = getLevelAddress(addressComponents, 'administrative_area_level_2');
+    const levelDescriptions = [];
+    if (level2) {
+      levelDescriptions.push(level2.short_name);
+    }
+    if (level1) {
+      levelDescriptions.push(level1.short_name);
+    }
+    return levelDescriptions.join(' - ');
+  };
+
   const handleAddressSelect = (address) => {
     geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
+      .then((results) => {
+        const completeAddress = results[0];
+        const shortAddress = getShortAddress(completeAddress.address_components);
+        localStorage.setItem('ComprarNoZapEnderecoCurto', shortAddress);
+        setLastEndereco(shortAddress);
+        return getLatLng(completeAddress);
+      })
       .then((latLng) => setLatLong(latLng, address))
       .catch((error) => error);
-    setLastEndereco(address);
     setRequiredDialog(false);
     setOpenDialog(false);
   };
@@ -130,17 +153,6 @@ export default function Home() {
         <Grid item xs={12}>
           {session.isAutheticated && (
           <div>
-            {!coordinates.allowed && !lastEndereco && (
-            <Grid item xs={12}>
-              <Alert severity="info">
-                Buscando por todo o Mundo, para pesquisar pela sua cidade clique
-                {' '}
-                <Link onClick={handleDialogOpen} className={classes.clickable}>
-                  <strong>aqui.</strong>
-                </Link>
-              </Alert>
-            </Grid>
-            )}
             <LoggedBarIndex
               src={session.profile['picture.imgBase64']}
               name={session.profile.nome}
@@ -153,19 +165,7 @@ export default function Home() {
           </div>
           )}
           {!session.isAutheticated && (
-
           <Grid container spacing={1}>
-            {!coordinates.allowed && !lastEndereco && (
-            <Grid item xs={12}>
-              <Alert severity="info">
-                Buscando por todo o Mundo, para pesquisar pela sua cidade clique
-                {' '}
-                <Link onClick={handleDialogOpen} className={classes.clickable}>
-                  <strong>aqui.</strong>
-                </Link>
-              </Alert>
-            </Grid>
-            )}
             {lastEndereco && (
             <Grid item xs={12} sm={12} md={6} lg={5}>
               <Box p={2}>
@@ -256,9 +256,9 @@ export default function Home() {
                   <PlacesAutocomplete
                     value={endereco}
                     onChange={(address) => { changeEndereco(address); }}
-                    onSelect={(address) => {
-                      handleAddressSelect(address);
-                      changeEndereco(address);
+                    onSelect={(address, placeID) => {
+                      handleAddressSelect(address, placeID);
+                      changeEndereco(address, placeID);
                     }}
                   >
                     {({

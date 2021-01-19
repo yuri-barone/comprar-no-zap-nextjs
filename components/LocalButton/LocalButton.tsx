@@ -1,4 +1,4 @@
-import { Button, Grid } from '@material-ui/core';
+import { Grid, Link, makeStyles } from '@material-ui/core';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import React from 'react';
 
@@ -7,25 +7,30 @@ export type LocalButtonProps = {
   handleDialogOpen: () => void,
 };
 
-const LocalButton = ({ lastEndereco, handleDialogOpen }:LocalButtonProps) => (
-  <>
-    {lastEndereco && (
+const useStyles = makeStyles({
+  link: {
+    cursor: 'pointer',
+    fontFamily: 'Roboto',
+  },
+});
+
+const LocalButton = ({ lastEndereco, handleDialogOpen }:LocalButtonProps) => {
+  const classes = useStyles();
+
+  return (
     <>
-      <Grid item xs={12}>
-        <Button
-          startIcon={<LocationOnIcon />}
-          size="small"
-          variant="text"
-          onClick={handleDialogOpen}
-          color="primary"
-          fullWidth
-        >
-          {lastEndereco}
-        </Button>
-      </Grid>
+      {lastEndereco && (
+      <>
+        <Grid item xs={12}>
+          <Link onClick={handleDialogOpen} color="primary" className={classes.link}>
+            <LocationOnIcon />
+            {lastEndereco}
+          </Link>
+        </Grid>
+      </>
+      )}
     </>
-    )}
-  </>
-);
+  );
+};
 
 export default LocalButton;
