@@ -43,6 +43,7 @@ const MyCartDetails = ({
       const sellerId = shoppItem.product.perfilId;
       sellerProductsMap[sellerId] = sellerProductsMap[sellerId] || {
         perfilName: shoppItem.product.nome,
+        perfilPrefix: shoppItem.product.prefix,
         zap: shoppItem.product.zap,
         endereco: shoppItem.product.endereco,
         delivery: shoppItem.product.delivery,
@@ -110,6 +111,7 @@ const MyCartDetails = ({
                     perfEndereco={item.items[0].product.endereco}
                     perfName={item.perfilName}
                     perfId={item.items[0].product.perfilId}
+                    perfPrefix={item.perfilPrefix}
                   />
                 </Paper>
               </Grid>

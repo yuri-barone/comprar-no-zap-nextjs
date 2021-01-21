@@ -30,7 +30,7 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseEx
   const router = useRouter();
 
   const sendMessage = () => {
-    const link = `https://api.whatsapp.com/send?phone=55${perfil.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
+    const link = `https://api.whatsapp.com/send?phone=${perfil.prefix}${perfil.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
     const win = window.open(link, '_blank');
     win.focus();
   };

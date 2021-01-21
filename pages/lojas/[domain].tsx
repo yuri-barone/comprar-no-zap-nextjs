@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   AppBar, Box, Button, Container, Divider, Grid, makeStyles, Slide, ThemeProvider, Typography,
 } from '@material-ui/core';
@@ -149,7 +150,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
   };
 
   const solicitarCatalogo = () => {
-    const link = `https://api.whatsapp.com/send?phone=55${perfil?.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
+    const link = `https://api.whatsapp.com/send?phone=${perfil?.prefix}${perfil?.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
     const win = window.open(link, '_blank');
     win.focus();
   };
@@ -272,7 +273,7 @@ export async function getStaticProps({ params }:any) {
   const perfilResponse = await perfisService.getPerfilByDomain(params.domain);
   let produtosResponse;
   if (perfilResponse?.data?.id) {
-    produtosResponse = await productsService.findOptimized(undefined, perfilResponse.data.id);
+    produtosResponse = await productsService.findOptimized(undefined, perfilResponse.data.id, undefined, 400);
   }
 
   const perfil = perfilResponse?.data || { isFallback: true };

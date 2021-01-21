@@ -85,7 +85,7 @@ const LoggedBarIndex = ({
   return (
     <Box p={2}>
       <Grid container alignItems="center" spacing={2}>
-        <Grid item xs={12} sm={12} md={6} lg={5}>
+        <Grid item xs={12} sm={6} md={6} lg={5}>
           <Box p={2}>
             <Grid container>
               <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />

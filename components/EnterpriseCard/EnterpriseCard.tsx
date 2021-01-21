@@ -20,6 +20,7 @@ export type EnterpriseCardProps = {
   pictureId?: number;
   onNavigate: (store:any) => void;
   distance?: number;
+  prefix: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EnterpriseCard = ({
-  name, zap, endereco, id, onNavigate, pictureId, distance,
+  name, zap, endereco, id, onNavigate, pictureId, distance, prefix,
 }: EnterpriseCardProps) => {
   const [src, setSrc] = useState<string | undefined>();
   const theme = useTheme();
@@ -62,12 +63,15 @@ const EnterpriseCard = ({
   const handleSendMessage = () => {
     const validateZap = () => {
       const numero = zap.toString();
-      if (!numero.startsWith('55')) {
-        return `55${numero}`;
-      }
       return numero;
     };
-    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=Olá,%20te%20encontrei%20no%20*comprarnozap.com*`;
+    const validatePrefix = () => {
+      if (prefix) {
+        return prefix;
+      }
+      return '';
+    };
+    const link = `https://api.whatsapp.com/send?phone=${validatePrefix()}${validateZap()}&text=Olá,%20te%20encontrei%20no%20*comprarnozap.com*`;
     const win = window.open(link, '_blank');
     win.focus();
   };

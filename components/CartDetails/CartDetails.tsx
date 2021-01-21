@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
+  IconButton,
   InputAdornment,
   makeStyles,
   Radio,
@@ -23,7 +24,9 @@ import {
 import { ValidationErrors } from 'final-form';
 import React, { useMemo } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
+import CloseIcon from '@material-ui/icons/Close';
 import * as yup from 'yup';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import ItemShowDetails from '../ItemShowDetails/ItemShowDetails';
 import ordersService from '../services/ordersService';
@@ -59,6 +62,7 @@ const generateZapLink = (
   trocoParam: number,
   obs: string,
   nome: string,
+  prefix: string,
   codigo?: string,
 ) => {
   const stringProducts = products.map((produto) => `${produto.quantidade}%20${produto.titulo}%0a`);
@@ -89,14 +93,17 @@ const generateZapLink = (
   };
   const validateZap = () => {
     const numero = zap.toString();
-    if (!numero.startsWith('55')) {
-      return `55${numero}`;
-    }
     return numero;
+  };
+  const validatePrefix = () => {
+    if (prefix) {
+      return prefix;
+    }
+    return '';
   };
   const temTroco = validateTroco();
   const formaDeReceber = validateEntrega();
-  const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProducts.join(
+  const link = `https://api.whatsapp.com/send?phone=${validatePrefix()}${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProducts.join(
     '',
   )}${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}${validateCodigo()}`;
   return link;
@@ -129,6 +136,7 @@ export type CartDetailsProps = {
   perfEndereco: string;
   perfName: string;
   perfId:number;
+  perfPrefix: string;
 };
 
 const CartDetails = ({
@@ -140,6 +148,7 @@ const CartDetails = ({
   perfEndereco,
   perfName,
   perfId,
+  perfPrefix,
 }: CartDetailsProps) => {
   const classes = useStyles();
 
@@ -187,7 +196,8 @@ const CartDetails = ({
       values.troco,
       values.obs,
       values.nome,
-        response?.data?.codigo,
+      perfPrefix,
+      response?.data?.codigo,
     );
     const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1
                    && navigator.userAgent
@@ -271,17 +281,71 @@ const CartDetails = ({
                       label="Entregar"
                     />
                     <Collapse in={entrega.input.value === true}>
-                      <TextField
-                        error={endereco.meta.touched && endereco.meta.invalid}
-                        helperText={
-                    endereco.meta.touched
-                    && endereco.meta.invalid
-                    && endereco.meta.error
-                  }
+                      <PlacesAutocomplete
                         {...endereco.input}
-                        label="Endereço de entrega"
-                        fullWidth
-                      />
+                        onSelect={(address) => {
+                          form.change('endereco', address);
+                        }}
+                      >
+                        {({
+                          getInputProps, suggestions, getSuggestionItemProps, loading,
+                        }) => (
+                          <div>
+                            <TextField
+                              {...endereco.input}
+                              {...getInputProps({
+                                placeholder: 'Endereço de entrega',
+                              })}
+                              fullWidth
+                              id="endereco"
+                              error={endereco.meta.touched && endereco.meta.invalid}
+                              helperText={
+                                endereco.meta.touched
+                                && endereco.meta.invalid
+                                && endereco.meta.error
+                              }
+                              InputProps={{
+                                endAdornment: (
+                                  <>
+                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                    <IconButton
+                                      color="primary"
+                                      aria-label="clear address"
+                                      component="span"
+                                      onClick={() => { form.change('endereco', ''); }}
+                                    >
+                                      <CloseIcon />
+                                    </IconButton>
+                                  </>
+                                ),
+                              }}
+                            />
+                            <div className="autocomplete-dropdown-container">
+                              {suggestions.map((suggestion) => {
+                                const className = suggestion.active
+                                  ? 'suggestion-item--active'
+                                  : 'suggestion-item';
+                                  // inline style for demonstration purpose
+                                const style = suggestion.active
+                                  ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
+                                  : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
+                                return (
+                                  <div
+                                    {...getSuggestionItemProps(suggestion, {
+                                      className,
+                                      style,
+                                    })}
+                                  >
+                                    <Box p={2}>
+                                      <Typography>{suggestion.description}</Typography>
+                                    </Box>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </PlacesAutocomplete>
                     </Collapse>
                   </Grid>
                   )}

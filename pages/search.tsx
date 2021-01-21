@@ -8,20 +8,28 @@ import {
   Container,
   Dialog,
   Divider,
+  Fab,
   Grid,
   Hidden,
+  IconButton,
   makeStyles,
   Slide,
+  Snackbar,
   Tab,
   Tabs,
   TextField,
   Typography,
+  useScrollTrigger,
 } from '@material-ui/core';
+import Zoom from '@material-ui/core/Zoom';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import CloseIcon from '@material-ui/icons/Close';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { Alert } from '@material-ui/lab';
 import EnterpriseCard from '../components/EnterpriseCard/EnterpriseCard';
 import EnterpriseCardShow from '../components/EnterpriseCard/EnterpriseCardShow';
 import MyAppBar from '../components/MyAppBar/MyAppBar';
@@ -65,6 +73,16 @@ const useStyles = makeStyles((theme) => ({
   clickable: {
     cursor: 'pointer',
   },
+  scroll: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+    zIndex: theme.zIndex.modal + 1,
+  },
+  topAnchor: {
+    position: 'absolute',
+    top: 0,
+  },
 }));
 
 export default function Home() {
@@ -91,10 +109,37 @@ export default function Home() {
   const [endereco, setEndereco] = useState('');
   const [lastEndereco, setLastEndereco] = useState(undefined);
   const [requiredDialog, setRequiredDialog] = useState(true);
+  const [locationBlocked, setLocationBlocked] = useState(false);
+  const [alertGeocode, setAlertGeocode] = useState(false);
 
   const session: any = useSession(false);
   const navigation: any = useNavigation();
   const coordinates = useCoordinate();
+
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  const handleDangerClose = (event:any, reason:any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertGeocode(false);
+  };
+
+  const checkIsAllowed = async () => {
+    const asd = await navigator.permissions.query({ name: 'geolocation' });
+    if (asd.state === 'prompt') {
+      setLocationBlocked(false);
+    }
+    if (asd.state === 'granted') {
+      setLocationBlocked(false);
+    }
+    if (asd.state === 'denied') {
+      setLocationBlocked(true);
+    }
+  };
 
   useEffect(() => {
     setLastEndereco(localStorage.getItem('ComprarNoZapEnderecoCurto'));
@@ -104,6 +149,7 @@ export default function Home() {
     if (!localStorage.getItem('ComprarNoZapEnderecoCurto')) {
       setOpenDialog(true);
     }
+    checkIsAllowed();
   }, []);
 
   const handleDialogOpen = () => {
@@ -121,7 +167,7 @@ export default function Home() {
     try {
       const localResponse = await perfisService.find(
         termToFind,
-        coordinates.position || JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
+        JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
       );
       return localResponse.data.data;
     } catch (error) {
@@ -134,7 +180,7 @@ export default function Home() {
       const productResponse = await productsService.findOptimized(
         termToFind,
         storeIdToFind,
-        coordinates.position || JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
+        JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
       );
       return productResponse.data.data;
     } catch (error) {
@@ -220,7 +266,7 @@ export default function Home() {
   }, [searchInput]);
 
   useEffect(() => {
-    setInputEndereco(session.profile.endereco || '');
+    setInputEndereco(localStorage.getItem('ComprarNoZapEndereco') || session.profile.endereco || '');
     setInputNome(session.profile.nome || '');
   }, [session.profile.loaded]);
 
@@ -326,43 +372,15 @@ export default function Home() {
   };
 
   const solicitarCatalogo = () => {
-    const link = `https://api.whatsapp.com/send?phone=55${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
+    const link = `https://api.whatsapp.com/send?phone=${currentStoreToShow.prefix}${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
     const win = window.open(link, '_blank');
     win.focus();
   };
 
   const onTalk = () => {
-    const link = `https://api.whatsapp.com/send?phone=55${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
+    const link = `https://api.whatsapp.com/send?phone=${currentStoreToShow.prefix}${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*`;
     const win = window.open(link, '_blank');
     win.focus();
-  };
-
-  const askGeolocation = () => {
-    const success = () => { window.location.reload(); };
-    navigator.geolocation.getCurrentPosition(success);
-  };
-
-  const setLatLong = async (latLng:any, Address:string) => {
-    const coordinatesToSave = { latitude: latLng.lat, longitude: latLng.lng };
-    localStorage.setItem('ComprarNoZapLatLng', JSON.stringify(coordinatesToSave));
-    localStorage.setItem('ComprarNoZapEndereco', Address);
-    coordinates.allowed = true;
-    handleDialogClose();
-    const hash = `${termToFind}_${storeIdToFind}`;
-    if (tabValue === 0) {
-      setIsLoading(true);
-      setLastlastSearchPlaceHash(hash);
-      const places = await getLocais();
-      setLocaisData(places);
-      setIsLoading(false);
-    }
-    if (tabValue === 1) {
-      setIsLoading(true);
-      setLastSearchProductHash(hash);
-      const products = await getProducts();
-      setProductsData(products);
-      setIsLoading(false);
-    }
   };
 
   const getLevelAddress = (addressParts:any, levelDescription:any) => addressParts.find((addressPart:any) => addressPart.types.includes(levelDescription));
@@ -380,16 +398,54 @@ export default function Home() {
     return levelDescriptions.join(' - ');
   };
 
+  const setLatLong = async (latLng:any) => {
+    const coordinatesToSave = { latitude: latLng.lat, longitude: latLng.lng };
+    localStorage.setItem('ComprarNoZapLatLng', JSON.stringify(coordinatesToSave));
+    coordinates.allowed = true;
+    handleDialogClose();
+    const hash = `${termToFind}_${storeIdToFind}`;
+    setIsLoading(true);
+    setLastlastSearchPlaceHash(hash);
+    const places = await getLocais();
+    const products = await getProducts();
+    setProductsData(products);
+    setLocaisData(places);
+    setIsLoading(false);
+  };
+
+  const setGeolocation = ({ coords }:any) => {
+    const coordinatesToSave = { lat: coords.latitude, lng: coords.longitude };
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=AIzaSyBb0OaO_k7YhPyJkn60P90Gw5tCi4EGGsg`).then((response) => response.json()).then((data) => {
+      const shortAddress = getShortAddress(data.results[0].address_components);
+      setLatLong(coordinatesToSave);
+      localStorage.setItem('ComprarNoZapEnderecoCurto', shortAddress);
+      setLastEndereco(shortAddress);
+      setOpenDialog(false);
+      coordinates.allowed = true;
+    }).catch(() => {
+      setAlertGeocode(true);
+      setOpenDialog(true);
+      coordinates.allowed = false;
+    });
+  };
+
+  const askGeolocation = () => {
+    navigator.geolocation.getCurrentPosition(setGeolocation);
+  };
+
   const handleAddressSelect = (address:string) => {
     geocodeByAddress(address)
       .then((results:any) => {
         const completeAddress = results[0];
         const shortAddress = getShortAddress(completeAddress.address_components);
+        const superCompleteAddress = results[0].formatted_address;
+        localStorage.setItem('ComprarNoZapEnderecoCurto', superCompleteAddress);
+        setInputEndereco(superCompleteAddress);
         localStorage.setItem('ComprarNoZapEnderecoCurto', shortAddress);
         setLastEndereco(shortAddress);
         return getLatLng(completeAddress);
       })
-      .then((latLng:any) => setLatLong(latLng, address))
+      .then((latLng:any) => setLatLong(latLng))
       .catch((error:Error) => error);
     setRequiredDialog(false);
     setOpenDialog(false);
@@ -397,6 +453,13 @@ export default function Home() {
 
   const changeEndereco = (selectedAddress:string) => {
     setEndereco(selectedAddress);
+  };
+
+  const handleClickTrigger = (section:string) => {
+    const anchor = document.querySelector(section);
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   return (
@@ -467,7 +530,7 @@ export default function Home() {
           </Container>
         </Hidden>
       </Box>
-      <Divider />
+      <Divider id="back-to-top-anchor" />
       <Container>
         {isLoading && (
           <Grid item xs={12} className={classes.missingItems}>
@@ -573,6 +636,7 @@ export default function Home() {
                       endereco={item.endereco}
                       pictureId={item.pictureId}
                       distance={item.distance}
+                      prefix={item.prefix}
                     />
                   </Grid>
                 ))}
@@ -628,11 +692,21 @@ export default function Home() {
                         value={endereco}
                         fullWidth
                         id="endereco"
-                        label="Endereço"
+                        label="Endereço para entrega"
                         InputProps={{
                           endAdornment: (
                             <>
                               {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                              {endereco.length > 3 ? (
+                                <IconButton
+                                  color="primary"
+                                  aria-label="clear address"
+                                  component="span"
+                                  onClick={() => { setEndereco(''); }}
+                                >
+                                  <CloseIcon />
+                                </IconButton>
+                              ) : null}
                             </>
                           ),
                         }}
@@ -664,6 +738,7 @@ export default function Home() {
                   )}
                 </PlacesAutocomplete>
               </Grid>
+              {!locationBlocked && (
               <Grid item xs={12}>
                 <Button
                   onClick={askGeolocation}
@@ -676,10 +751,35 @@ export default function Home() {
                   Usar minha localização
                 </Button>
               </Grid>
+              )}
             </Grid>
           </Box>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={alertGeocode}
+          autoHideDuration={6000}
+          onClose={handleDangerClose}
+        >
+          <Alert severity="error">
+            Ocorreu um erro ao acessar a sua localização
+          </Alert>
+        </Snackbar>
       </Container>
+      <Zoom in={trigger}>
+        <div
+          onClick={() => handleClickTrigger('#back-to-top-anchor')}
+          role="presentation"
+          className={classes.scroll}
+        >
+          <Fab color="primary" size="large" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </div>
+      </Zoom>
     </ThemeProvider>
   );
 }

@@ -139,6 +139,7 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
     nome: string,
     product: any,
     quantity: number,
+    prefix: string,
   ) => {
     const stringProduct = `${quantity} ${product.titulo}`;
     const validateEntrega = () => {
@@ -163,14 +164,17 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
     };
     const validateZap = () => {
       const numero = zap.toString();
-      if (!numero.startsWith('55')) {
-        return `55${numero}`;
-      }
       return numero;
+    };
+    const validatePrefix = () => {
+      if (prefix) {
+        return prefix;
+      }
+      return '';
     };
     const temTroco = validateTroco();
     const formaDeReceber = validateEntrega();
-    const link = `https://api.whatsapp.com/send?phone=${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProduct}%0a${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
+    const link = `https://api.whatsapp.com/send?phone=${validatePrefix()}${validateZap()}&text=%20Pedido%20realizado%20no%20*comprarnozap.com*%0a%0a*Nome*%0a${nome}%0a%0a*Pedido*%0a${stringProduct}%0a${getObs()}%0a*Forma%20de%20pagamento*%0a${paymentMethod}${temTroco}${formaDeReceber}`;
     return link;
   };
 
@@ -197,6 +201,7 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
       values.nome,
       produto,
       values.quantity,
+      perfil.prefix,
     );
     const win = window.open(link, '_blank');
     win.focus();
@@ -269,7 +274,7 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
                     <Grid item xs={4}>
                       <img
                         alt={produto.titulo}
-                        src={produto['picture.imgBase64']}
+                        src={produto['picture.imgBase64'] || '/empty-img.png'}
                         className={classes.img}
                         width="100%"
                         height="100%"

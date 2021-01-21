@@ -134,6 +134,7 @@ function SignUpScreen() {
   const [touchedName, setTouchedName] = useState<boolean>(false);
   const [touchedZap, setTouchedZap] = useState<boolean>(false);
   const [latLong, setLatLong] = useState<any>(undefined);
+  const [prefix, setPrefix] = useState<string | undefined>();
   const router = useRouter();
 
   const onSubmit = async (values:any) => {
@@ -150,6 +151,7 @@ function SignUpScreen() {
     params.endereco = values.endereco;
     params.lat = latLong.lat;
     params.lng = latLong.lng;
+    params.prefix = prefix;
     const responsePerfil = await perfisService.save(params);
 
     if (responsePerfil.ok) {
@@ -260,9 +262,20 @@ function SignUpScreen() {
     setTouchedZap(true);
   };
 
+  const getLevelAddress = (addressParts:any, levelDescription:any) => addressParts.find((addressPart:any) => addressPart.types.includes(levelDescription));
+
   const handleAddressSelect = (address:string) => {
     geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
+      .then((results) => {
+        const country = getLevelAddress(results[0].address_components, 'country');
+        if (country.short_name === 'BR') {
+          setPrefix('55');
+        }
+        if (country.short_name === 'UK') {
+          setPrefix('44');
+        }
+        return getLatLng(results[0]);
+      })
       .then((latLng) => setLatLong(latLng))
       .catch((error) => error);
   };
