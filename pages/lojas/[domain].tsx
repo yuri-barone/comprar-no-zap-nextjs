@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import {
-  AppBar, Box, Button, Container, Divider, Grid, makeStyles, Slide, ThemeProvider, Typography,
+  AppBar, Box, Button, Container, Divider, Fab, Grid, makeStyles, Slide, ThemeProvider, Typography, useScrollTrigger, Zoom,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import MyCart from '../../components/MyCart/MyCart';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import perfisService from '../../components/services/perfisService';
@@ -38,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     width: '100%',
   },
+  scroll: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+    zIndex: theme.zIndex.modal + 1,
+  },
 }));
 
 // eslint-disable-next-line max-len
@@ -55,6 +61,18 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
   const showingCart = cartProducts.length > 0;
 
   const isFallBack = () => !(perfil?.id > 0);
+
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  const handleClickTrigger = (section:string) => {
+    const anchor = document.querySelector(section);
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
 
   const compareProducts = async () => {
     const res = await productsService.findOptimized(undefined, perfil.id);
@@ -200,7 +218,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
         <Grid container className={classes.enterpriseShow}>
           <Grid item xs={12}>
             <Container>
-              <Box p={2}>
+              <Box p={2} id="back-to-top-anchor">
                 <EnterpriseExclusive perfil={perfil} isTheSamePerfil={isTheSamePerfil} whiteText />
               </Box>
             </Container>
@@ -263,6 +281,17 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
             </AppBar>
           </Slide>
         </Container>
+        <Zoom in={trigger}>
+          <div
+            onClick={() => handleClickTrigger('#back-to-top-anchor')}
+            role="presentation"
+            className={classes.scroll}
+          >
+            <Fab color="primary" size="large" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </div>
+        </Zoom>
       </>
       )}
     </ThemeProvider>

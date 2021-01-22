@@ -79,10 +79,6 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(2),
     zIndex: theme.zIndex.modal + 1,
   },
-  topAnchor: {
-    position: 'absolute',
-    top: 0,
-  },
 }));
 
 export default function Home() {

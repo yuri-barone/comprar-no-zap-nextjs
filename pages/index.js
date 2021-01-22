@@ -43,9 +43,13 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
   },
   link: {
+    textAlign: 'end',
     '& > * + *': {
       marginLeft: theme.spacing(2),
       cursor: 'pointer',
+    },
+    [theme.breakpoints.only('xs')]: {
+      textAlign: 'center',
     },
   },
   clickable: {
@@ -217,17 +221,16 @@ export default function Home() {
           {!session.isAutheticated && (
           <Grid container spacing={1}>
             {lastEndereco && (
-            <Grid item xs={12} sm={6} md={6} lg={5}>
-              <Box p={2}>
+            <Grid item xs={12} sm={6} lg={5}>
+              <Box p={1}>
                 <Grid container>
                   <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />
                 </Grid>
               </Box>
             </Grid>
             )}
-            <Grid item xs />
-            <Grid item xs="auto">
-              <Box p={2}>
+            <Grid item xs={12} sm={6} lg={7}>
+              <Box p={1}>
                 <Typography className={classes.link}>
                   <Link href="/cadastro" color="inherit">
                     Cadastrar-me
@@ -245,131 +248,132 @@ export default function Home() {
           </Grid>
         </Grid>
         <Container>
-          <Grid item xs={12}>
-            <Grid container spacing={2} justify="center">
-              <Grid item xs={12} sm={6}>
-                <img
-                  alt=""
-                  src="/comprar-no-zap.svg"
-                  className={classes.img}
-                />
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Search onEnter={handlePlacesSearch} onChange={storeFilter} />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item xs={12} sm={4} md={3}>
-                    <Button startIcon={<StorefrontIcon />} color="primary" type="submit" variant="contained" onClick={handlePlacesSearch} fullWidth size="large">
-                      Ver lugares
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={4} md={3}>
-                    <Button startIcon={<LocalMallOutlinedIcon />} color="secondary" variant="outlined" onClick={handleProductSearch} fullWidth size="large">
-                      Ver produtos
-                    </Button>
+          <Box p={2}>
+            <Grid item xs={12}>
+              <Grid container spacing={2} justify="center">
+                <Grid item xs={12} sm={6}>
+                  <img
+                    alt=""
+                    src="/comprar-no-zap.svg"
+                    className={classes.img}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Search onEnter={handlePlacesSearch} onChange={storeFilter} />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <Grid container justify="center" spacing={2}>
+                    <Grid item xs={12} sm={4} md={3}>
+                      <Button startIcon={<StorefrontIcon />} color="primary" type="submit" variant="contained" onClick={handlePlacesSearch} fullWidth size="large">
+                        Ver lugares
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3}>
+                      <Button startIcon={<LocalMallOutlinedIcon />} color="secondary" variant="outlined" onClick={handleProductSearch} fullWidth size="large">
+                        Ver produtos
+                      </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <Typography variant="body1" color="textSecondary" align="center">
-                  Não perca tempo procurando, o
-                  {' '}
-                  <Box component="span" fontWeight="fontWeightBold">
-                    Comprar no zap
-                  </Box>
-                  {' '}
-                  já organizou tudo para você!
-                </Typography>
-                <Typography variant="body1" color="textSecondary" align="center">
-                  Hambúrgueres, lanches, porções, eletrônicos, roupas...
-                  {' '}
-                  <Box component="span" fontWeight="fontWeightBold">
-                    se tem zap está aqui!
-                  </Box>
-                </Typography>
+                <Grid item xs={12} sm={12}>
+                  <Typography variant="body1" color="textSecondary" align="center">
+                    Não perca tempo procurando, o
+                    {' '}
+                    <Box component="span" fontWeight="fontWeightBold">
+                      Comprar no zap
+                    </Box>
+                    {' '}
+                    já organizou tudo para você!
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary" align="center">
+                    Hambúrgueres, lanches, porções, eletrônicos, roupas...
+                    {' '}
+                    <Box component="span" fontWeight="fontWeightBold">
+                      se tem zap está aqui!
+                    </Box>
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Dialog
-            open={openDialog}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={handleDialogClose}
-          >
-            <Box p={2}>
-              <Grid container justify="center" spacing={2}>
-                <Grid item xs="auto">
-                  <Typography variant="h6">Onde quer receber seu pedido?</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <PlacesAutocomplete
-                    value={endereco}
-                    onChange={(address) => { changeEndereco(address); }}
-                    onSelect={(address, placeID) => {
-                      handleAddressSelect(address, placeID);
-                      changeEndereco(address, placeID);
-                    }}
-                  >
-                    {({
-                      getInputProps, suggestions, getSuggestionItemProps, loading,
-                    }) => (
-                      <div>
-                        <TextField
-                          {...getInputProps({
-                            placeholder: 'Endereço',
-                          })}
-                          variant="outlined"
-                          value={endereco}
-                          fullWidth
-                          id="endereco"
-                          label="Endereço para entrega"
-                          InputProps={{
-                            endAdornment: (
-                              <>
-                                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                {endereco.length > 3 ? (
-                                  <IconButton
-                                    color="primary"
-                                    aria-label="clear address"
-                                    component="span"
-                                    onClick={() => { setEndereco(''); }}
-                                  >
-                                    <CloseIcon />
-                                  </IconButton>
-                                ) : null}
-                              </>
-                            ),
-                          }}
-                        />
-                        <div className="autocomplete-dropdown-container">
-                          {suggestions.map((suggestion) => {
-                            const className = suggestion.active
-                              ? 'suggestion-item--active'
-                              : 'suggestion-item';
-                            // inline style for demonstration purpose
-                            const style = suggestion.active
-                              ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
-                              : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
-                            return (
-                              <div
-                                {...getSuggestionItemProps(suggestion, {
-                                  className,
-                                  style,
-                                })}
-                              >
-                                <Box p={2}>
-                                  <Typography>{suggestion.description}</Typography>
-                                </Box>
-                              </div>
-                            );
-                          })}
+            <Dialog
+              open={openDialog}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={handleDialogClose}
+            >
+              <Box p={2}>
+                <Grid container justify="center" spacing={2}>
+                  <Grid item xs="auto">
+                    <Typography variant="h6">Onde quer receber seu pedido?</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <PlacesAutocomplete
+                      value={endereco}
+                      onChange={(address) => { changeEndereco(address); }}
+                      onSelect={(address, placeID) => {
+                        handleAddressSelect(address, placeID);
+                        changeEndereco(address, placeID);
+                      }}
+                    >
+                      {({
+                        getInputProps, suggestions, getSuggestionItemProps, loading,
+                      }) => (
+                        <div>
+                          <TextField
+                            {...getInputProps({
+                              placeholder: 'Endereço',
+                            })}
+                            variant="outlined"
+                            value={endereco}
+                            fullWidth
+                            id="endereco"
+                            label="Endereço para entrega"
+                            InputProps={{
+                              endAdornment: (
+                                <>
+                                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                  {endereco.length > 3 ? (
+                                    <IconButton
+                                      color="primary"
+                                      aria-label="clear address"
+                                      component="span"
+                                      onClick={() => { setEndereco(''); }}
+                                    >
+                                      <CloseIcon />
+                                    </IconButton>
+                                  ) : null}
+                                </>
+                              ),
+                            }}
+                          />
+                          <div className="autocomplete-dropdown-container">
+                            {suggestions.map((suggestion) => {
+                              const className = suggestion.active
+                                ? 'suggestion-item--active'
+                                : 'suggestion-item';
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
+                                : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
+                              return (
+                                <div
+                                  {...getSuggestionItemProps(suggestion, {
+                                    className,
+                                    style,
+                                  })}
+                                >
+                                  <Box p={2}>
+                                    <Typography>{suggestion.description}</Typography>
+                                  </Box>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </PlacesAutocomplete>
-                </Grid>
-                {!locationBlocked && (
+                      )}
+                    </PlacesAutocomplete>
+                  </Grid>
+                  {!locationBlocked && (
                   <Grid item xs={12}>
                     <Button
                       onClick={askGeolocation}
@@ -382,10 +386,11 @@ export default function Home() {
                       Usar minha localização
                     </Button>
                   </Grid>
-                )}
-              </Grid>
-            </Box>
-          </Dialog>
+                  )}
+                </Grid>
+              </Box>
+            </Dialog>
+          </Box>
         </Container>
         <Snackbar
           anchorOrigin={{

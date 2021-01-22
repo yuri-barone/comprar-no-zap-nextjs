@@ -9,13 +9,17 @@ export type LocalButtonProps = {
   handleDialogOpen: () => void,
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   link: {
     cursor: 'pointer',
     fontFamily: 'Roboto',
-    display: 'flex',
   },
-});
+  typography: {
+    [theme.breakpoints.only('xs')]: {
+      textAlign: 'center',
+    },
+  },
+}));
 
 const LocalButton = ({ lastEndereco, handleDialogOpen }:LocalButtonProps) => {
   const classes = useStyles();
@@ -25,7 +29,7 @@ const LocalButton = ({ lastEndereco, handleDialogOpen }:LocalButtonProps) => {
       {lastEndereco && (
       <>
         <Grid item xs={12}>
-          <Typography>
+          <Typography className={classes.typography}>
             <Link onClick={handleDialogOpen} color="primary" className={classes.link}>
               <LocationOnIcon />
               {lastEndereco}
