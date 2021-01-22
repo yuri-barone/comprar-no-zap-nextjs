@@ -89,7 +89,7 @@ const buildNome = (value: string) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.grey[200],
-    minHeight: '100%',
+    height: '100vh',
     display: 'flex',
   },
   avatarSize: {

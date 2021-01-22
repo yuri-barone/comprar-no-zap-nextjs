@@ -105,11 +105,11 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
               <IconButton aria-label="share" onClick={shareProduct}>
                 <ShareIcon fontSize="small" />
               </IconButton>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">{product.titulo}</Typography>
-              <br />
-              <Typography color="textSecondary">{product.descricao}</Typography>
+              <Box pt={1}>
+                <Typography variant="h5">{product.titulo}</Typography>
+                <br />
+                <Typography color="textSecondary">{product.descricao}</Typography>
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <Grid container justify="flex-end" spacing={2}>
