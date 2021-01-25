@@ -158,6 +158,16 @@ const LoggedBarProducts = ({
                 </Grid>
                 )}
                 <Grid item xs={12}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    href="/"
+                    fullWidth
+                  >
+                    Página Inicial
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
                   <ColorButton
                     variant="outlined"
                     fullWidth

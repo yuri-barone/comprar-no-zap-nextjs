@@ -27,6 +27,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { Alert } from '@material-ui/lab';
@@ -43,6 +44,8 @@ import useSession from '../components/useSession';
 import useNavigation from '../components/useNavigation';
 import ImageFeedback from '../components/ImageFeedback/ImageFeedback';
 import useCoordinate from '../components/useCoordinate';
+import Menu from '../components/Menu/Menu';
+import Search from '../components/Search/Search';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -94,6 +97,7 @@ export default function Home() {
   const [inputEndereco, setInputEndereco] = useState<string | undefined>();
   const [inputNome, setInputNome] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+  const [xsMenu, setXsMenu] = useState(false);
 
   const [termToFind, setTermToFind] = useState<string | undefined>('');
   const [storeIdToFind, setStoreIdToFind] = useState<number | undefined>(null);
@@ -458,9 +462,18 @@ export default function Home() {
     }
   };
 
+  const handleXsMenuOpen = () => {
+    setXsMenu(true);
+  };
+
+  const handleXsMenuClose = () => {
+    setXsMenu(false);
+  };
+
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
-      {session.isAutheticated && (
+      <Hidden xsDown>
+        {session.isAutheticated && (
 
         <MyAppBarLogged
           value={searchInput}
@@ -475,8 +488,8 @@ export default function Home() {
           handleDialogOpen={handleDialogOpen}
         />
 
-      )}
-      {!session.isAutheticated && (
+        )}
+        {!session.isAutheticated && (
 
         <MyAppBar
           value={searchInput}
@@ -485,7 +498,22 @@ export default function Home() {
           handleDialogOpen={handleDialogOpen}
           lastEndereco={lastEndereco}
         />
-      )}
+        )}
+      </Hidden>
+      <Hidden smUp>
+        <Grid container alignItems="center">
+          <Grid item xs>
+            <Box p={1}>
+              <Search value={searchInput} onEnter={() => null} onChange={searchOnChange} />
+            </Box>
+          </Grid>
+          <Grid item xs="auto">
+            <IconButton color="primary" onClick={handleXsMenuOpen}>
+              <MenuIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+      </Hidden>
       <Box style={{ backgroundColor: 'white' }}>
         <Hidden xsDown>
           <Container>
@@ -751,6 +779,11 @@ export default function Home() {
             </Grid>
           </Box>
         </Dialog>
+        <Menu
+          session={session}
+          handleXsMenuClose={handleXsMenuClose}
+          xsMenu={xsMenu}
+        />
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',

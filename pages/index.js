@@ -8,6 +8,7 @@ import {
   Dialog,
   Divider,
   Grid,
+  Hidden,
   IconButton,
   Link,
   makeStyles,
@@ -20,6 +21,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import { Alert } from '@material-ui/lab';
 import StorefrontIcon from '@material-ui/icons/Storefront';
@@ -30,6 +32,7 @@ import useCoordinate from '../components/useCoordinate';
 import useNavigation from '../components/useNavigation';
 import useSession from '../components/useSession';
 import LocalButton from '../components/LocalButton/LocalButton';
+import Menu from '../components/Menu/Menu';
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -72,6 +75,7 @@ export default function Home() {
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
+  const [xsMenu, setXsMenu] = useState(false);
   const session = useSession(false);
   const navigation = useNavigation();
   const coordinates = useCoordinate;
@@ -201,52 +205,81 @@ export default function Home() {
     setEndereco(selectedAddress);
   };
 
+  const handleXsMenuOpen = () => {
+    setXsMenu(true);
+  };
+
+  const handleXsMenuClose = () => {
+    setXsMenu(false);
+  };
+
   return (
     <>
       <Grid container className={classes.containerHeight} spacing={2}>
-        <Grid item xs={12}>
-          {session.isAutheticated && (
-          <div>
-            <LoggedBarIndex
-              src={session.profile['picture.imgBase64']}
-              name={session.profile.nome}
-              zap={session.profile.zap}
-              domain={session.profile.domain}
-              seller={session.profile.seller}
-              lastEndereco={lastEndereco}
-              handleDialogOpen={handleDialogOpen}
-            />
-          </div>
-          )}
-          {!session.isAutheticated && (
-          <Grid container spacing={1}>
-            {lastEndereco && (
-            <Grid item xs={12} sm={6} lg={5}>
-              <Box p={1}>
-                <Grid container>
-                  <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />
-                </Grid>
-              </Box>
+        <Hidden xsDown>
+          <Grid item xs={12}>
+            {session.isAutheticated && (
+            <div>
+              <LoggedBarIndex
+                src={session.profile['picture.imgBase64']}
+                name={session.profile.nome}
+                zap={session.profile.zap}
+                domain={session.profile.domain}
+                seller={session.profile.seller}
+                lastEndereco={lastEndereco}
+                handleDialogOpen={handleDialogOpen}
+              />
+            </div>
+            )}
+            {!session.isAutheticated && (
+            <Grid container spacing={1}>
+              {lastEndereco && (
+              <Grid item xs={12} sm={6} lg={5}>
+                <Box p={1}>
+                  <Grid container>
+                    <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />
+                  </Grid>
+                </Box>
+              </Grid>
+              )}
+              <Grid item xs={12} sm={6} lg={7}>
+                <Box p={1}>
+                  <Typography className={classes.link}>
+                    <Link href="/cadastro" color="inherit">
+                      Cadastrar-me
+                    </Link>
+                    <Link href="/entrar" color="inherit">
+                      Logar-me
+                    </Link>
+                  </Typography>
+                </Box>
+              </Grid>
             </Grid>
             )}
-            <Grid item xs={12} sm={6} lg={7}>
-              <Box p={1}>
-                <Typography className={classes.link}>
-                  <Link href="/cadastro" color="inherit">
-                    Cadastrar-me
-                  </Link>
-                  <Link href="/entrar" color="inherit">
-                    Logar-me
-                  </Link>
-                </Typography>
-              </Box>
+            <Grid item xs={12}>
+              <Divider />
             </Grid>
           </Grid>
-          )}
+        </Hidden>
+        <Hidden smUp>
           <Grid item xs={12}>
-            <Divider />
+            <Grid container>
+              <Grid item xs>
+                <Box p={1}>
+                  <LocalButton lastEndereco={lastEndereco} handleDialogOpen={handleDialogOpen} />
+                </Box>
+              </Grid>
+              <Grid item xs="auto">
+                <IconButton color="primary" onClick={handleXsMenuOpen}>
+                  <MenuIcon />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
+        </Hidden>
         <Container>
           <Box p={2}>
             <Grid item xs={12}>
@@ -390,6 +423,11 @@ export default function Home() {
                 </Grid>
               </Box>
             </Dialog>
+            <Menu
+              session={session}
+              handleXsMenuClose={handleXsMenuClose}
+              xsMenu={xsMenu}
+            />
           </Box>
         </Container>
         <Snackbar
