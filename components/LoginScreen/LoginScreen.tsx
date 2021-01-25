@@ -99,11 +99,13 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
       <Grid container justify="center" spacing={2}>
         <Grid item xs={6}>
           <Box pb={2} pt={2}>
-            <img
-              alt=""
-              src="/comprar-no-zap-logo-vertical.svg"
-              className={classes.logo}
-            />
+            <a href="/">
+              <img
+                alt=""
+                src="/comprar-no-zap-logo-vertical.svg"
+                className={classes.logo}
+              />
+            </a>
           </Box>
         </Grid>
         <Grid item xs={12}>

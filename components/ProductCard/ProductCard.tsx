@@ -19,6 +19,7 @@ import pictureService from '../services/pictureService';
 export type ProductCardProps = {
   product: any;
   onAdd?: (item:any) => void
+  onNavigate?: (store:any) => void;
 };
 
 const useStyles = makeStyles({
@@ -31,9 +32,12 @@ const useStyles = makeStyles({
   box: {
     height: 'calc(100% - 200px)',
   },
+  link: {
+    cursor: 'pointer',
+  },
 });
 
-function ProductCard({ product, onAdd }: ProductCardProps) {
+function ProductCard({ product, onAdd, onNavigate }: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState<string | undefined>();
@@ -49,6 +53,12 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
     } catch (error) {
       return error;
     }
+  };
+
+  const handleOnSeeProducts = () => {
+    onNavigate({
+      id: product.perfilId,
+    });
   };
 
   useEffect(() => {
@@ -116,9 +126,16 @@ function ProductCard({ product, onAdd }: ProductCardProps) {
                 <Grid item xs={12}>
                   <Typography color="primary">{formatNumberToMoneyWithSymbol(product.valor, 'R$')}</Typography>
                   <Typography color="textSecondary">
-                    <Link color="textSecondary" href={`/lojas/${product.domain}`}>
+                    {onNavigate && (
+                    <Link color="textSecondary" onClick={handleOnSeeProducts} className={classes.link}>
                       {product.nome}
                     </Link>
+                    )}
+                    {!onNavigate && (
+                      <>
+                        {product.nome}
+                      </>
+                    )}
                   </Typography>
                   {!!product.distance && (
                   <Typography variant="caption" color="secondary">

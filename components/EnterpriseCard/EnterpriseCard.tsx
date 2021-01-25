@@ -27,9 +27,13 @@ const useStyles = makeStyles((theme) => ({
   avatarSize: {
     width: theme.spacing(10),
     height: theme.spacing(10),
+    cursor: 'pointer',
   },
   maxHeigth: {
     height: '100%',
+  },
+  link: {
+    cursor: 'pointer',
   },
 }));
 const EnterpriseCard = ({
@@ -84,7 +88,9 @@ const EnterpriseCard = ({
             <Grid container alignItems="center" spacing={2} className={classes.maxHeigth}>
               <Grid item xs="auto">
                 {src ? (
-                  <Avatar src={src} className={classes.avatarSize} />
+                  <a onClick={handleOnSeeProducts} aria-hidden="true">
+                    <Avatar src={src} className={classes.avatarSize} />
+                  </a>
                 ) : (
                   <Skeleton animation="wave" variant="circle" width={theme.spacing(10)} height={theme.spacing(10)} />
                 )}
@@ -92,7 +98,9 @@ const EnterpriseCard = ({
               <Grid item xs>
                 <Grid container>
                   <Grid item xs={12}>
-                    <Typography variant="h6">{name}</Typography>
+                    <a onClick={handleOnSeeProducts} aria-hidden="true">
+                      <Typography variant="h6" className={classes.link}>{name}</Typography>
+                    </a>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography color="textSecondary">{endereco}</Typography>

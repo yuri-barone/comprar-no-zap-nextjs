@@ -643,7 +643,7 @@ export default function Home() {
                 {tabValue === 1
                 && productsData.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
-                    <ProductCard product={item} onAdd={adicionar} />
+                    <ProductCard product={item} onAdd={adicionar} onNavigate={currentStore} />
                   </Grid>
                 ))}
               </Grid>
@@ -783,6 +783,8 @@ export default function Home() {
           session={session}
           handleXsMenuClose={handleXsMenuClose}
           xsMenu={xsMenu}
+          lastEndereco={lastEndereco}
+          handleDialogOpen={handleDialogOpen}
         />
         <Snackbar
           anchorOrigin={{

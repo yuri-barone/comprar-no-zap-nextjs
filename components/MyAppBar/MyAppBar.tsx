@@ -89,10 +89,10 @@ const MyAppBar = ({
                       <Box pt={2} pl={2} pr={2} pb={1}>
                         <Typography className={classes.link}>
                           <Link href="/cadastro" color="inherit">
-                            Cadastrar-me
+                            Cadastro
                           </Link>
                           <Link href="/entrar" color="inherit">
-                            Logar-me
+                            Login
                           </Link>
                         </Typography>
                       </Box>

@@ -55,10 +55,10 @@ const MyAppBarSm = ({
           <Box p={2}>
             <Typography className={classes.link} align="center">
               <Link href="/cadastro" color="inherit">
-                Cadastrar-me
+                Cadastro
               </Link>
               <Link href="/entrar" color="inherit">
-                Logar-me
+                Login
               </Link>
             </Typography>
           </Box>

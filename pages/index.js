@@ -246,10 +246,10 @@ export default function Home() {
                 <Box p={1}>
                   <Typography className={classes.link}>
                     <Link href="/cadastro" color="inherit">
-                      Cadastrar-me
+                      Cadastro
                     </Link>
                     <Link href="/entrar" color="inherit">
-                      Logar-me
+                      Login
                     </Link>
                   </Typography>
                 </Box>
@@ -285,11 +285,13 @@ export default function Home() {
             <Grid item xs={12}>
               <Grid container spacing={2} justify="center">
                 <Grid item xs={12} sm={6}>
-                  <img
-                    alt=""
-                    src="/comprar-no-zap.svg"
-                    className={classes.img}
-                  />
+                  <a href="/">
+                    <img
+                      alt=""
+                      src="/comprar-no-zap.svg"
+                      className={classes.img}
+                    />
+                  </a>
                 </Grid>
                 <Grid item xs={12} sm={8}>
                   <Search onEnter={handlePlacesSearch} onChange={storeFilter} />
@@ -427,6 +429,8 @@ export default function Home() {
               session={session}
               handleXsMenuClose={handleXsMenuClose}
               xsMenu={xsMenu}
+              lastEndereco={lastEndereco}
+              handleDialogOpen={handleDialogOpen}
             />
           </Box>
         </Container>
