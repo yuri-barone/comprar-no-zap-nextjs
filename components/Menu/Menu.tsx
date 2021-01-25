@@ -2,6 +2,7 @@
 import React from 'react';
 import red from '@material-ui/core/colors/red';
 import {
+    Box,
   Button, Dialog, Divider, Grid, IconButton, makeStyles, Slide, Typography, withStyles,
 } from '@material-ui/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -88,15 +89,17 @@ const Menu = ({ xsMenu, handleXsMenuClose, session }:MenuProps) => {
               <Grid item xs={12}>
                 <Grid container justify="center">
                   <Grid item xs="auto">
-                    <div className={classes.imgPopover}>
-                      <img
-                        src={session.profile['picture.imgBase64'] || '/empty-profile.png'}
-                        alt=""
-                        className={classes.imgAvatar}
-                        height="100%"
-                        width="100%"
-                      />
-                    </div>
+                    <Box p={1}>
+                      <div className={classes.imgPopover}>
+                        <img
+                          src={session.profile['picture.imgBase64'] || '/empty-profile.png'}
+                          alt=""
+                          className={classes.imgAvatar}
+                          height="100%"
+                          width="100%"
+                        />
+                      </div>
+                    </Box>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography align="center" gutterBottom variant="h6">
