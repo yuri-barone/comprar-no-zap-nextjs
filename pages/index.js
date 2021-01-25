@@ -76,6 +76,9 @@ export default function Home() {
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
   const [xsMenu, setXsMenu] = useState(false);
+  const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
+  const [loadingAddressField, setLoadingAddressField] = useState(false);
+
   const session = useSession(false);
   const navigation = useNavigation();
   const coordinates = useCoordinate;
@@ -213,6 +216,25 @@ export default function Home() {
     setXsMenu(false);
   };
 
+  const verifyAddress = async (address) => {
+    setLoadingAddressField(true);
+    const result = await geocodeByAddress(address)
+      .then((results) => {
+        const completeAddress = results[0];
+        const streetNum = getLevelAddress(completeAddress.address_components, 'street_number');
+        const street = getLevelAddress(completeAddress.address_components, 'route');
+        if (streetNum && street) {
+          setIsValidAddress({ ok: true, helperText: undefined });
+          return true;
+        }
+        setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
+        return false;
+      })
+      .catch((error) => error);
+    setLoadingAddressField(false);
+    return result;
+  };
+
   return (
     <>
       <Grid container className={classes.containerHeight} spacing={2}>
@@ -345,9 +367,12 @@ export default function Home() {
                     <PlacesAutocomplete
                       value={endereco}
                       onChange={(address) => { changeEndereco(address); }}
-                      onSelect={(address, placeID) => {
-                        handleAddressSelect(address, placeID);
-                        changeEndereco(address, placeID);
+                      onSelect={async (address) => {
+                        const isValid = await verifyAddress(address);
+                        if (isValid) {
+                          handleAddressSelect(address);
+                          changeEndereco(address);
+                        }
                       }}
                     >
                       {({
@@ -363,6 +388,9 @@ export default function Home() {
                             fullWidth
                             id="endereco"
                             label="Endereço para entrega"
+                            error={!isValidAddress.ok}
+                            helperText={!isValidAddress.ok && isValidAddress.helperText}
+                            disabled={loadingAddressField}
                             InputProps={{
                               endAdornment: (
                                 <>
