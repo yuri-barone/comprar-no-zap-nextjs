@@ -320,12 +320,12 @@ export default function Home() {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <Grid container justify="center" spacing={2}>
-                    <Grid item xs={12} sm={4} md={3}>
+                    <Grid item xs={12} sm={5} md={4}>
                       <Button startIcon={<StorefrontIcon />} color="primary" type="submit" variant="contained" onClick={handlePlacesSearch} fullWidth size="large">
                         Ver lugares
                       </Button>
                     </Grid>
-                    <Grid item xs={12} sm={4} md={3}>
+                    <Grid item xs={12} sm={5} md={4}>
                       <Button startIcon={<LocalMallOutlinedIcon />} color="secondary" variant="outlined" onClick={handleProductSearch} fullWidth size="large">
                         Ver produtos
                       </Button>

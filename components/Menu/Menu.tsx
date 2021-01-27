@@ -15,6 +15,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 export type MenuProps = {
   session: any,
@@ -99,6 +100,15 @@ const Menu = ({
                   <HomeIcon color="primary" fontSize="small" />
                 </ListItemIcon>
                 <Typography align="center" color="primary">Página inicial</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => {
+                window.location.href = '/sobre';
+              }}
+              >
+                <ListItemIcon>
+                  <InfoOutlinedIcon color="primary" fontSize="small" />
+                </ListItemIcon>
+                <Typography align="center" color="primary">Sobre</Typography>
               </MenuItem>
               {lastEndereco && (
               <MenuItem onClick={() => {
@@ -187,6 +197,15 @@ const Menu = ({
                       <HomeIcon color="primary" fontSize="small" />
                     </ListItemIcon>
                     <Typography align="center" color="primary">Página inicial</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    window.location.href = '/sobre';
+                  }}
+                  >
+                    <ListItemIcon>
+                      <InfoOutlinedIcon color="primary" fontSize="small" />
+                    </ListItemIcon>
+                    <Typography align="center" color="primary">Sobre</Typography>
                   </MenuItem>
                   {lastEndereco && (
                   <MenuItem onClick={() => {

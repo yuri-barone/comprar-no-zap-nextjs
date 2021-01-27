@@ -312,7 +312,7 @@ function SignUpScreen() {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Grid container>
+                <Grid container justify="center">
                   <Grid item xs="auto" md={3} lg={2}>
                     <Box pb={2}>
                       <ImageUpload onChangeImage={handleImage} rounded />
