@@ -4,6 +4,7 @@ import {
   Container,
   Grid,
   Hidden,
+  Link,
   makeStyles,
   TextField,
   Typography,
@@ -137,17 +138,6 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
         </Grid>
         <Grid item xs={12}>
           <Button
-            variant="outlined"
-            size="large"
-            color="secondary"
-            href="/cadastro"
-            fullWidth
-          >
-            Criar conta
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
             type="submit"
             color="primary"
             variant="contained"
@@ -158,6 +148,25 @@ function LoginScreen({ onLogin }: LoginScreenProps) {
           >
             Entrar
           </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            <Link href="/cadastro">
+              Criar conta
+            </Link>
+          </Typography>
+          <Typography>
+            <Link
+              href="#"
+              onClick={() => {
+                const link = 'https://api.whatsapp.com/send?phone=554497737167&text=Ol%C3%A1%2C%20eu%20esqueci%20a%20minha%20senha%20do%20ComprarNoZap%20pode%20me%20ajudar%3F';
+                const win = window.open(link, '_blank');
+                win.focus();
+              }}
+            >
+              Esqueci minha senha
+            </Link>
+          </Typography>
         </Grid>
       </Grid>
     </form>
