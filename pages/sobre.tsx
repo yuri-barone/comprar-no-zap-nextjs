@@ -121,12 +121,12 @@ const sobre = () => {
                         Catálogo grátis
                       </Box>
                     </Typography>
-                    <Typography variant="body1">
-                      <Box pl={4}>
+                    <Box pl={4}>
+                      <Typography variant="body1">
                         {' '}
                         Cadastre seus produtos, possibilitando um pedido de forma ágil!
-                      </Box>
-                    </Typography>
+                      </Typography>
+                    </Box>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h6">
@@ -135,11 +135,11 @@ const sobre = () => {
                         Pedidos pronto para impressão
                       </Box>
                     </Typography>
-                    <Typography variant="body1">
-                      <Box pl={4}>
+                    <Box pl={4}>
+                      <Typography variant="body1">
                         Você recebe o pedido com todos os dados necessários.
-                      </Box>
-                    </Typography>
+                      </Typography>
+                    </Box>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h6">
@@ -148,11 +148,11 @@ const sobre = () => {
                         Tecnologia QR Code
                       </Box>
                     </Typography>
-                    <Typography variant="body1">
-                      <Box pl={4}>
+                    <Box pl={4}>
+                      <Typography variant="body1">
                         Ofereça acesso ao seu Catálogo Digital no ComprarNoZap.
-                      </Box>
-                    </Typography>
+                      </Typography>
+                    </Box>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h6">
@@ -161,12 +161,12 @@ const sobre = () => {
                         Divulgamos sua marca!
                       </Box>
                     </Typography>
-                    <Typography variant="body1">
-                      <Box pb={4} pl={4}>
+                    <Box pb={4} pl={4}>
+                      <Typography variant="body1">
                         {' '}
                         Quem não é visto não é lembrado, aproveite este novo canal de vendas.
-                      </Box>
-                    </Typography>
+                      </Typography>
+                    </Box>
                   </Grid>
                 </Grid>
               </Grid>

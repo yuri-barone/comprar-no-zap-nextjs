@@ -50,11 +50,11 @@ const FaqQuestion = ({ question, answer }:FaqQuestionProps) => {
               </Grid>
               <Grid item xs={12}>
                 <Collapse in={checked}>
-                  <Typography color="textSecondary">
-                    <Box p={1}>
+                  <Box p={1}>
+                    <Typography color="textSecondary">
                       {answer}
-                    </Box>
-                  </Typography>
+                    </Typography>
+                  </Box>
                 </Collapse>
               </Grid>
             </Grid>

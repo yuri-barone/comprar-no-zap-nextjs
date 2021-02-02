@@ -13,10 +13,12 @@ const renderInfoParam = (label:string, value: string) => {
     return null;
   }
   return (
-    <Typography gutterBottom>
+    <>
       <Typography variant="caption" component="p">{label}</Typography>
-      {value}
-    </Typography>
+      <Typography>
+        {value}
+      </Typography>
+    </>
   );
 };
 
@@ -50,34 +52,38 @@ const pedidos = () => {
         <Grid item xs={12} lg={4}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <h2>
+              <Typography variant="h5">
                 PEDIDO:
                 {' '}
-                {order.codigo}
-              </h2>
-              <h4>{date}</h4>
+                <Box fontWeight="fontWeightBold" component="span">
+                  {order.codigo}
+                </Box>
+              </Typography>
+              <Typography variant="h6">{date}</Typography>
               {items.map((item:any) => (
-                <>
+                <div key={item.id}>
                   <Box pb={1}>
-                    <span>
+                    <Typography component="span">
                       {item.quantidade}
                       {' '}
                       {item.titulo}
-                    </span>
+                    </Typography>
                     <br />
-                    <span>
+                    <Typography component="span">
                       Valor:
                       {' '}
                       {formatNumberToMoneyWithSymbol(item.valorTotal)}
-                    </span>
+                    </Typography>
                   </Box>
-                </>
+                </div>
               ))}
-              <h2>
-                Total:
-                {' '}
-                {formatNumberToMoneyWithSymbol(order.valorTotal)}
-              </h2>
+              <Typography variant="h5">
+                <Box fontWeight="fontWeightBold">
+                  Total:
+                  {' '}
+                  {formatNumberToMoneyWithSymbol(order.valorTotal)}
+                </Box>
+              </Typography>
             </Grid>
           </Grid>
           <Grid item xs={12}>
@@ -85,17 +91,29 @@ const pedidos = () => {
             {renderInfoParam('Observação', order.observacao)}
             {renderInfoParam('Entregar', order.endereco)}
             {!order.delivery && (
-              <Typography gutterBottom>
+              <>
                 <Typography variant="caption" component="p">Entrega</Typography>
-                Cliente irá buscar
-              </Typography>
+                <Typography>
+                  Cliente irá buscar
+                </Typography>
+              </>
             )}
             {renderInfoParam('Forma de pagamento', order.formaPagamento)}
-            {order.formaPagamento === 'Dinheiro' && order.troco && (
-              <Typography>
-                <Typography variant="caption" component="p">Troco para</Typography>
-                {formatNumberToMoneyWithSymbol(order.troco)}
-              </Typography>
+            {order.formaPagamento === 'Dinheiro' && order.troco && (order.troco - order.valorTotal !== 0) && (
+              <>
+                <>
+                  <Typography variant="caption" component="p">Dinheiro do cliente:</Typography>
+                  <Typography>
+                    {formatNumberToMoneyWithSymbol(order.troco)}
+                  </Typography>
+                </>
+                <>
+                  <Typography variant="caption" component="p">Troco:</Typography>
+                  <Typography>
+                    {formatNumberToMoneyWithSymbol(order.troco - order.valorTotal)}
+                  </Typography>
+                </>
+              </>
             )}
           </Grid>
           <Grid item xs={12}>

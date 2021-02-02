@@ -9,6 +9,7 @@ export type SearchProps = {
   onEnter?: () => void;
   value?: string;
   InputAddornment?: React.ReactFragment;
+  openDialog?: () => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Search({
-  onEnter, value, onChange, InputAddornment,
+  onEnter, value, onChange, InputAddornment, openDialog,
 }: SearchProps) {
   const classes = useStyles();
   const handleKeyDown = (e:any) => {
@@ -65,6 +66,7 @@ function Search({
         onChange={onChange}
         onKeyDown={handleKeyDown}
         value={value}
+        onFocus={openDialog}
         classes={{
           root: classes.inputRoot,
           input: classes.inputInput,

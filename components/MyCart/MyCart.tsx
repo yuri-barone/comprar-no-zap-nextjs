@@ -155,7 +155,12 @@ const MyCart = ({
           </Grid>
         </Grid>
       </Hidden>
-      <Modal open={open} onClose={handleClose}>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
         <MyCartDetails
           initialEndereco={initialEndereco}
           initialNome={initialNome}

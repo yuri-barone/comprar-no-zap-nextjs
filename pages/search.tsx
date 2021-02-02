@@ -374,7 +374,7 @@ export default function Home() {
   };
 
   const solicitarCatalogo = () => {
-    const link = `https://api.whatsapp.com/send?phone=${currentStoreToShow.prefix}${currentStoreToShow.zap}&text=Ol%C3%A1,%20te%20encontrei%20no%20*comprarnozap.com*,%20mas%20você%20ainda%20não%20cadastrou%20os%20seus%20produtos.%0aConsegue%20cadastrar%20ou%20me%20enviar%20o%20seu%20catálogo%20por%20favor? `;
+    const link = `https://api.whatsapp.com/send?phone=${currentStoreToShow.prefix}${currentStoreToShow.zap}&text=Ol%C3%A1%2C%20te%20encontrei%20no%20*comprarnozap.com*%2C%20mas%20n%C3%A3o%20encontrei%20produtos%20para%20comprar.%20Poderia%20cadastrar%20ou%20me%20enviar%20o%20seu%20cat%C3%A1logo%20por%20favor%3F `;
     const win = window.open(link, '_blank');
     win.focus();
   };

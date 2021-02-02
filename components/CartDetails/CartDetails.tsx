@@ -22,7 +22,7 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ValidationErrors } from 'final-form';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
 import CloseIcon from '@material-ui/icons/Close';
 import * as yup from 'yup';
@@ -151,6 +151,8 @@ const CartDetails = ({
   perfPrefix,
 }: CartDetailsProps) => {
   const classes = useStyles();
+  const [touchedTroco, setTouchedTroco] = useState(false);
+  const [isTrocoValid, setIsTrocoValid] = useState(true);
 
   const totalValue = useMemo(() => {
     let total = 0;
@@ -160,15 +162,24 @@ const CartDetails = ({
     return total;
   }, [cartProductsData]);
 
+  const processAsyncValidate = (errors:any) => {
+    if (!isTrocoValid) {
+      return { ...errors, troco: 'O troco tem que ser maior que o total!' };
+    }
+    return errors;
+  };
+
   // eslint-disable-next-line consistent-return
   const validate = (values: any) => {
     try {
       schema.validateSync(values, { abortEarly: false });
+      return processAsyncValidate({});
     } catch (errors) {
-      const formErrors: any = {};
+      let formErrors: any = {};
       errors.inner.forEach((erro:ValidationErrors) => {
         formErrors[erro.path] = erro.message;
       });
+      formErrors = processAsyncValidate(formErrors);
       return formErrors;
     }
   };
@@ -229,6 +240,14 @@ const CartDetails = ({
   const metodoPagamento = useField('metodoPagamento', form);
   const obs = useField('obs', form);
   const nome = useField('nome', form);
+
+  const validateTroco = (value:string) => {
+    if (value !== '' && totalValue > parseInt(value, 10)) {
+      setIsTrocoValid(false);
+    } else {
+      setIsTrocoValid(true);
+    }
+  };
 
   return (
     <form className={classes.formWidth} onSubmit={handleSubmit}>
@@ -383,13 +402,17 @@ const CartDetails = ({
                             <InputAdornment position="start">R$</InputAdornment>
                           ),
                         }}
-                        error={troco.meta.touched && troco.meta.invalid}
+                        error={touchedTroco && troco.meta.invalid}
                         helperText={
-                    troco.meta.touched && troco.meta.invalid && troco.meta.error
+                    touchedTroco && troco.meta.invalid && troco.meta.error
                   }
                         {...troco.input}
                         type="number"
                         label="Troco para:"
+                        onBlur={() => {
+                          validateTroco(troco.input.value);
+                          setTouchedTroco(true);
+                        }}
                       />
                     </Collapse>
                   </Grid>

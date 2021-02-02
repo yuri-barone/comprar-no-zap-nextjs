@@ -109,9 +109,6 @@ export default function Home() {
     if (localStorage.getItem('ComprarNoZapEnderecoCurto')) {
       setRequiredDialog(false);
     }
-    if (!localStorage.getItem('ComprarNoZapEnderecoCurto')) {
-      setOpenDialog(true);
-    }
     checkIsBlocked();
   }, []);
 
@@ -316,13 +313,21 @@ export default function Home() {
                   </a>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Search onEnter={handlePlacesSearch} onChange={storeFilter} />
+                  <Search
+                    openDialog={() => {
+                      if (!localStorage.getItem('ComprarNoZapEnderecoCurto')) {
+                        setOpenDialog(true);
+                      }
+                    }}
+                    onEnter={handlePlacesSearch}
+                    onChange={storeFilter}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <Grid container justify="center" spacing={2}>
                     <Grid item xs={12} sm={5} md={4}>
                       <Button startIcon={<StorefrontIcon />} color="primary" type="submit" variant="contained" onClick={handlePlacesSearch} fullWidth size="large">
-                        Ver lugares
+                        Ver lojas
                       </Button>
                     </Grid>
                     <Grid item xs={12} sm={5} md={4}>
@@ -361,7 +366,7 @@ export default function Home() {
               <Box p={2}>
                 <Grid container justify="center" spacing={2}>
                   <Grid item xs="auto">
-                    <Typography variant="h6">Onde quer receber seu pedido?</Typography>
+                    <Typography variant="h6">Onde você está agora?</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <PlacesAutocomplete

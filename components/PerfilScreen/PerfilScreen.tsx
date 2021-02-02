@@ -389,7 +389,9 @@ function PerfilScreen({
                     elementCount: 125,
                     elementSize: 7,
                   }}
-                />
+                >
+                  <div />
+                </Reward>
               </Grid>
               {seller && (
               <Grid item xs={12}>
@@ -428,7 +430,9 @@ function PerfilScreen({
                           elementCount: 125,
                           elementSize: 7,
                         }}
-                      />
+                      >
+                        <div />
+                      </Reward>
                       <AlertTitle>Seu Catálogo</AlertTitle>
                       Parabéns agora seu estabelecimento tem um catálogo na internet. Clique
                       {' '}
