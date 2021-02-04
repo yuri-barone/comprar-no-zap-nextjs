@@ -187,7 +187,7 @@ const sobre = () => {
         <Container>
           <Box pb={6}>
             <Grid item xs={12}>
-              <Grid container alignItems="stretch" spacing={2}>
+              <Grid container alignItems="stretch" spacing={3}>
                 <Grid item xs={12} md={6}>
                   <FaqQuestion
                     question={(
@@ -233,6 +233,13 @@ const sobre = () => {
                     )}
                     answer="O seu catálogo exibe apenas os seus produtos, então está esperando o quê, envie para seus clientes agora mesmo o link da sua loja no Comprar no Zap, ou imprima o QRCode do seu catálogo digital... moderno né?"
                   />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box p={2}>
+                    <Button href="/cadastro" variant="contained" size="large" color="primary" fullWidth>
+                      Registrar minha loja!
+                    </Button>
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>

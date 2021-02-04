@@ -29,20 +29,20 @@ const FaqQuestion = ({ question, answer }:FaqQuestionProps) => {
 
   return (
     <Container className={classes.fullHeight}>
-      <Paper elevation={3} className={classes.fullHeight}>
-        <a onClick={handleClick} aria-hidden="true" className={classes.clickable}>
+      <a onClick={handleClick} aria-hidden="true" className={classes.clickable}>
+        <Paper elevation={3} className={classes.fullHeight}>
           <Box p={1}>
             <Grid container alignItems="center">
               <Grid item xs="auto">
                 {!checked && (
-                  <IconButton onClick={handleClick}>
-                    <AddIcon />
-                  </IconButton>
+                <IconButton onClick={handleClick}>
+                  <AddIcon />
+                </IconButton>
                 )}
                 {checked && (
-                  <IconButton onClick={handleClick}>
-                    <RemoveIcon />
-                  </IconButton>
+                <IconButton onClick={handleClick}>
+                  <RemoveIcon />
+                </IconButton>
                 )}
               </Grid>
               <Grid item xs>
@@ -59,8 +59,8 @@ const FaqQuestion = ({ question, answer }:FaqQuestionProps) => {
               </Grid>
             </Grid>
           </Box>
-        </a>
-      </Paper>
+        </Paper>
+      </a>
     </Container>
   );
 };
