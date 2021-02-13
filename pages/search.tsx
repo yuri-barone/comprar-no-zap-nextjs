@@ -8,7 +8,6 @@ import {
   Container,
   Dialog,
   Divider,
-  Fab,
   Grid,
   Hidden,
   IconButton,
@@ -19,9 +18,7 @@ import {
   Tabs,
   TextField,
   Typography,
-  useScrollTrigger,
 } from '@material-ui/core';
-import Zoom from '@material-ui/core/Zoom';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -29,7 +26,6 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-au
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { Alert } from '@material-ui/lab';
 import EnterpriseCard from '../components/EnterpriseCard/EnterpriseCard';
 import EnterpriseCardShow from '../components/EnterpriseCard/EnterpriseCardShow';
@@ -46,6 +42,7 @@ import ImageFeedback from '../components/ImageFeedback/ImageFeedback';
 import useCoordinate from '../components/useCoordinate';
 import Menu from '../components/Menu/Menu';
 import Search from '../components/Search/Search';
+import FastPromotion from '../components/FastPromotion';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -117,11 +114,6 @@ export default function Home() {
   const session: any = useSession(false);
   const navigation: any = useNavigation();
   const coordinates = useCoordinate();
-
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 100,
-  });
 
   const handleDangerClose = (event:any, reason:any) => {
     if (reason === 'clickaway') {
@@ -457,13 +449,6 @@ export default function Home() {
     setEndereco(selectedAddress);
   };
 
-  const handleClickTrigger = (section:string) => {
-    const anchor = document.querySelector(section);
-    if (anchor) {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  };
-
   const handleXsMenuOpen = () => {
     setXsMenu(true);
   };
@@ -576,7 +561,9 @@ export default function Home() {
         </Hidden>
       </Box>
       <Divider id="back-to-top-anchor" />
+      <FastPromotion onAdd={adicionar} />
       <Container>
+
         {isLoading && (
           <Grid item xs={12} className={classes.missingItems}>
             <Grid container alignContent="center" className={classes.missingItems}>
@@ -590,87 +577,87 @@ export default function Home() {
           </Grid>
         )}
         {!isLoading && (
-          <Grid
-            container
-            spacing={2}
-            className={showingCart ? classes.showingCart : classes.hiddenCart}
-          >
-            {currentStoreToShow && (
-            <Grid item xs={12} className={classes.containerMarginFix4}>
-              <EnterpriseCardShow
-                onRemove={removeStore}
-                src={currentStoreToShow['picture.imgBase64']}
-                name={currentStoreToShow.nome}
-                endereco={currentStoreToShow.endereco}
-                zap={currentStoreToShow.zap}
-                id={currentStoreToShow.id}
-                onTalk={onTalk}
-              />
-            </Grid>
-            )}
+        <Grid
+          container
+          spacing={2}
+          className={showingCart ? classes.showingCart : classes.hiddenCart}
+        >
+          {currentStoreToShow && (
+          <Grid item xs={12} className={classes.containerMarginFix4}>
+            <EnterpriseCardShow
+              onRemove={removeStore}
+              src={currentStoreToShow['picture.imgBase64']}
+              name={currentStoreToShow.nome}
+              endereco={currentStoreToShow.endereco}
+              zap={currentStoreToShow.zap}
+              id={currentStoreToShow.id}
+              onTalk={onTalk}
+            />
+          </Grid>
+          )}
 
-            {productsData.length === 0 && currentStoreToShow && !searchInput && (
-            <Grid item xs={12} className={classes.containerMarginFix4}>
-              <ImageFeedback
-                image="/Jhon-Travolta.gif"
-                message="Ahhh! esta loja ainda não cadastrou seus produtos..."
-                withButton
-                buttonMessage="Solicitar catálogo de produtos"
-                buttonOnClick={solicitarCatalogo}
-              />
-            </Grid>
-            )}
+          {productsData.length === 0 && currentStoreToShow && !searchInput && (
+          <Grid item xs={12} className={classes.containerMarginFix4}>
+            <ImageFeedback
+              image="/Jhon-Travolta.gif"
+              message="Ahhh! esta loja ainda não cadastrou seus produtos..."
+              withButton
+              buttonMessage="Solicitar catálogo de produtos"
+              buttonOnClick={solicitarCatalogo}
+            />
+          </Grid>
+          )}
 
-            {productsData.length === 0 && currentStoreToShow && searchInput && (
-            <Grid item xs={12} className={classes.containerMarginFix4}>
-              <ImageFeedback
-                image="/Jhon-Travolta.gif"
-                message="Hmm... Nenhum produto foi encontrado com este nome."
-                withButton
-                buttonMessage="Solicitar catálogo de produtos"
-                buttonOnClick={solicitarCatalogo}
-              />
-            </Grid>
-            )}
+          {productsData.length === 0 && currentStoreToShow && searchInput && (
+          <Grid item xs={12} className={classes.containerMarginFix4}>
+            <ImageFeedback
+              image="/Jhon-Travolta.gif"
+              message="Hmm... Nenhum produto foi encontrado com este nome."
+              withButton
+              buttonMessage="Solicitar catálogo de produtos"
+              buttonOnClick={solicitarCatalogo}
+            />
+          </Grid>
+          )}
 
-            {productsData.length === 0 && tabValue === 1 && !currentStoreToShow && (
-            <Grid item xs={12} className={classes.missingItems}>
-              <Grid container alignContent="center" className={classes.missingItems}>
-                <Grid item xs={12}>
-                  <ImageFeedback
-                    image="/Jhon-Travolta.gif"
-                    message="Hmm... Nenhum produto foi encontrado com este nome."
-                  />
-                </Grid>
+          {productsData.length === 0 && tabValue === 1 && !currentStoreToShow && (
+          <Grid item xs={12} className={classes.missingItems}>
+            <Grid container alignContent="center" className={classes.missingItems}>
+              <Grid item xs={12}>
+                <ImageFeedback
+                  image="/Jhon-Travolta.gif"
+                  message="Hmm... Nenhum produto foi encontrado com este nome."
+                />
               </Grid>
             </Grid>
-            )}
+          </Grid>
+          )}
 
-            {locaisData.length === 0 && tabValue === 0 && (
-            <Grid item xs={12} className={classes.missingItems}>
-              <Grid container alignContent="center" className={classes.missingItems}>
-                <Grid item xs={12}>
-                  <ImageFeedback
-                    image="/Jhon-Travolta.gif"
-                    message="Hmm... Nenhuma empresa foi encontrada com este nome."
-                  />
-                </Grid>
+          {locaisData.length === 0 && tabValue === 0 && (
+          <Grid item xs={12} className={classes.missingItems}>
+            <Grid container alignContent="center" className={classes.missingItems}>
+              <Grid item xs={12}>
+                <ImageFeedback
+                  image="/Jhon-Travolta.gif"
+                  message="Hmm... Nenhuma empresa foi encontrada com este nome."
+                />
               </Grid>
             </Grid>
-            )}
+          </Grid>
+          )}
 
-            <Grid item xs={12} className={classes.containerMarginFix4}>
-              <Grid container alignItems="stretch" spacing={4}>
-                {tabValue === 1
+          <Grid item xs={12} className={classes.containerMarginFix4}>
+            <Grid container alignItems="stretch" spacing={4}>
+              {tabValue === 1
                 && productsData.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
                     <ProductCard product={item} onAdd={adicionar} onNavigate={currentStore} />
                   </Grid>
                 ))}
-              </Grid>
+            </Grid>
 
-              <Grid container alignItems="stretch" spacing={4}>
-                {tabValue === 0
+            <Grid container alignItems="stretch" spacing={4}>
+              {tabValue === 0
                 && locaisData.map((item) => (
                   <Grid item xs={12} md={12} sm={12} lg={6} key={item.id}>
                     <EnterpriseCard
@@ -685,9 +672,9 @@ export default function Home() {
                     />
                   </Grid>
                 ))}
-              </Grid>
             </Grid>
           </Grid>
+        </Grid>
         )}
         <Slide direction="up" in={showingCart}>
           <AppBar position="fixed" className={classes.appBar} color="primary">
@@ -827,17 +814,7 @@ export default function Home() {
           </Alert>
         </Snackbar>
       </Container>
-      <Zoom in={trigger}>
-        <div
-          onClick={() => handleClickTrigger('#back-to-top-anchor')}
-          role="presentation"
-          className={classes.scroll}
-        >
-          <Fab color="primary" size="large" aria-label="scroll back to top">
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </div>
-      </Zoom>
+
     </ThemeProvider>
   );
 }
