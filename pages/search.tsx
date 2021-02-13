@@ -561,7 +561,7 @@ export default function Home() {
         </Hidden>
       </Box>
       <Divider id="back-to-top-anchor" />
-      <FastPromotion onAdd={adicionar} />
+      <FastPromotion lastEndereco={lastEndereco} onAdd={adicionar} />
       <Container>
 
         {isLoading && (

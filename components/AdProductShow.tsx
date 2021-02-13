@@ -16,6 +16,10 @@ export type AdProductShowProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  fullHeight: {
+    height: '100%',
+    flex: '1 0 auto',
+  },
   img: {
     objectFit: 'cover',
     display: 'block',
@@ -74,10 +78,10 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
   }, []);
 
   return (
-    <Paper variant="outlined">
+    <Paper variant="outlined" className={classes.fullHeight}>
 
-      <Grid container spacing={1}>
-        <Grid item sm={4} xs={12}>
+      <Grid container spacing={1} className={classes.fullHeight}>
+        <Grid item sm={4} xs={12} className={classes.fullHeight}>
           {image ? (
             <img
               alt={product.titulo}
@@ -92,8 +96,8 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
 
         </Grid>
 
-        <Grid item sm={8} xs={12}>
-          <Box p={1}>
+        <Grid item sm={8} xs={12} className={classes.fullHeight}>
+          <Box p={1} className={classes.fullHeight}>
             <Grid container className={classes.content} alignItems="flex-end">
               <Grid item xs={12}>
                 <Typography variant="body1" title={product.descricao}>

@@ -8,6 +8,8 @@ import useChrono from './useChrono';
 
 export type FastPromotionProps = {
   onAdd: (item:any) => void,
+  lastEndereco?: string,
+  howMany?: number,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FastPromotion = ({ onAdd }:FastPromotionProps) => {
+const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
   const classes = useStyles();
   const [productsData, setProductsData] = useState([]);
 
@@ -33,7 +35,7 @@ const FastPromotion = ({ onAdd }:FastPromotionProps) => {
     const res = await promotionsService.findOptimized(
       true,
       JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
-      3,
+      howMany || 3,
     );
     setProductsData(res.data);
   };
@@ -43,6 +45,11 @@ const FastPromotion = ({ onAdd }:FastPromotionProps) => {
     return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    loadPromos();
+    return () => setProductsData([]);
+  }, [lastEndereco]);
+
   const remaining = useChrono();
 
   return (
@@ -50,7 +57,7 @@ const FastPromotion = ({ onAdd }:FastPromotionProps) => {
       <Box pb={3} className={classes.promotions}>
         <Container>
           <Box pt={1}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} alignItems="stretch">
               <Grid item xs={12}>
                 <Grid container alignItems="flex-end">
                   <Grid item xs={12} sm>
