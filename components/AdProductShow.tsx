@@ -46,6 +46,11 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flex: '1 0 auto',
   },
+  titulo: {
+    height: 45,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
 }));
 
 const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
@@ -100,7 +105,7 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
           <Box p={1}>
             <Grid container className={classes.content} alignItems="flex-end" spacing={1}>
               <Grid item xs={12}>
-                <Typography variant="body1" title={product.descricao}>
+                <Typography variant="body1" title={product.titulo} className={classes.titulo}>
                   {product.titulo}
                 </Typography>
               </Grid>
