@@ -81,7 +81,7 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
     <Paper variant="outlined" className={classes.fullHeight}>
 
       <Grid container spacing={1} className={classes.fullHeight}>
-        <Grid item sm={4} xs={12} className={classes.fullHeight}>
+        <Grid item sm={4} xs={12}>
           {image ? (
             <img
               alt={product.titulo}
@@ -98,7 +98,7 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
 
         <Grid item sm={8} xs={12} className={classes.fullHeight}>
           <Box p={1} className={classes.fullHeight}>
-            <Grid container className={classes.content} alignItems="flex-end">
+            <Grid container className={classes.content} alignItems="flex-end" spacing={1}>
               <Grid item xs={12}>
                 <Typography variant="body1" title={product.descricao}>
                   {product.titulo}
@@ -122,7 +122,7 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
 
               </Grid>
 
-              <Grid item xs={12} sm>
+              <Grid item xs>
                 <IconButton onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}>
                   <RemoveIcon fontSize="small" />
                 </IconButton>
@@ -134,7 +134,7 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
                   <AddIcon fontSize="small" />
                 </IconButton>
               </Grid>
-              <Grid item xs={12} sm="auto">
+              <Grid item xs="auto">
                 <Button onClick={createProductCart} variant="contained" color="primary">
                   Adicionar
                 </Button>
