@@ -72,11 +72,6 @@ const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
                       <Box component="span" fontWeight="fontWeightBold">{remaining}</Box>
                     </Typography>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="body1" align="right">
-                      <Link href="/promos">Todas as promoções</Link>
-                    </Typography>
-                  </Grid>
                 </Grid>
               </Grid>
               {productsData.map((item) => (
@@ -84,6 +79,11 @@ const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
                   <AdProductShow product={item} onAdd={onAdd} />
                 </Grid>
               ))}
+              <Grid item xs={12}>
+                <Typography variant="body1" align="center">
+                  <Link href="/promos">Ver mais</Link>
+                </Typography>
+              </Grid>
             </Grid>
           </Box>
         </Container>
