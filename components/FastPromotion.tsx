@@ -1,5 +1,5 @@
 import {
-  Box, Collapse, Container, Grid, makeStyles, Typography,
+  Box, Collapse, Container, Grid, Link, makeStyles, Typography,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import AdProductShow from './AdProductShow';
@@ -70,6 +70,11 @@ const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
                       Acaba em
                       {' '}
                       <Box component="span" fontWeight="fontWeightBold">{remaining}</Box>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="body1" align="right">
+                      <Link href="/promos">Todas as promoções</Link>
                     </Typography>
                   </Grid>
                 </Grid>

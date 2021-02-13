@@ -14,6 +14,7 @@ import {
   makeStyles,
   Modal,
   Paper,
+  Snackbar,
   TextField,
   Typography,
   withStyles,
@@ -125,7 +126,21 @@ function ProductCard({
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openPromote, setOpenPromote] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openDanger, setOpenDanger] = useState(false);
   const [image, setImage] = useState('/empty-img.png');
+
+  const openSnackBarDanger = () => {
+    setOpenDanger(true);
+  };
+
+  const handleDangerClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenDanger(false);
+  };
 
   const getMinData = () => {
     const dtToday = new Date();
@@ -184,12 +199,28 @@ function ProductCard({
     setOpenPromote(false);
   };
 
+  const openSnackBarSuccess = () => {
+    setOpenSuccess(true);
+  };
+  const handleSuccessClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const onSubmit = async (values:any) => {
     const val = {
       ...values, data: `${values.data}T03:00:00.000Z`, productId: product.id, status: false,
     };
     const res = await promotionsService.createPromotion(val);
-    console.log(res);
+    if (res.ok) {
+      setOpenPromote(true);
+      openSnackBarSuccess();
+    }
+    if (!res.ok) {
+      openSnackBarDanger();
+    }
   };
 
   // eslint-disable-next-line consistent-return
@@ -568,6 +599,32 @@ function ProductCard({
           </Grid>
         </Grid>
       </Box>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={openSuccess}
+        autoHideDuration={6000}
+        onClose={handleSuccessClose}
+      >
+        <Alert severity="info">
+          Promoção enviada para análise
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={openDanger}
+        autoHideDuration={6000}
+        onClose={handleDangerClose}
+      >
+        <Alert severity="error">
+          Sua promoção não pode ser finalizada tente novamente mais tarde
+        </Alert>
+      </Snackbar>
     </>
   );
 }

@@ -462,9 +462,8 @@ export default function Home() {
     const result = await geocodeByAddress(address)
       .then((results:any) => {
         const completeAddress = results[0];
-        const streetNum = getLevelAddress(completeAddress.address_components, 'street_number');
         const street = getLevelAddress(completeAddress.address_components, 'route');
-        if (streetNum && street) {
+        if (street) {
           setIsValidAddress({ ok: true, helperText: undefined });
           return true;
         }

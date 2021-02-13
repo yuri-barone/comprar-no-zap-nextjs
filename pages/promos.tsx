@@ -124,6 +124,8 @@ const promos = () => {
     setLastEndereco(localStorage.getItem('ComprarNoZapEnderecoCurto'));
     if (localStorage.getItem('ComprarNoZapEnderecoCurto')) {
       setRequiredDialog(false);
+    } else {
+      setOpenDialog(true);
     }
     checkIsBlocked();
   }, []);
@@ -238,9 +240,8 @@ const promos = () => {
     const result = await geocodeByAddress(address)
       .then((results) => {
         const completeAddress = results[0];
-        const streetNum = getLevelAddress(completeAddress.address_components, 'street_number');
         const street = getLevelAddress(completeAddress.address_components, 'route');
-        if (streetNum && street) {
+        if (street) {
           setIsValidAddress({ ok: true, helperText: undefined });
           return true;
         }
@@ -329,7 +330,7 @@ const promos = () => {
         <Box p={2}>
           <Grid container justify="center" spacing={2}>
             <Grid item xs="auto">
-              <Typography variant="h6">Onde você está agora?</Typography>
+              <Typography variant="h6">Em qual rua você está agora?</Typography>
             </Grid>
             <Grid item xs={12}>
               <PlacesAutocomplete
