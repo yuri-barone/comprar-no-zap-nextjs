@@ -78,9 +78,9 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
   }, []);
 
   return (
-    <Paper variant="outlined" className={classes.fullHeight}>
+    <Paper variant="outlined">
 
-      <Grid container spacing={1} className={classes.fullHeight}>
+      <Grid container spacing={1}>
         <Grid item sm={4} xs={12}>
           {image ? (
             <img
@@ -96,8 +96,8 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
 
         </Grid>
 
-        <Grid item sm={8} xs={12} className={classes.fullHeight}>
-          <Box p={1} className={classes.fullHeight}>
+        <Grid item sm={8} xs={12}>
+          <Box p={1}>
             <Grid container className={classes.content} alignItems="flex-end" spacing={1}>
               <Grid item xs={12}>
                 <Typography variant="body1" title={product.descricao}>
