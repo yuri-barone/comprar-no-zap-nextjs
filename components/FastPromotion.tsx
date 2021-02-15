@@ -1,5 +1,13 @@
 import {
-  Box, Collapse, Container, Grid, Link, makeStyles, Typography,
+  Box,
+  Collapse,
+  Container,
+  Grid,
+  Link,
+  makeStyles,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import AdProductShow from './AdProductShow';
@@ -29,13 +37,19 @@ const useStyles = makeStyles((theme) => ({
 
 const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const size = useMediaQuery(theme.breakpoints.up('xs'));
   const [productsData, setProductsData] = useState([]);
 
   const loadPromos = async () => {
+    let numberOfPromos = 2;
+    if (!size) {
+      numberOfPromos = 4;
+    }
     const res = await promotionsService.findOptimized(
       true,
       JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
-      howMany || 3,
+      howMany || numberOfPromos,
     );
     setProductsData(res.data);
   };
@@ -75,7 +89,7 @@ const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
                 </Grid>
               </Grid>
               {productsData.map((item) => (
-                <Grid item xs={12} md={6} sm={6} lg={4} key={item.id}>
+                <Grid item xs={6} md={4} sm={4} lg={3} key={item.id}>
                   <AdProductShow product={item} onAdd={onAdd} />
                 </Grid>
               ))}

@@ -365,7 +365,7 @@ export default function Home() {
               <Box p={2}>
                 <Grid container justify="center" spacing={2}>
                   <Grid item xs="auto">
-                    <Typography variant="h6">Em qual rua você está agora?</Typography>
+                    <Typography variant="h6">Aonde você está agora?</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <PlacesAutocomplete

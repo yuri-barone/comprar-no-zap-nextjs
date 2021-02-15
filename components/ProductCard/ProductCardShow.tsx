@@ -7,6 +7,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  CircularProgress,
   Fade,
   Grid,
   IconButton,
@@ -101,6 +102,18 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     color: 'black',
+  },
+  buttonProgress: {
+    color: theme.palette.primary.light,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
   },
 }));
 
@@ -215,7 +228,7 @@ function ProductCard({
     };
     const res = await promotionsService.createPromotion(val);
     if (res.ok) {
-      setOpenPromote(true);
+      setOpenPromote(false);
       openSnackBarSuccess();
     }
     if (!res.ok) {
@@ -506,15 +519,18 @@ function ProductCard({
                           </Button>
                         </Grid>
                         <Grid item xs={6}>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            fullWidth
-                            disabled={pristine || submitting}
-                            type="submit"
-                          >
-                            Promover
-                          </Button>
+                          <div className={classes.wrapper}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              fullWidth
+                              disabled={pristine || submitting}
+                              type="submit"
+                            >
+                              Promover
+                            </Button>
+                            {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
+                          </div>
                         </Grid>
                       </Grid>
                     </CardActions>

@@ -531,7 +531,7 @@ export default function Home() {
                   textColor="primary"
                   centered
                 >
-                  <Tab label="Locais" />
+                  <Tab label="Lojas" />
                   <Tab label="Produtos" />
                 </Tabs>
               </Grid>
@@ -550,7 +550,7 @@ export default function Home() {
                   textColor="primary"
                   centered
                 >
-                  <Tab label="Locais" />
+                  <Tab label="Lojas" />
                   <Tab label="Produtos" />
                 </Tabs>
               </Grid>
