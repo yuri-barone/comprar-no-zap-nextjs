@@ -95,10 +95,15 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
   },
   cardPromote: {
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+      overflowY: 'auto',
+      width: '100%',
+    },
     maxWidth: '480px',
   },
   hideName: {
-    maxWidth: theme.spacing(10),
+    maxWidth: theme.spacing(25),
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     color: 'black',
@@ -230,6 +235,22 @@ function ProductCard({
     if (res.ok) {
       setOpenPromote(false);
       openSnackBarSuccess();
+      const link = `https://api.whatsapp.com/send?phone=5544997737167&text=Ol%C3%A1%20estou%20querendo%20promover%20o%20meu%20produto%20voc%C3%AA%20pode%20aprovar%20para%20mim%3F%20O%20n%C3%BAmero%20da%20promo%C3%A7%C3%A3o%20%C3%A9%20${res.data.id}`;
+      const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1
+      && navigator.userAgent
+      && navigator.userAgent.indexOf('CriOS') === -1
+      && navigator.userAgent.indexOf('FxiOS') === -1;
+      if (isSafari) {
+        window.location.assign(link);
+      } else {
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        a.onclick = () => {
+          window.open(link);
+        };
+        a.click();
+        document.body.removeChild(a);
+      }
     }
     if (!res.ok) {
       openSnackBarDanger();
@@ -397,7 +418,7 @@ function ProductCard({
       </Paper>
       <Box p={2}>
         <Grid container>
-          <Grid item xs={1}>
+          <Grid item xs={12}>
             <Modal
               aria-labelledby="transition-modal-title"
               aria-describedby="transition-modal-description"
@@ -439,7 +460,7 @@ function ProductCard({
                             {product['perfil.nome']}
                           </Typography>
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={12} sm={7}>
                           <TextField
                             {...valor.input}
                             id="valor"
@@ -460,7 +481,7 @@ function ProductCard({
                             fullWidth
                           />
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={12} sm={5}>
                           <TextField
                             {...data.input}
                             id="date"
@@ -480,34 +501,34 @@ function ProductCard({
                           />
                         </Grid>
                         {data.input.value && (
-                        <Grid item xs={12}>
-                          <Alert severity="info" role="alert">
-                            <Typography>
-                              Este é  um
-                              {' '}
-                              <Box fontWeight="fontWeightBold" component="span">
-                                anúncio relâmpago
-                              </Box>
-                              {' '}
-                              e estará disponível por
-                              {' '}
-                              <Box fontWeight="fontWeightBold" component="span">
-                                24H
-                              </Box>
-                              {' '}
-                              no dia
-                              {' '}
-                              <Box fontWeight="fontWeightBold" component="span">
-                                {getFormatedData(`${data.input.value}T03:00:00.000Z`)}
-                              </Box>
-                            </Typography>
-                          </Alert>
-                        </Grid>
+                          <Grid item xs={12}>
+                            <Alert severity="info" role="alert">
+                              <Typography>
+                                Este é  um
+                                {' '}
+                                <Box fontWeight="fontWeightBold" component="span">
+                                  anúncio relâmpago
+                                </Box>
+                                {' '}
+                                e estará disponível por
+                                {' '}
+                                <Box fontWeight="fontWeightBold" component="span">
+                                  24H
+                                </Box>
+                                {' '}
+                                no dia
+                                {' '}
+                                <Box fontWeight="fontWeightBold" component="span">
+                                  {getFormatedData(`${data.input.value}T03:00:00.000Z`)}
+                                </Box>
+                              </Typography>
+                            </Alert>
+                          </Grid>
                         )}
                       </Grid>
                     </CardContent>
                     <CardActions>
-                      <Grid container spacing={2}>
+                      <Grid container spacing={2} alignItems="center">
                         <Grid item xs={6}>
                           <Button
                             variant="outlined"

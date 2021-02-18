@@ -29,6 +29,10 @@ import perfisService from '../services/perfisService';
 import usersService from '../services/usersService';
 import { keepSession } from '../useSession';
 
+const searchOptions = {
+  componentRestrictions: { country: ['br'] },
+};
+
 const buildDomain = (value: string) => {
   if (!value) {
     return value;
@@ -366,6 +370,7 @@ function SignUpScreen() {
                             handleAddressSelect(address);
                             form.mutators.changeEndereco(address);
                           }}
+                          searchOptions={searchOptions}
                         >
                           {({
                             getInputProps, suggestions, getSuggestionItemProps, loading,

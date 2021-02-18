@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 0 auto',
   },
   img: {
+    [theme.breakpoints.only('xs')]: {
+      height: '125px',
+    },
     objectFit: 'cover',
     display: 'block',
   },

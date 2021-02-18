@@ -33,6 +33,7 @@ import LocalButton from '../components/LocalButton/LocalButton';
 import Menu from '../components/Menu/Menu';
 import MyCart from '../components/MyCart/MyCart';
 import FastPromotion from '../components/FastPromotion';
+import Search from '../components/Search/Search';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -45,6 +46,14 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     maxHeight: theme.spacing(25),
     color: theme.palette.common.white,
+  },
+  containerMarginFix4: {
+    marginTop: theme.spacing(4),
+  },
+  searchContainer: {
+    backgroundColor: theme.palette.grey[200],
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -69,6 +78,7 @@ const promos = () => {
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [alertGeocode, setAlertGeocode] = useState(false);
+  const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
   const session: any = useSession(false);
   const coordinates:any = useCoordinate;
 
@@ -253,6 +263,10 @@ const promos = () => {
     return result;
   };
 
+  const searchOnChange = (e: any) => {
+    setSearchInput(e.target.value);
+  };
+
   return (
     <>
       <Hidden xsDown>
@@ -320,7 +334,12 @@ const promos = () => {
         </Grid>
       </Hidden>
       <Divider />
-      <FastPromotion onAdd={adicionar} lastEndereco={lastEndereco} howMany={50} />
+      <Grid container justify="center" className={classes.searchContainer}>
+        <Grid item xs={11} sm={8}>
+          <Search onChange={searchOnChange} value={searchInput} />
+        </Grid>
+      </Grid>
+      <FastPromotion onAdd={adicionar} lastEndereco={lastEndereco} searchInput={searchInput} howMany={50} />
       <Dialog
         open={openDialog}
         TransitionComponent={Transition}

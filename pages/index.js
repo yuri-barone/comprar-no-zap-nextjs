@@ -34,6 +34,10 @@ import useSession from '../components/useSession';
 import LocalButton from '../components/LocalButton/LocalButton';
 import Menu from '../components/Menu/Menu';
 
+const searchOptions = {
+  componentRestrictions: { country: ['br'] },
+};
+
 const useStyles = makeStyles((theme) => ({
   img: {
     objectFit: 'cover',
@@ -378,6 +382,7 @@ export default function Home() {
                           changeEndereco(address);
                         }
                       }}
+                      searchOptions={searchOptions}
                     >
                       {({
                         getInputProps, suggestions, getSuggestionItemProps, loading,

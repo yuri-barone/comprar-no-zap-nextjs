@@ -35,6 +35,10 @@ import MaskedTextField from '../MaskedTextField';
 import perfisService from '../services/perfisService';
 import useSession from '../useSession';
 
+const searchOptions = {
+  componentRestrictions: { country: ['br'] },
+};
+
 yup.setLocale({
   mixed: {
     default: 'Não é válido',
@@ -529,6 +533,7 @@ function PerfilScreen({
                         handleAddressSelect(address);
                         form.mutators.changeEndereco(address);
                       }}
+                      searchOptions={searchOptions}
                     >
                       {({
                         getInputProps, suggestions, getSuggestionItemProps, loading,

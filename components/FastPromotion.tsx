@@ -18,6 +18,7 @@ export type FastPromotionProps = {
   onAdd: (item:any) => void,
   lastEndereco?: string,
   howMany?: number,
+  searchInput?: string,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -35,11 +36,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
+const FastPromotion = ({
+  onAdd, lastEndereco, howMany, searchInput,
+}:FastPromotionProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const size = useMediaQuery(theme.breakpoints.up('xs'));
   const [productsData, setProductsData] = useState([]);
+  const [inicialPromos, setInicialPromos] = useState([]);
+
+  const normalizeText = (text:string) => text.toLowerCase().normalize('NFD').replace(/[^a-z0-9&\-\s]/g, '');
 
   const loadPromos = async () => {
     let numberOfPromos = 2;
@@ -51,8 +57,31 @@ const FastPromotion = ({ onAdd, lastEndereco, howMany }:FastPromotionProps) => {
       JSON.parse(localStorage.getItem('ComprarNoZapLatLng')),
       howMany || numberOfPromos,
     );
-    setProductsData(res.data);
+    setInicialPromos(res.data);
+    return res.data;
   };
+
+  useEffect(() => {
+    setProductsData(inicialPromos);
+  }, [inicialPromos]);
+
+  useEffect(() => {
+    const searchTimeout = setTimeout(() => {
+      if (searchInput) {
+        const produtosFiltrados = inicialPromos.filter((inicialPromo) => {
+          const pesquisa = normalizeText(searchInput);
+          const camposProduto = normalizeText(`${inicialPromo.titulo} ${inicialPromo.descricao}`);
+          return camposProduto.match(pesquisa);
+        });
+        setProductsData(produtosFiltrados);
+      }
+      if (searchInput === '') {
+        setProductsData(inicialPromos);
+      }
+    }, 500);
+
+    return () => clearInterval(searchTimeout);
+  }, [searchInput]);
 
   useEffect(() => {
     const timeout = setTimeout(loadPromos, 2000);

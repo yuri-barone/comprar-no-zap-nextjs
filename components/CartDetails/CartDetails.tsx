@@ -31,6 +31,10 @@ import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import ItemShowDetails from '../ItemShowDetails/ItemShowDetails';
 import ordersService from '../services/ordersService';
 
+const searchOptions = {
+  componentRestrictions: { country: ['br'] },
+};
+
 yup.setLocale({
   mixed: {
     default: 'Não é válido',
@@ -305,6 +309,7 @@ const CartDetails = ({
                         onSelect={(address) => {
                           form.change('endereco', address);
                         }}
+                        searchOptions={searchOptions}
                       >
                         {({
                           getInputProps, suggestions, getSuggestionItemProps, loading,
