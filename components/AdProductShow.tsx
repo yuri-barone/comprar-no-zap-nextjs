@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.only('xs')]: {
       height: '125px',
     },
+    maxHeigh: 117,
     objectFit: 'cover',
     display: 'block',
   },
@@ -120,7 +121,7 @@ const AdProductShow = ({ product, onAdd }:AdProductShowProps) => {
                   src={image || '/empty-img.png'}
                   className={classes.img}
                   width="100%"
-                  height="100%"
+                  height="118px"
                 />
               ) : (
                 <Skeleton animation="wave" variant="rect" width="100%" height="100%" />
