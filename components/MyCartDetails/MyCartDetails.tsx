@@ -64,36 +64,6 @@ const MyCartDetails = ({
       <Box pb={8} pt={2} pl={2} pr={2}>
         <Container>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Paper variant="outlined">
-                <Box p={2}>
-                  <Grid container alignItems="center" spacing={2}>
-                    <Grid item xs>
-                      <Typography variant="h5">Meu pedido</Typography>
-                      <Typography>
-                        Basta clicar no botão
-                        {' '}
-                        <Box component="span" fontWeight="fontWeightBold">
-                          Pedir no Zap
-                        </Box>
-                        {' '}
-                        que o seu pedido será enviado pelo WhatsApp
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs="auto">
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={onContinuarComprando}
-                      >
-                        Continuar pedindo
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Paper>
-            </Grid>
             {cartSellers.map((item) => (
               <Grid item xs={12} key={item.items[0].product.perfilId}>
                 <Paper variant="outlined">

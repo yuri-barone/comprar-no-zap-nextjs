@@ -45,7 +45,6 @@ const schema = yup.object().shape({
     .min(5)
     .max(100)
     .required(),
-  descricao: yup.string().max(244),
   valor: yup
     .number()
     .typeError('Valor precisa ser um número')

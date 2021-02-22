@@ -19,6 +19,7 @@ export type FastPromotionProps = {
   lastEndereco?: string,
   howMany?: number,
   searchInput?: string,
+  seeMore?: boolean,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FastPromotion = ({
-  onAdd, lastEndereco, howMany, searchInput,
+  onAdd, lastEndereco, howMany, searchInput, seeMore,
 }:FastPromotionProps) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -122,11 +123,13 @@ const FastPromotion = ({
                   <AdProductShow product={item} onAdd={onAdd} />
                 </Grid>
               ))}
+              {seeMore && (
               <Grid item xs={12}>
                 <Typography variant="body1" align="center">
                   <Link href="/promos">Ver mais</Link>
                 </Typography>
               </Grid>
+              )}
             </Grid>
           </Box>
         </Container>
