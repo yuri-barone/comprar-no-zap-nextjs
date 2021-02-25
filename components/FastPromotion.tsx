@@ -118,7 +118,7 @@ const FastPromotion = ({
                   </Grid>
                 </Grid>
               </Grid>
-              {productsData.map((item) => (
+              {productsData?.map((item) => (
                 <Grid item xs={6} md={4} sm={4} lg={3} key={item.id}>
                   <AdProductShow product={item} onAdd={onAdd} />
                 </Grid>

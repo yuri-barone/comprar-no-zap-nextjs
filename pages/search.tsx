@@ -433,7 +433,7 @@ export default function Home() {
         const completeAddress = results[0];
         const shortAddress = getShortAddress(completeAddress.address_components);
         const superCompleteAddress = results[0].formatted_address;
-        localStorage.setItem('ComprarNoZapEnderecoCurto', superCompleteAddress);
+        localStorage.setItem('ComprarNoZapEndereco', superCompleteAddress);
         setInputEndereco(superCompleteAddress);
         localStorage.setItem('ComprarNoZapEnderecoCurto', shortAddress);
         setLastEndereco(shortAddress);
