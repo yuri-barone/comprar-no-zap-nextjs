@@ -73,8 +73,8 @@ const promos = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [xsMenu, setXsMenu] = useState(false);
   const [endereco, setEndereco] = useState('');
-  const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
-  const [loadingAddressField, setLoadingAddressField] = useState(false);
+  // const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
+  // const [loadingAddressField, setLoadingAddressField] = useState(false);
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [alertGeocode, setAlertGeocode] = useState(false);
@@ -245,23 +245,23 @@ const promos = () => {
 
   const showingCart = cartProducts.length > 0;
 
-  const verifyAddress = async (address:any) => {
-    setLoadingAddressField(true);
-    const result = await geocodeByAddress(address)
-      .then((results) => {
-        const completeAddress = results[0];
-        const street = getLevelAddress(completeAddress.address_components, 'route');
-        if (street) {
-          setIsValidAddress({ ok: true, helperText: undefined });
-          return true;
-        }
-        setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
-        return false;
-      })
-      .catch((error) => error);
-    setLoadingAddressField(false);
-    return result;
-  };
+  // const verifyAddress = async (address:any) => {
+  //   setLoadingAddressField(true);
+  //   const result = await geocodeByAddress(address)
+  //     .then((results) => {
+  //       const completeAddress = results[0];
+  //       const street = getLevelAddress(completeAddress.address_components, 'route');
+  //       if (street) {
+  //         setIsValidAddress({ ok: true, helperText: undefined });
+  //         return true;
+  //       }
+  //       setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
+  //       return false;
+  //     })
+  //     .catch((error) => error);
+  //   setLoadingAddressField(false);
+  //   return result;
+  // };
 
   const searchOnChange = (e: any) => {
     setSearchInput(e.target.value);
@@ -349,18 +349,15 @@ const promos = () => {
         <Box p={2}>
           <Grid container justify="center" spacing={2}>
             <Grid item xs="auto">
-              <Typography variant="h6">Aonde você está agora?</Typography>
+              <Typography variant="h6">Qual a sua cidade?</Typography>
             </Grid>
             <Grid item xs={12}>
               <PlacesAutocomplete
                 value={endereco}
                 onChange={(address) => { changeEndereco(address); }}
-                onSelect={async (address) => {
-                  const isValid = await verifyAddress(address);
-                  if (isValid) {
-                    handleAddressSelect(address);
-                    changeEndereco(address);
-                  }
+                onSelect={(address) => {
+                  handleAddressSelect(address);
+                  changeEndereco(address);
                 }}
               >
                 {({
@@ -375,10 +372,10 @@ const promos = () => {
                       value={endereco}
                       fullWidth
                       id="endereco"
-                      label="Endereço para entrega"
-                      error={!isValidAddress.ok}
-                      helperText={!isValidAddress.ok && isValidAddress.helperText}
-                      disabled={loadingAddressField}
+                      label="Cidade"
+                      // error={!isValidAddress.ok}
+                      // helperText={!isValidAddress.ok && isValidAddress.helperText}
+                      // disabled={loadingAddressField}
                       InputProps={{
                         endAdornment: (
                           <>

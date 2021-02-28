@@ -108,8 +108,8 @@ export default function Home() {
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
-  const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
-  const [loadingAddressField, setLoadingAddressField] = useState(false);
+  // const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
+  // const [loadingAddressField, setLoadingAddressField] = useState(false);
 
   const session: any = useSession(false);
   const navigation: any = useNavigation();
@@ -457,23 +457,23 @@ export default function Home() {
     setXsMenu(false);
   };
 
-  const verifyAddress = async (address:any) => {
-    setLoadingAddressField(true);
-    const result = await geocodeByAddress(address)
-      .then((results:any) => {
-        const completeAddress = results[0];
-        const street = getLevelAddress(completeAddress.address_components, 'route');
-        if (street) {
-          setIsValidAddress({ ok: true, helperText: undefined });
-          return true;
-        }
-        setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
-        return false;
-      })
-      .catch((error:Error) => error);
-    setLoadingAddressField(false);
-    return result;
-  };
+  // const verifyAddress = async (address:any) => {
+  //   setLoadingAddressField(true);
+  //   const result = await geocodeByAddress(address)
+  //     .then((results:any) => {
+  //       const completeAddress = results[0];
+  //       const street = getLevelAddress(completeAddress.address_components, 'route');
+  //       if (street) {
+  //         setIsValidAddress({ ok: true, helperText: undefined });
+  //         return true;
+  //       }
+  //       setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
+  //       return false;
+  //     })
+  //     .catch((error:Error) => error);
+  //   setLoadingAddressField(false);
+  //   return result;
+  // };
 
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
@@ -700,18 +700,15 @@ export default function Home() {
           <Box p={2}>
             <Grid container justify="center" spacing={2}>
               <Grid item xs="auto">
-                <Typography variant="h6">Onde quer receber seu pedido?</Typography>
+                <Typography variant="h6">Qual a sua cidade</Typography>
               </Grid>
               <Grid item xs={12}>
                 <PlacesAutocomplete
                   value={endereco}
                   onChange={(address) => { changeEndereco(address); }}
-                  onSelect={async (address) => {
-                    const isValid = await verifyAddress(address);
-                    if (isValid) {
-                      handleAddressSelect(address);
-                      changeEndereco(address);
-                    }
+                  onSelect={(address) => {
+                    handleAddressSelect(address);
+                    changeEndereco(address);
                   }}
                 >
                   {({
@@ -726,10 +723,10 @@ export default function Home() {
                         value={endereco}
                         fullWidth
                         id="endereco"
-                        label="Endereço para entrega"
-                        error={!isValidAddress.ok}
-                        helperText={!isValidAddress.ok && isValidAddress.helperText}
-                        disabled={loadingAddressField}
+                        label="Cidade"
+                        // error={!isValidAddress.ok}
+                        // helperText={!isValidAddress.ok && isValidAddress.helperText}
+                        // disabled={loadingAddressField}
                         InputProps={{
                           endAdornment: (
                             <>
