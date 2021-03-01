@@ -14,8 +14,8 @@ const renderInfoParam = (label:string, value: string) => {
   }
   return (
     <>
-      <Typography variant="h4" component="p">{label}</Typography>
-      <Typography variant="h3">
+      <Typography variant="caption" component="p">{label}</Typography>
+      <Typography>
         {value}
       </Typography>
     </>
@@ -59,17 +59,17 @@ const pedidos = () => {
                   {order.codigo}
                 </Box>
               </Typography>
-              <Typography variant="h5">{date}</Typography>
+              <Typography variant="h6">{date}</Typography>
               {items.map((item:any) => (
                 <div key={item.id}>
                   <Box pb={1}>
-                    <Typography variant="h4" component="span">
+                    <Typography component="span">
                       {item.quantidade}
                       {' '}
                       {item.titulo}
                     </Typography>
                     <br />
-                    <Typography variant="h4" component="span">
+                    <Typography component="span">
                       Valor:
                       {' '}
                       {formatNumberToMoneyWithSymbol(item.valorTotal)}
@@ -77,7 +77,7 @@ const pedidos = () => {
                   </Box>
                 </div>
               ))}
-              <Typography variant="h3">
+              <Typography variant="h5">
                 <Box fontWeight="fontWeightBold">
                   Total:
                   {' '}
@@ -88,37 +88,30 @@ const pedidos = () => {
           </Grid>
           <Grid item xs={12}>
             {renderInfoParam('Cliente', order.nome)}
-            <br />
             {renderInfoParam('Observação', order.observacao)}
-            <br />
             {renderInfoParam('Entregar', order.endereco)}
-            <br />
             {!order.delivery && (
               <>
-                <Typography variant="h3" component="p">Entrega</Typography>
-                <Typography variant="h4">
+                <Typography variant="caption" component="p">Entrega</Typography>
+                <Typography>
                   Cliente irá buscar
                 </Typography>
-                <br />
               </>
             )}
             {renderInfoParam('Forma de pagamento', order.formaPagamento)}
-            <br />
             {order.formaPagamento === 'Dinheiro' && order.troco && (order.troco - order.valorTotal !== 0) && (
               <>
                 <>
-                  <Typography variant="h4" component="p">Dinheiro do cliente:</Typography>
-                  <Typography variant="h3">
+                  <Typography variant="caption" component="p">Dinheiro do cliente:</Typography>
+                  <Typography>
                     {formatNumberToMoneyWithSymbol(order.troco)}
                   </Typography>
-                  <br />
                 </>
                 <>
-                  <Typography variant="h4" component="p">Troco:</Typography>
-                  <Typography variant="h3">
+                  <Typography variant="caption" component="p">Troco:</Typography>
+                  <Typography>
                     {formatNumberToMoneyWithSymbol(order.troco - order.valorTotal)}
                   </Typography>
-                  <br />
                 </>
               </>
             )}
