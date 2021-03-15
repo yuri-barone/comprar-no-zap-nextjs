@@ -217,24 +217,6 @@ export default function Home() {
     setXsMenu(false);
   };
 
-  // const verifyAddress = async (address) => {
-  //   setLoadingAddressField(true);
-  //   const result = await geocodeByAddress(address)
-  //     .then((results) => {
-  //       const completeAddress = results[0];
-  //       const street = getLevelAddress(completeAddress.address_components, 'route');
-  //       if (street) {
-  //         setIsValidAddress({ ok: true, helperText: undefined });
-  //         return true;
-  //       }
-  //       setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
-  //       return false;
-  //     })
-  //     .catch((error) => error);
-  //   setLoadingAddressField(false);
-  //   return result;
-  // };
-
   return (
     <>
       <Grid container className={classes.containerHeight} spacing={2}>
@@ -394,9 +376,6 @@ export default function Home() {
                             fullWidth
                             id="endereco"
                             label="Cidade"
-                            // error={!isValidAddress.ok}
-                            // helperText={!isValidAddress.ok && isValidAddress.helperText}
-                            // disabled={loadingAddressField}
                             InputProps={{
                               endAdornment: (
                                 <>
