@@ -80,8 +80,6 @@ export default function Home() {
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
   const [xsMenu, setXsMenu] = useState(false);
-  // const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
-  // const [loadingAddressField, setLoadingAddressField] = useState(false);
 
   const session = useSession(false);
   const navigation = useNavigation();

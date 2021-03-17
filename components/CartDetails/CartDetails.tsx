@@ -11,7 +11,6 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
-  IconButton,
   InputAdornment,
   makeStyles,
   Radio,
@@ -24,16 +23,11 @@ import {
 import { ValidationErrors } from 'final-form';
 import React, { useMemo, useState } from 'react';
 import { useForm, useField } from 'react-final-form-hooks';
-import CloseIcon from '@material-ui/icons/Close';
 import * as yup from 'yup';
-import PlacesAutocomplete from 'react-places-autocomplete';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import ItemShowDetails from '../ItemShowDetails/ItemShowDetails';
 import ordersService from '../services/ordersService';
-
-const searchOptions = {
-  componentRestrictions: { country: ['br'] },
-};
+import useSession from '../useSession';
 
 yup.setLocale({
   mixed: {
@@ -157,6 +151,7 @@ const CartDetails = ({
   const classes = useStyles();
   const [touchedTroco, setTouchedTroco] = useState(false);
   const [isTrocoValid, setIsTrocoValid] = useState(true);
+  const session = useSession();
 
   const totalValue = useMemo(() => {
     let total = 0;
@@ -202,6 +197,7 @@ const CartDetails = ({
     args.formaPagamento = values.metodoPagamento;
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
+    args.consumerid = session.profile.id || undefined;
     const response = await ordersService.createOrder(args);
     const link = generateZapLink(
       Number(values.products[0].zap),
@@ -304,72 +300,18 @@ const CartDetails = ({
                       label="Entregar"
                     />
                     <Collapse in={entrega.input.value === true}>
-                      <PlacesAutocomplete
+                      <TextField
                         {...endereco.input}
-                        onSelect={(address) => {
-                          form.change('endereco', address);
-                        }}
-                        searchOptions={searchOptions}
-                      >
-                        {({
-                          getInputProps, suggestions, getSuggestionItemProps, loading,
-                        }) => (
-                          <div>
-                            <TextField
-                              {...endereco.input}
-                              {...getInputProps({
-                                placeholder: 'Endereço de entrega',
-                              })}
-                              fullWidth
-                              id="endereco"
-                              error={endereco.meta.touched && endereco.meta.invalid}
-                              helperText={
-                                endereco.meta.touched
-                                && endereco.meta.invalid
-                                && endereco.meta.error
-                              }
-                              InputProps={{
-                                endAdornment: (
-                                  <>
-                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                    <IconButton
-                                      color="primary"
-                                      aria-label="clear address"
-                                      component="span"
-                                      onClick={() => { form.change('endereco', ''); }}
-                                    >
-                                      <CloseIcon />
-                                    </IconButton>
-                                  </>
-                                ),
-                              }}
-                            />
-                            <div className="autocomplete-dropdown-container">
-                              {suggestions.map((suggestion) => {
-                                const className = suggestion.active
-                                  ? 'suggestion-item--active'
-                                  : 'suggestion-item';
-                                  // inline style for demonstration purpose
-                                const style = suggestion.active
-                                  ? { backgroundColor: '#bdbdbd', cursor: 'pointer' }
-                                  : { backgroundColor: '#e0e0e0', cursor: 'pointer' };
-                                return (
-                                  <div
-                                    {...getSuggestionItemProps(suggestion, {
-                                      className,
-                                      style,
-                                    })}
-                                  >
-                                    <Box p={2}>
-                                      <Typography>{suggestion.description}</Typography>
-                                    </Box>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-                      </PlacesAutocomplete>
+                        placeholder="Endereço de entrega"
+                        id="endereco"
+                        fullWidth
+                        error={endereco.meta.touched && endereco.meta.invalid}
+                        helperText={
+                          endereco.meta.touched
+                          && endereco.meta.invalid
+                          && endereco.meta.error
+                        }
+                      />
                     </Collapse>
                   </Grid>
                   )}

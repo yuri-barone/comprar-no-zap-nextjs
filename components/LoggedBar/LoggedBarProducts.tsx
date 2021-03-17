@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 export type LoggedBarProductsProps = {
   src: string;
@@ -19,6 +19,7 @@ export type LoggedBarProductsProps = {
   zap: string;
   domain: string;
   seller: boolean;
+  consumerid: number;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -52,13 +53,18 @@ const useStyles = makeStyles((theme) => ({
   clickable: {
     cursor: 'pointer',
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 const LoggedBarProducts = ({
   src, name, zap, domain, seller,
 }:LoggedBarProductsProps) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const Router = useRouter();
   const handleOnClick = () => {
     localStorage.removeItem('PDZT');
@@ -146,17 +152,27 @@ const LoggedBarProducts = ({
                   </Button>
                 </Grid>
                 {seller && (
+                  <Grid item xs={12}>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={showCatalogo}
+                      fullWidth
+                    >
+                      Meu catálogo
+                    </Button>
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <Button
                     variant="outlined"
                     color="secondary"
-                    onClick={showCatalogo}
                     fullWidth
+                    href="/meuspedidos"
                   >
-                    Meu catálogo
+                    Meus pedidos
                   </Button>
                 </Grid>
-                )}
                 <Grid item xs={12}>
                   <Button
                     variant="outlined"

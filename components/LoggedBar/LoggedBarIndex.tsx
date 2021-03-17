@@ -172,6 +172,16 @@ const LoggedBarIndex = ({
                 )}
                 <Grid item xs={12}>
                   <Button
+                    href="/meuspedidos"
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                  >
+                    Meus pedidos
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
                     variant="outlined"
                     color="secondary"
                     href="/"

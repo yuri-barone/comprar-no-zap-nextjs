@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   Grid,
   makeStyles,
   Paper,
@@ -24,6 +23,11 @@ const useStyles = makeStyles({
   root: {
     height: '100vh',
     overflowY: 'auto',
+  },
+  paper: {
+    width: '100%',
+    height: '100vh',
+    overflowX: 'hidden',
   },
 });
 const MyCartDetails = ({
@@ -61,66 +65,58 @@ const MyCartDetails = ({
   }, [cartProductsData]);
   return (
     <div className={classes.root}>
-      <Box pb={8} pt={2} pl={2} pr={2}>
-        <Container>
-          <Grid container spacing={3}>
-            {cartSellers.map((item) => (
-              <Grid item xs={12} key={item.items[0].product.perfilId}>
-                <Paper variant="outlined">
-                  <Box p={2}>
-                    <Typography variant="h5">
-                      <Box pb={2}>{item.perfilName}</Box>
-                    </Typography>
-                  </Box>
-                  <CartDetails
-                    cartProductsData={item.items}
-                    changeItemQuantity={changeItemQuantity}
-                    removeItem={removeItem}
-                    initialValues={{ endereco: initialEndereco, nome: initialNome }}
-                    perfDelivery={item.items[0].product.delivery}
-                    perfEndereco={item.items[0].product.endereco}
-                    perfName={item.perfilName}
-                    perfId={item.items[0].product.perfilId}
-                    perfPrefix={item.perfilPrefix}
-                  />
-                </Paper>
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Paper variant="outlined">
-                <Box p={2}>
-                  <Grid
-                    container
-                    alignItems="center"
-                    justify="flex-end"
-                    spacing={2}
-                  >
-                    <Grid item xs="auto">
-                      <Button
-                        color="primary"
-                        variant="outlined"
-                        onClick={removeAll}
-                      >
-                        Limpar Carrinho
-                      </Button>
-                    </Grid>
-
-                    <Grid item xs="auto">
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={onContinuarComprando}
-                      >
-                        Fechar
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Paper>
+      <Grid container>
+        <Paper variant="outlined" className={classes.paper}>
+          {cartSellers.map((item) => (
+            <Grid item xs={12} key={item.items[0].product.perfilId}>
+              <Box p={2}>
+                <Typography variant="h5">
+                  <Box pb={2}>{item.perfilName}</Box>
+                </Typography>
+              </Box>
+              <CartDetails
+                cartProductsData={item.items}
+                changeItemQuantity={changeItemQuantity}
+                removeItem={removeItem}
+                initialValues={{ endereco: initialEndereco, nome: initialNome }}
+                perfDelivery={item.items[0].product.delivery}
+                perfEndereco={item.items[0].product.endereco}
+                perfName={item.perfilName}
+                perfId={item.items[0].product.perfilId}
+                perfPrefix={item.perfilPrefix}
+              />
             </Grid>
-          </Grid>
-        </Container>
-      </Box>
+          ))}
+          <Box p={2}>
+            <Grid
+              container
+              alignItems="center"
+              justify="flex-end"
+              spacing={2}
+            >
+              <Grid item xs="auto">
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={removeAll}
+                >
+                  Limpar Carrinho
+                </Button>
+              </Grid>
+
+              <Grid item xs="auto">
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={onContinuarComprando}
+                >
+                  Fechar
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Paper>
+      </Grid>
     </div>
   );
 };

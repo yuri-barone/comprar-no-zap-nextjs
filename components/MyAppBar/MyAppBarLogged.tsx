@@ -224,6 +224,16 @@ const MyAppBarLogged = ({
                           </Grid>
                         )}
                         <Grid item xs={12}>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            fullWidth
+                            href="/meuspedidos"
+                          >
+                            Meus pedidos
+                          </Button>
+                        </Grid>
+                        <Grid item xs={12}>
                           <ColorButton
                             variant="outlined"
                             fullWidth

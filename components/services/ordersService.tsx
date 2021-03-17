@@ -36,9 +36,19 @@ const getOrderItems = async (ordersId:number) => {
   }
 };
 
+const getOrderByConsumerid = async (consumerid:number) => {
+  try {
+    const response = await api.get(`/orders_and_items?consumerid=${consumerid}`);
+    return { ok: true, data: response.data };
+  } catch (error) {
+    return { ok: false, erro: 'Seus itens não foram recuperados' };
+  }
+};
+
 export default {
   createOrder,
   getOrder,
   getOrderItems,
   getOrderById,
+  getOrderByConsumerid,
 };

@@ -260,7 +260,7 @@ export default function Home() {
   }, [searchInput]);
 
   useEffect(() => {
-    setInputEndereco(localStorage.getItem('ComprarNoZapEndereco') || session.profile.endereco || '');
+    setInputEndereco(session.profile.endereco || '');
     setInputNome(session.profile.nome || '');
   }, [session.profile.loaded]);
 
@@ -432,9 +432,6 @@ export default function Home() {
       .then((results:any) => {
         const completeAddress = results[0];
         const shortAddress = getShortAddress(completeAddress.address_components);
-        const superCompleteAddress = results[0].formatted_address;
-        localStorage.setItem('ComprarNoZapEndereco', superCompleteAddress);
-        setInputEndereco(superCompleteAddress);
         localStorage.setItem('ComprarNoZapEnderecoCurto', shortAddress);
         setLastEndereco(shortAddress);
         return getLatLng(completeAddress);
@@ -456,24 +453,6 @@ export default function Home() {
   const handleXsMenuClose = () => {
     setXsMenu(false);
   };
-
-  // const verifyAddress = async (address:any) => {
-  //   setLoadingAddressField(true);
-  //   const result = await geocodeByAddress(address)
-  //     .then((results:any) => {
-  //       const completeAddress = results[0];
-  //       const street = getLevelAddress(completeAddress.address_components, 'route');
-  //       if (street) {
-  //         setIsValidAddress({ ok: true, helperText: undefined });
-  //         return true;
-  //       }
-  //       setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
-  //       return false;
-  //     })
-  //     .catch((error:Error) => error);
-  //   setLoadingAddressField(false);
-  //   return result;
-  // };
 
   return (
     <ThemeProvider theme={PedirNoZapTheme}>

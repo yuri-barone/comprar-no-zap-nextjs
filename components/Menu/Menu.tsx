@@ -15,6 +15,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 export type MenuProps = {
@@ -188,6 +189,15 @@ const Menu = ({
                       <MenuBookIcon color="primary" fontSize="small" />
                     </ListItemIcon>
                     <Typography align="center" color="primary">Meu catálogo</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    window.location.href = '/meuspedidos';
+                  }}
+                  >
+                    <ListItemIcon>
+                      <ListAltIcon color="primary" fontSize="small" />
+                    </ListItemIcon>
+                    <Typography align="center" color="primary">Meus pedidos</Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {
                     window.location.href = '/';

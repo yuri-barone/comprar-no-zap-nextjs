@@ -69,7 +69,7 @@ const pedidos = () => {
                   {order.codigo}
                 </Box>
               </Typography>
-              <Typography variant="h6" className={classes.h6}>{date}</Typography>
+              <Typography variant="h6" className={classes.caption}>{date}</Typography>
               {items.map((item: any) => (
                 <div key={item.id}>
                   <Box pb={1}>
