@@ -198,6 +198,7 @@ const CartDetails = ({
     args.observacao = values.obs ? values.obs : undefined;
     args.troco = values.troco ? values.troco : undefined;
     args.consumerid = session.profile.id || undefined;
+    localStorage.setItem('CNZAddress', args.endereco);
     const response = await ordersService.createOrder(args);
     const link = generateZapLink(
       Number(values.products[0].zap),

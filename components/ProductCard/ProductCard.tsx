@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Box,
   Button,
@@ -15,11 +16,14 @@ import ShareIcon from '@material-ui/icons/Share';
 import { Skeleton } from '@material-ui/lab';
 import { formatNumberToMoneyWithSymbol } from '../../formatters';
 import pictureService from '../services/pictureService';
+import Claped from '../icons/Claped';
+import Clap from '../icons/Clap';
 
 export type ProductCardProps = {
   product: any;
-  onAdd?: (item:any) => void
+  onAdd?: (item:any) => void;
   onNavigate?: (store:any) => void;
+  toggleLike: (productId:number) => void;
 };
 
 const useStyles = makeStyles({
@@ -37,7 +41,9 @@ const useStyles = makeStyles({
   },
 });
 
-function ProductCard({ product, onAdd, onNavigate }: ProductCardProps) {
+function ProductCard({
+  product, onAdd, onNavigate, toggleLike,
+}: ProductCardProps) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState<string | undefined>();
@@ -112,9 +118,28 @@ function ProductCard({ product, onAdd, onNavigate }: ProductCardProps) {
         <Box pb={2} pl={2} pr={2} pt={1} className={classes.box}>
           <Grid container spacing={2} alignContent="space-between" style={{ height: '100%' }}>
             <Grid item xs={12}>
-              <IconButton aria-label="share" onClick={shareProduct}>
-                <ShareIcon fontSize="small" />
-              </IconButton>
+              <Grid container justify="space-between">
+                <Grid item xs="auto">
+                  <IconButton aria-label="share" onClick={shareProduct}>
+                    <ShareIcon fontSize="small" />
+                  </IconButton>
+                </Grid>
+                <Grid item xs="auto">
+                  <IconButton aria-label="like" onClick={() => toggleLike(product.id)}>
+                    {!product.liked && (
+                      <Clap />
+                    )}
+                    {product.liked && (
+                      <Claped />
+                    )}
+                  </IconButton>
+                  <Typography variant="caption" color="textSecondary">
+                    {product.likecount}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
               <Box pt={1}>
                 <Typography variant="h5">{product.titulo}</Typography>
                 <br />

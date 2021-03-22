@@ -43,6 +43,7 @@ import useCoordinate from '../components/useCoordinate';
 import Menu from '../components/Menu/Menu';
 import Search from '../components/Search/Search';
 import FastPromotion from '../components/FastPromotion';
+import useLikeActions from '../components/ProductCard/useLikeActions';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -79,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(2),
     zIndex: theme.zIndex.modal + 1,
   },
+  container: {
+    paddingBottom: theme.spacing(6),
+  },
 }));
 
 export default function Home() {
@@ -108,12 +112,11 @@ export default function Home() {
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
-  // const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
-  // const [loadingAddressField, setLoadingAddressField] = useState(false);
 
   const session: any = useSession(false);
   const navigation: any = useNavigation();
   const coordinates = useCoordinate();
+  const likeActions = useLikeActions();
 
   const handleDangerClose = (event:any, reason:any) => {
     if (reason === 'clickaway') {
@@ -260,7 +263,7 @@ export default function Home() {
   }, [searchInput]);
 
   useEffect(() => {
-    setInputEndereco(session.profile.endereco || '');
+    setInputEndereco(session.profile.endereco || localStorage.getItem('CNZAddress') || '');
     setInputNome(session.profile.nome || '');
   }, [session.profile.loaded]);
 
@@ -454,6 +457,46 @@ export default function Home() {
     setXsMenu(false);
   };
 
+  const handleToggleLikeProduct = (productId: number) => {
+    let direction = 1;
+
+    const newProductsData = productsData.map((product:any) => {
+      if (product.id === productId) {
+        direction = product.liked ? -1 : 1;
+        return { ...product, liked: direction > 0, likecount: product.likecount + direction };
+      }
+      return product;
+    });
+
+    setProductsData(newProductsData);
+
+    if (direction > 0) {
+      likeActions.likeProduct(productId);
+    } else {
+      likeActions.dislikeProduct(productId);
+    }
+  };
+
+  const handleToggleLikeStore = (storeId: number) => {
+    let direction = 1;
+
+    const newLocaisData = locaisData.map((local:any) => {
+      if (local.id === storeId) {
+        direction = local.liked ? -1 : 1;
+        return { ...local, liked: direction > 0, likecount: local.likecount + direction };
+      }
+      return local;
+    });
+
+    setLocaisData(newLocaisData);
+
+    if (direction > 0) {
+      likeActions.likeStore(storeId);
+    } else {
+      likeActions.dislikeStore(storeId);
+    }
+  };
+
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
       <Hidden xsDown>
@@ -540,8 +583,7 @@ export default function Home() {
       </Box>
       <Divider id="back-to-top-anchor" />
       <FastPromotion lastEndereco={lastEndereco} onAdd={adicionar} seeMore />
-      <Container>
-
+      <Container className={classes.container}>
         {isLoading && (
           <Grid item xs={12} className={classes.missingItems}>
             <Grid container alignContent="center" className={classes.missingItems}>
@@ -629,7 +671,7 @@ export default function Home() {
               {tabValue === 1
                 && productsData.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
-                    <ProductCard product={item} onAdd={adicionar} onNavigate={currentStore} />
+                    <ProductCard product={item} onAdd={adicionar} toggleLike={handleToggleLikeProduct} onNavigate={currentStore} />
                   </Grid>
                 ))}
             </Grid>
@@ -647,6 +689,9 @@ export default function Home() {
                       pictureId={item.pictureId}
                       distance={item.distance}
                       prefix={item.prefix}
+                      liked={item.liked}
+                      likecount={item.likecount}
+                      toggleLike={handleToggleLikeStore}
                     />
                   </Grid>
                 ))}
@@ -703,9 +748,6 @@ export default function Home() {
                         fullWidth
                         id="endereco"
                         label="Cidade"
-                        // error={!isValidAddress.ok}
-                        // helperText={!isValidAddress.ok && isValidAddress.helperText}
-                        // disabled={loadingAddressField}
                         InputProps={{
                           endAdornment: (
                             <>

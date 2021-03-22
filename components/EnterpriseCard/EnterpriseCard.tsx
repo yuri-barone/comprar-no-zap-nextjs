@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   Grid,
+  IconButton,
   makeStyles,
   Typography,
   useTheme,
@@ -11,6 +12,8 @@ import {
 import { Skeleton } from '@material-ui/lab';
 import React, { useEffect, useState } from 'react';
 import pictureService from '../services/pictureService';
+import Clap from '../icons/Clap';
+import Claped from '../icons/Claped';
 
 export type EnterpriseCardProps = {
   name: string;
@@ -21,6 +24,9 @@ export type EnterpriseCardProps = {
   onNavigate: (store:any) => void;
   distance?: number;
   prefix: string;
+  likecount: number;
+  toggleLike: (storeId:number) => void;
+  liked: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EnterpriseCard = ({
-  name, zap, endereco, id, onNavigate, pictureId, distance, prefix,
+  name, zap, endereco, id, onNavigate, pictureId, distance, prefix, liked, likecount, toggleLike,
 }: EnterpriseCardProps) => {
   const [src, setSrc] = useState<string | undefined>();
   const theme = useTheme();
@@ -116,6 +122,19 @@ const EnterpriseCard = ({
                     )}
                   </Grid>
                 </Grid>
+              </Grid>
+              <Grid item xs="auto">
+                <IconButton aria-label="share" onClick={() => (toggleLike(id))}>
+                  {!liked && (
+                  <Clap />
+                  )}
+                  {liked && (
+                  <Claped />
+                  )}
+                </IconButton>
+                <Typography color="textSecondary" variant="caption">
+                  {likecount}
+                </Typography>
               </Grid>
               <Grid item xs={12} sm={4}>
                 <Grid container spacing={2}>
