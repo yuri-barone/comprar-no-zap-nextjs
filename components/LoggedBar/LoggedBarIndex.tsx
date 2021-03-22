@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 import React from 'react';
+import Clap from '../icons/Clap';
 import LocalButton from '../LocalButton/LocalButton';
 
 export type LoggedBarIndexProps = {
@@ -22,6 +23,7 @@ export type LoggedBarIndexProps = {
   optionSearch?: boolean;
   lastEndereco?: string;
   handleDialogOpen?: () => void;
+  likes: number,
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -55,10 +57,16 @@ const useStyles = makeStyles((theme) => ({
   clickable: {
     cursor: 'pointer',
   },
+  sizePopover: {
+    width: 300,
+  },
+  iconColor: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 const LoggedBarIndex = ({
-  src, name, zap, domain, seller, optionSearch, handleDialogOpen, lastEndereco,
+  src, name, zap, domain, seller, optionSearch, handleDialogOpen, lastEndereco, likes,
 }:LoggedBarIndexProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -125,7 +133,7 @@ const LoggedBarIndex = ({
               horizontal: 'right',
             }}
           >
-            <Box p={2}>
+            <Box p={2} className={classes.sizePopover}>
               <Grid container justify="center" spacing={2}>
                 <Grid item xs="auto">
                   <div className={classes.imgPopover}>
@@ -137,6 +145,20 @@ const LoggedBarIndex = ({
                       width="100%"
                     />
                   </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid container justify="center" spacing={2}>
+                    <Grid item xs="auto">
+                      <div className={classes.iconColor}>
+                        <Clap />
+                      </div>
+                    </Grid>
+                    <Grid item xs="auto">
+                      <Typography color="primary">
+                        {likes}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid item xs={12}>
                   <Typography align="center" gutterBottom variant="h6">

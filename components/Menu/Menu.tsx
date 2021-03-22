@@ -17,6 +17,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import Clap from '../icons/Clap';
 
 export type MenuProps = {
   session: any,
@@ -38,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   },
   redIcon: {
     color: red[500],
+  },
+  iconColor: {
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -145,6 +149,20 @@ const Menu = ({
                         />
                       </div>
                     </Box>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container justify="center" spacing={2}>
+                      <Grid item xs="auto">
+                        <div className={classes.iconColor}>
+                          <Clap />
+                        </div>
+                      </Grid>
+                      <Grid item xs="auto">
+                        <Typography color="primary">
+                          {session.profile.likecount}
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography align="center" gutterBottom variant="h6">

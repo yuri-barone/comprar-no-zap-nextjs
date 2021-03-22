@@ -513,6 +513,7 @@ export default function Home() {
           seller={session.isAutheticated && session.profile.seller}
           lastEndereco={lastEndereco}
           handleDialogOpen={handleDialogOpen}
+          likes={session.profile.likecount}
         />
 
         )}

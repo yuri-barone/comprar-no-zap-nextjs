@@ -258,6 +258,7 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
                 zap={session.profile.zap}
                 domain={session.profile.domain}
                 seller={session.profile.seller}
+                likes={session.profile.likecount}
                 optionSearch
               />
               )}

@@ -14,6 +14,7 @@ import red from '@material-ui/core/colors/red';
 import { useRouter } from 'next/router';
 import Search from '../Search/Search';
 import LocalButton from '../LocalButton/LocalButton';
+import Clap from '../icons/Clap';
 
 export type MyAppBarLoggedSmProps = {
   onSearch: (filter: string) => void;
@@ -26,6 +27,7 @@ export type MyAppBarLoggedSmProps = {
   seller: boolean;
   domain: string;
   lastEndereco: string;
+  likes: number,
   handleDialogOpen: () => void;
 };
 
@@ -73,10 +75,16 @@ const useStyles = makeStyles((theme) => ({
   avatarClick: {
     cursor: 'pointer',
   },
+  sizePopover: {
+    width: 300,
+  },
+  iconColor: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 const MyAppBarLoggedSm = ({
-  value, onChange, src, name, zap, seller, domain, handleDialogOpen, lastEndereco,
+  value, onChange, src, name, zap, seller, domain, handleDialogOpen, lastEndereco, likes,
 }: MyAppBarLoggedSmProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -135,7 +143,7 @@ const MyAppBarLoggedSm = ({
                   horizontal: 'right',
                 }}
               >
-                <Box p={2}>
+                <Box p={2} className={classes.sizePopover}>
                   <Grid container justify="center" spacing={2}>
                     <Grid item xs="auto">
                       <div className={classes.imgPopover}>
@@ -147,6 +155,20 @@ const MyAppBarLoggedSm = ({
                           width="100%"
                         />
                       </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Grid container justify="center" spacing={2}>
+                        <Grid item xs="auto">
+                          <div className={classes.iconColor}>
+                            <Clap />
+                          </div>
+                        </Grid>
+                        <Grid item xs="auto">
+                          <Typography color="primary">
+                            {likes}
+                          </Typography>
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid item xs={12}>
                       <Typography align="center" gutterBottom variant="h6">

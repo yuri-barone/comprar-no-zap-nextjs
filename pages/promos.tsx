@@ -281,6 +281,7 @@ const promos = () => {
               seller={session.profile.seller}
               lastEndereco={lastEndereco}
               handleDialogOpen={handleDialogOpen}
+              likes={session.profile.likecount}
             />
           </div>
           )}

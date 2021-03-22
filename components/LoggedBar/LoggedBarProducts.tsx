@@ -12,6 +12,7 @@ import {
 import red from '@material-ui/core/colors/red';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import Clap from '../icons/Clap';
 
 export type LoggedBarProductsProps = {
   src: string;
@@ -19,6 +20,7 @@ export type LoggedBarProductsProps = {
   zap: string;
   domain: string;
   seller: boolean;
+  likes: number;
   consumerid: number;
 };
 
@@ -58,10 +60,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  sizePopover: {
+    width: 300,
+  },
+  iconColor: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 const LoggedBarProducts = ({
-  src, name, zap, domain, seller,
+  src, name, zap, domain, seller, likes,
 }:LoggedBarProductsProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -118,7 +126,7 @@ const LoggedBarProducts = ({
               horizontal: 'right',
             }}
           >
-            <Box p={2}>
+            <Box p={2} className={classes.sizePopover}>
               <Grid container justify="center" spacing={2}>
                 <Grid item xs="auto">
                   <div className={classes.imgPopover}>
@@ -130,6 +138,20 @@ const LoggedBarProducts = ({
                       width="100%"
                     />
                   </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid container justify="center" spacing={2}>
+                    <Grid item xs="auto">
+                      <div className={classes.iconColor}>
+                        <Clap />
+                      </div>
+                    </Grid>
+                    <Grid item xs="auto">
+                      <Typography color="primary">
+                        {likes}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid item xs={12}>
                   <Typography align="center" gutterBottom variant="h6">

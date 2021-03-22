@@ -230,6 +230,7 @@ export default function Home() {
                 seller={session.profile.seller}
                 lastEndereco={lastEndereco}
                 handleDialogOpen={handleDialogOpen}
+                likes={session.profile.likecount}
               />
             </div>
             )}

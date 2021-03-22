@@ -35,6 +35,7 @@ import productsService from '../services/productsService';
 import ProductRegister from '../ProductRegister/ProductRegister';
 import pictureService from '../services/pictureService';
 import promotionsService from '../services/promotionsService';
+import Clap from '../icons/Clap';
 
 export type ProductCardProps = {
   product: any;
@@ -119,6 +120,9 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     margin: theme.spacing(1),
     position: 'relative',
+  },
+  iconColor: {
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -355,9 +359,20 @@ function ProductCard({
         <Box p={2} className={classes.content}>
           <Grid container alignContent="space-between" className={classes.root}>
             <Grid item xs={12}>
-              <IconButton aria-label="share" onClick={shareProduct}>
-                <ShareIcon fontSize="small" />
-              </IconButton>
+              <Grid container justify="space-between">
+                <Grid item xs="auto">
+                  <IconButton aria-label="share" onClick={shareProduct}>
+                    <ShareIcon fontSize="small" />
+                  </IconButton>
+                </Grid>
+                <Grid item xs="auto">
+                  <Typography component="span" color="primary">
+                    <Clap />
+                    {' '}
+                    {product.likecount}
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <Grid container spacing={1}>
