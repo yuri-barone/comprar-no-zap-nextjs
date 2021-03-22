@@ -14,6 +14,7 @@ import useSession from '../../components/useSession';
 import EnterpriseExclusive from '../../components/EnterpriseCard/EnterpriseExclusive';
 import ImageFeedback from '../../components/ImageFeedback/ImageFeedback';
 import Search from '../../components/Search/Search';
+import useLikeActions from '../../components/ProductCard/useLikeActions';
 
 const useStyles = makeStyles((theme) => ({
   showingCart: {
@@ -59,6 +60,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
   const session: any = useSession(false);
   const classes = useStyles();
   const showingCart = cartProducts.length > 0;
+  const likeActions = useLikeActions();
 
   const isFallBack = () => !(perfil?.id > 0);
 
@@ -177,6 +179,26 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
     setSearchInput(e.target.value);
   };
 
+  const handleToggleLikeProduct = (productId: number) => {
+    let direction = 1;
+
+    const newProductsData = productsData.map((product:any) => {
+      if (product.id === productId) {
+        direction = product.liked ? -1 : 1;
+        return { ...product, liked: direction > 0, likecount: product.likecount + direction };
+      }
+      return product;
+    });
+
+    setProductsData(newProductsData);
+
+    if (direction > 0) {
+      likeActions.likeProduct(productId);
+    } else {
+      likeActions.dislikeProduct(productId);
+    }
+  };
+
   return (
     <ThemeProvider theme={PedirNoZapTheme}>
       {isFallBack()
@@ -238,7 +260,7 @@ const Catalogo = ({ perfil = { isFallBack: true }, produtos = [] }:{perfil:any, 
               <Grid container alignItems="stretch" spacing={4}>
                 { productsData?.map((item) => (
                   <Grid item xs={12} md={6} sm={6} lg={3} key={item.id}>
-                    <ProductCard product={item} onAdd={adicionar} />
+                    <ProductCard product={item} onAdd={adicionar} toggleLike={handleToggleLikeProduct} />
                   </Grid>
                 ))}
               </Grid>
