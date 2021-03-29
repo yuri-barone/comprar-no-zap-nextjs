@@ -17,6 +17,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import MotorcycleIcon from '@material-ui/icons/Motorcycle';
 import Clap from '../icons/Clap';
 
 export type MenuProps = {
@@ -150,6 +151,7 @@ const Menu = ({
                       </div>
                     </Box>
                   </Grid>
+                  {!!session.profile.likecount && (
                   <Grid item xs={12}>
                     <Grid container justify="center" spacing={2}>
                       <Grid item xs="auto">
@@ -164,6 +166,7 @@ const Menu = ({
                       </Grid>
                     </Grid>
                   </Grid>
+                  )}
                   <Grid item xs={12}>
                     <Typography align="center" gutterBottom variant="h6">
                       {session.profile.nome}
@@ -216,6 +219,15 @@ const Menu = ({
                       <ListAltIcon color="primary" fontSize="small" />
                     </ListItemIcon>
                     <Typography align="center" color="primary">Meus pedidos</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    window.location.href = '/motoboys';
+                  }}
+                  >
+                    <ListItemIcon>
+                      <MotorcycleIcon color="primary" fontSize="small" />
+                    </ListItemIcon>
+                    <Typography align="center" color="primary">Contratar motoboy</Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {
                     window.location.href = '/';

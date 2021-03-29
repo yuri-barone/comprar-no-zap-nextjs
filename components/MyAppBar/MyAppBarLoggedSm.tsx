@@ -156,6 +156,7 @@ const MyAppBarLoggedSm = ({
                         />
                       </div>
                     </Grid>
+                    {!!likes && (
                     <Grid item xs={12}>
                       <Grid container justify="center" spacing={2}>
                         <Grid item xs="auto">
@@ -170,6 +171,7 @@ const MyAppBarLoggedSm = ({
                         </Grid>
                       </Grid>
                     </Grid>
+                    )}
                     <Grid item xs={12}>
                       <Typography align="center" gutterBottom variant="h6">
                         {name}
@@ -210,6 +212,16 @@ const MyAppBarLoggedSm = ({
                         href="/meuspedidos"
                       >
                         Meus pedidos
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        href="/motoboys"
+                        variant="outlined"
+                        color="secondary"
+                        fullWidth
+                      >
+                        Contratar Motoboy
                       </Button>
                     </Grid>
                     <Grid item xs={12}>

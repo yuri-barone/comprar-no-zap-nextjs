@@ -45,7 +45,7 @@ const checkZap = async (zap:string) => {
   }
 };
 
-const find = async (filter: string, position?: any) => {
+const find = async (filter: string, position?: any, motoboy?: boolean) => {
   try {
     const args = [];
     if (filter) {
@@ -54,6 +54,9 @@ const find = async (filter: string, position?: any) => {
     if (position) {
       args.push(`lat=${position.latitude}`);
       args.push(`lng=${position.longitude}`);
+    }
+    if (motoboy) {
+      args.push(`motoboy=${motoboy}`);
     }
     args.push('optimized=true');
     const response = await api.get(`/perfis?${args.join('&')}`);

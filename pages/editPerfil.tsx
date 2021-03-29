@@ -47,6 +47,7 @@ const editPerfil = () => {
           userId={perfil.userId}
           delivery={perfil.delivery}
           domain={perfil.domain}
+          deliverman={perfil.deliverman}
         />
       )}
     </>

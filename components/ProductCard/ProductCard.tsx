@@ -133,9 +133,11 @@ function ProductCard({
                       <Claped />
                     )}
                   </IconButton>
+                  {!!product.likecount && (
                   <Typography variant="caption" color="textSecondary">
                     {product.likecount}
                   </Typography>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

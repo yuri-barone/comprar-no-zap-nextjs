@@ -185,7 +185,7 @@ export default function Home() {
     }
   }, [termToFind, storeIdToFind, coordinates]);
 
-  const aplicarFiltrosAoEstado = async (
+  const aplicarFiltrosAoEstado = (
     term: string | undefined,
     storeId?: number,
   ) => {

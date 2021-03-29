@@ -68,6 +68,7 @@ export type PerfilScreenProps = {
   delivery: boolean;
   palavrasChaves: string;
   domain: string;
+  deliverman: boolean;
 };
 
 const buildDomain = (value: string) => {
@@ -139,6 +140,7 @@ function PerfilScreen({
   delivery,
   userId,
   palavrasChaves,
+  deliverman,
   domain,
 }: PerfilScreenProps) {
   const [img64, setImg64] = useState<any>(src);
@@ -271,6 +273,7 @@ function PerfilScreen({
       delivery,
       palavrasChaves,
       domain,
+      deliverman,
     },
     mutators: { dominioMutator, changeEndereco },
   });
@@ -281,6 +284,7 @@ function PerfilScreen({
   const deliveryBox = useField('delivery', form);
   const palavrasChavesInput = useField('palavrasChaves', form);
   const domainInput = useField('domain', form);
+  const delivermanBox = useField('deliverman', form);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const image = useField('image', form);
 
@@ -612,6 +616,9 @@ function PerfilScreen({
                   </Grid>
                 </Grid>
                 <Grid container justify="flex-end" spacing={2}>
+                  <Grid item xs="auto">
+                    <FormControlLabel control={<Checkbox defaultChecked={deliverman} {...delivermanBox.input} />} label="Sou motoboy" />
+                  </Grid>
                   <Grid item xs="auto">
                     <FormControlLabel control={<Checkbox defaultChecked={seller} {...sellerBox.input} />} label="Quero vender" />
                   </Grid>

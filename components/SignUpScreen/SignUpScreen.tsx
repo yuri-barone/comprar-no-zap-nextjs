@@ -235,6 +235,7 @@ function SignUpScreen() {
   const delivery = useField('delivery', form);
   const palavrasChaves = useField('palavrasChaves', form);
   const domain = useField('domain', form);
+  const deliverman = useField('deliverman', form);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const image = useField('image', form);
 
@@ -499,6 +500,12 @@ function SignUpScreen() {
                         && confirmarPassword.meta.invalid
                         && confirmarPassword.meta.error
                       }
+                    />
+                  </Grid>
+                  <Grid item xs="auto">
+                    <FormControlLabel
+                      control={<Checkbox {...deliverman.input} />}
+                      label="Sou motoboy"
                     />
                   </Grid>
                   <Grid item xs="auto">

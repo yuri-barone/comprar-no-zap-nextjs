@@ -21,7 +21,7 @@ export type EnterpriseCardProps = {
   endereco: string;
   id: number;
   pictureId?: number;
-  onNavigate: (store:any) => void;
+  onNavigate?: (store:any) => void;
   distance?: number;
   prefix: string;
   likecount: number;
@@ -94,7 +94,7 @@ const EnterpriseCard = ({
             <Grid container justify="center" alignItems="center" spacing={2} className={classes.maxHeigth}>
               <Grid item xs="auto">
                 {src ? (
-                  <a onClick={handleOnSeeProducts} aria-hidden="true">
+                  <a onClick={onNavigate ? handleOnSeeProducts : undefined} aria-hidden="true">
                     <Avatar src={src} className={classes.avatarSize} />
                   </a>
                 ) : (
@@ -104,16 +104,16 @@ const EnterpriseCard = ({
               <Grid item xs={12} sm="auto">
                 <Grid container>
                   <Grid item xs={12}>
-                    <a onClick={handleOnSeeProducts} aria-hidden="true">
-                      <Typography variant="h6" className={classes.link}>{name}</Typography>
+                    <a onClick={onNavigate ? handleOnSeeProducts : undefined} aria-hidden="true">
+                      <Typography align="center" variant="h6" className={classes.link}>{name}</Typography>
                     </a>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography color="textSecondary">{endereco}</Typography>
+                    <Typography align="center" color="textSecondary">{endereco}</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     {distance > 0 && (
-                    <Typography color="secondary">
+                    <Typography align="center" color="secondary">
                       A
                       {' '}
                       {distance}
@@ -132,17 +132,21 @@ const EnterpriseCard = ({
                   <Claped />
                   )}
                 </IconButton>
-                <Typography color="textSecondary" variant="caption">
-                  {likecount}
-                </Typography>
+                {!!likecount && (
+                  <Typography color="textSecondary" variant="caption">
+                    {likecount}
+                  </Typography>
+                )}
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12}>
                 <Grid container spacing={2}>
+                  {!!onNavigate && (
                   <Grid item xs={12}>
                     <Button variant="outlined" color="primary" onClick={handleOnSeeProducts} fullWidth>
                       Ver produtos
                     </Button>
                   </Grid>
+                  )}
                   <Grid item xs={12}>
                     <Button variant="contained" color="primary" fullWidth onClick={handleSendMessage}>
                       Enviar mensagem
