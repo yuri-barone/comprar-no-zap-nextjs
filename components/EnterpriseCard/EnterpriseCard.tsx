@@ -91,7 +91,7 @@ const EnterpriseCard = ({
       <Grid container alignItems="center" className={classes.maxHeigth}>
         <Grid item xs={12}>
           <CardContent>
-            <Grid container alignItems="center" spacing={2} className={classes.maxHeigth}>
+            <Grid container justify="center" alignItems="center" spacing={2} className={classes.maxHeigth}>
               <Grid item xs="auto">
                 {src ? (
                   <a onClick={handleOnSeeProducts} aria-hidden="true">
@@ -101,7 +101,7 @@ const EnterpriseCard = ({
                   <Skeleton animation="wave" variant="circle" width={theme.spacing(10)} height={theme.spacing(10)} />
                 )}
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} sm="auto">
                 <Grid container>
                   <Grid item xs={12}>
                     <a onClick={handleOnSeeProducts} aria-hidden="true">
