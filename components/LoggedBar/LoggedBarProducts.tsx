@@ -22,6 +22,7 @@ export type LoggedBarProductsProps = {
   seller: boolean;
   likes: number;
   consumerid: number;
+  deliverman: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -69,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoggedBarProducts = ({
-  src, name, zap, domain, seller, likes,
+  src, name, zap, domain, seller, likes, deliverman,
 }:LoggedBarProductsProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -175,17 +176,41 @@ const LoggedBarProducts = ({
                     Editar meu perfil
                   </Button>
                 </Grid>
-                {seller && (
+                {deliverman && (
                   <Grid item xs={12}>
                     <Button
                       variant="outlined"
                       color="secondary"
-                      onClick={showCatalogo}
+                      href="/entregas"
                       fullWidth
                     >
-                      Meu catálogo
+                      Fazer entrega
                     </Button>
                   </Grid>
+                )}
+                {seller && (
+                  <>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={showCatalogo}
+                        fullWidth
+                      >
+                        Meu catálogo
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        href="/pedidosrecebidos"
+                        fullWidth
+                      >
+                        Pedidos recebidos
+                      </Button>
+                    </Grid>
+                  </>
                 )}
                 <Grid item xs={12}>
                   <Button
@@ -199,12 +224,12 @@ const LoggedBarProducts = ({
                 </Grid>
                 <Grid item xs={12}>
                   <Button
-                    href="/motoboys"
+                    href="/deliver"
                     variant="outlined"
                     color="secondary"
                     fullWidth
                   >
-                    Contratar Motoboy
+                    Contratar delivery
                   </Button>
                 </Grid>
                 <Grid item xs={12}>

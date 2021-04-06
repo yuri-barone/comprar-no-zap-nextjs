@@ -12,12 +12,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
+import SportsMotorsportsIcon from '@material-ui/icons/SportsMotorsports';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import MotorcycleIcon from '@material-ui/icons/Motorcycle';
+import ViewListIcon from '@material-ui/icons/ViewList';
 import Clap from '../icons/Clap';
 
 export type MenuProps = {
@@ -194,6 +196,15 @@ const Menu = ({
                     <Typography align="center" color="primary">Editar meu perfil</Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {
+                    window.location.href = '/entregas';
+                  }}
+                  >
+                    <ListItemIcon>
+                      <SportsMotorsportsIcon color="primary" fontSize="small" />
+                    </ListItemIcon>
+                    <Typography align="center" color="primary">Fazer entrega</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
                     window.location.href = '/produtos';
                   }}
                   >
@@ -212,6 +223,15 @@ const Menu = ({
                     <Typography align="center" color="primary">Meu catálogo</Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {
+                    window.location.href = '/pedidosrecebidos';
+                  }}
+                  >
+                    <ListItemIcon>
+                      <ViewListIcon color="primary" fontSize="small" />
+                    </ListItemIcon>
+                    <Typography align="center" color="primary">Pedidos recebidos</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => {
                     window.location.href = '/meuspedidos';
                   }}
                   >
@@ -221,13 +241,13 @@ const Menu = ({
                     <Typography align="center" color="primary">Meus pedidos</Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {
-                    window.location.href = '/motoboys';
+                    window.location.href = '/deliver';
                   }}
                   >
                     <ListItemIcon>
                       <MotorcycleIcon color="primary" fontSize="small" />
                     </ListItemIcon>
-                    <Typography align="center" color="primary">Contratar motoboy</Typography>
+                    <Typography align="center" color="primary">Contratar delivery</Typography>
                   </MenuItem>
                   <MenuItem onClick={() => {
                     window.location.href = '/';

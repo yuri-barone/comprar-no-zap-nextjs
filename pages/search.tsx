@@ -45,6 +45,10 @@ import Search from '../components/Search/Search';
 import FastPromotion from '../components/FastPromotion';
 import useLikeActions from '../components/ProductCard/useLikeActions';
 
+const searchOptions = {
+  componentRestrictions: { country: ['br'] },
+};
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
@@ -514,6 +518,7 @@ export default function Home() {
           lastEndereco={lastEndereco}
           handleDialogOpen={handleDialogOpen}
           likes={session.profile.likecount}
+          deliverman={session.profile.deliverman}
         />
 
         )}
@@ -735,6 +740,7 @@ export default function Home() {
                     handleAddressSelect(address);
                     changeEndereco(address);
                   }}
+                  searchOptions={searchOptions}
                 >
                   {({
                     getInputProps, suggestions, getSuggestionItemProps, loading,

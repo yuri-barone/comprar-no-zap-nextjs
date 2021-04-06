@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
 }));
-const motoboys = () => {
+const deliver = () => {
   const classes = useStyles();
   const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
   const [termToFind, setTermToFind] = useState<string | undefined>(undefined);
@@ -237,6 +237,7 @@ const motoboys = () => {
           lastEndereco={lastEndereco}
           handleDialogOpen={handleDialogOpen}
           likes={session.profile.likecount}
+          deliverman={session.profile.deliverman}
         />
 
         )}
@@ -302,7 +303,7 @@ const motoboys = () => {
           <Grid item xs={12} className={classes.containerMarginFix4}>
             <ImageFeedback
               image="/Jhon-Travolta.gif"
-              message="Hmm... Nenhum motoboy foi encontrado nessa região."
+              message="Hmm... Nenhum entregador foi encontrado nessa região."
             />
           </Grid>
           )}
@@ -426,4 +427,4 @@ const motoboys = () => {
   );
 };
 
-export default motoboys;
+export default deliver;

@@ -259,6 +259,7 @@ const showProduto = ({ produto = {} }:{ produto:any}) => {
                 domain={session.profile.domain}
                 seller={session.profile.seller}
                 likes={session.profile.likecount}
+                deliverman={session.profile.deliverman}
                 optionSearch
               />
               )}

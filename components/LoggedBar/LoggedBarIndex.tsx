@@ -24,6 +24,7 @@ export type LoggedBarIndexProps = {
   lastEndereco?: string;
   handleDialogOpen?: () => void;
   likes: number,
+  deliverman: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoggedBarIndex = ({
-  src, name, zap, domain, seller, optionSearch, handleDialogOpen, lastEndereco, likes,
+  src, name, zap, domain, seller, optionSearch, handleDialogOpen, lastEndereco, likes, deliverman,
 }:LoggedBarIndexProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -182,17 +183,41 @@ const LoggedBarIndex = ({
                     Editar meu perfil
                   </Button>
                 </Grid>
+                {deliverman && (
+                  <Grid item xs={12}>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      href="/entregas"
+                      fullWidth
+                    >
+                      Fazer entrega
+                    </Button>
+                  </Grid>
+                )}
                 {seller && (
-                <Grid item xs={12}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={showCatalogo}
-                    fullWidth
-                  >
-                    Meu catálogo
-                  </Button>
-                </Grid>
+                  <>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={showCatalogo}
+                        fullWidth
+                      >
+                        Meu catálogo
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        href="/pedidosrecebidos"
+                        fullWidth
+                      >
+                        Pedidos recebidos
+                      </Button>
+                    </Grid>
+                  </>
                 )}
                 <Grid item xs={12}>
                   <Button
@@ -206,12 +231,12 @@ const LoggedBarIndex = ({
                 </Grid>
                 <Grid item xs={12}>
                   <Button
-                    href="/motoboys"
+                    href="/deliver"
                     variant="outlined"
                     color="secondary"
                     fullWidth
                   >
-                    Contratar Motoboy
+                    Contratar delivery
                   </Button>
                 </Grid>
                 <Grid item xs={12}>

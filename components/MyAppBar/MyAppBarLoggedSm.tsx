@@ -29,6 +29,7 @@ export type MyAppBarLoggedSmProps = {
   lastEndereco: string;
   likes: number,
   handleDialogOpen: () => void;
+  deliverman: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -84,7 +85,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MyAppBarLoggedSm = ({
-  value, onChange, src, name, zap, seller, domain, handleDialogOpen, lastEndereco, likes,
+  value,
+  onChange,
+  src,
+  name,
+  zap,
+  seller,
+  domain,
+  handleDialogOpen,
+  lastEndereco,
+  likes,
+  deliverman,
 }: MyAppBarLoggedSmProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -192,17 +203,41 @@ const MyAppBarLoggedSm = ({
                         Editar meu perfil
                       </Button>
                     </Grid>
-                    {seller && (
+                    {deliverman && (
                     <Grid item xs={12}>
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={showCatalogo}
+                        href="/entregas"
                         fullWidth
                       >
-                        Meu catálogo
+                        Fazer entrega
                       </Button>
                     </Grid>
+                    )}
+                    {seller && (
+                    <>
+                      <Grid item xs={12}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={showCatalogo}
+                          fullWidth
+                        >
+                          Meu catálogo
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          href="/pedidosrecebidos"
+                          fullWidth
+                        >
+                          Pedidos recebidos
+                        </Button>
+                      </Grid>
+                    </>
                     )}
                     <Grid item xs={12}>
                       <Button
@@ -216,12 +251,12 @@ const MyAppBarLoggedSm = ({
                     </Grid>
                     <Grid item xs={12}>
                       <Button
-                        href="/motoboys"
+                        href="/deliver"
                         variant="outlined"
                         color="secondary"
                         fullWidth
                       >
-                        Contratar Motoboy
+                        Contratar delivery
                       </Button>
                     </Grid>
                     <Grid item xs={12}>

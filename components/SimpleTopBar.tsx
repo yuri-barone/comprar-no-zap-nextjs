@@ -1,81 +1,40 @@
 /* eslint-disable max-len */
 import {
-  Container,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Theme,
-  makeStyles,
-  CircularProgress,
-  Grid,
-  Typography,
   Box,
-  Link,
-  Hidden,
-  Divider,
-  IconButton,
-  Dialog,
-  Slide,
   Button,
-  TextField,
+  CircularProgress,
+  Dialog,
+  Divider,
+  Grid,
+  Hidden,
+  IconButton,
+  Link,
+  makeStyles,
   Snackbar,
+  TextField,
+  Typography,
 } from '@material-ui/core';
-import {
-  Alert,
-  Timeline,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineItem,
-  TimelineSeparator,
-} from '@material-ui/lab';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { TransitionProps } from '@material-ui/core/transitions';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 import CloseIcon from '@material-ui/icons/Close';
-import LocalButton from '../components/LocalButton/LocalButton';
-import LoggedBarIndex from '../components/LoggedBar/LoggedBarIndex';
-import ordersService from '../components/services/ordersService';
-import useSession from '../components/useSession';
-import useCoordinate from '../components/useCoordinate';
-import Menu from '../components/Menu/Menu';
-import ImageFeedback from '../components/ImageFeedback/ImageFeedback';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { Alert } from '@material-ui/lab';
+import LocalButton from './LocalButton/LocalButton';
+import LoggedBarIndex from './LoggedBar/LoggedBarIndex';
+import useSession from './useSession';
+import useCoordinate from './useCoordinate';
+import Menu from './Menu/Menu';
+
+type SimpleTopBarProps = {
+  requiredLogin: boolean,
+};
 
 const searchOptions = {
   componentRestrictions: { country: ['br'] },
 };
 
-// eslint-disable-next-line react/display-name
-const Transition = React.forwardRef((props: TransitionProps,
-  ref: React.Ref<unknown>) => <Slide direction="up" ref={ref} {...props} />);
-
-const useStyles = makeStyles((theme: Theme) => ({
-  table: {
-    minWidth: 700,
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: theme.palette.secondary.main,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  paper: {
-    padding: '6px 16px',
-  },
-  primaryTail: {
-    backgroundColor: theme.palette.primary.main,
-  },
-  dataSize: {
-    fontSize: '0.6 rem',
-    paddingBottom: theme.spacing(2),
-  },
+const useStyles = makeStyles((theme) => ({
   link: {
     textAlign: 'end',
     '& > * + *': {
@@ -86,77 +45,38 @@ const useStyles = makeStyles((theme: Theme) => ({
       textAlign: 'center',
     },
   },
-  missingItems: {
-    minHeight: 'calc(100vh - 200px)',
-  },
 }));
 
-const meuspedidos = () => {
+const SimpleTopBar = ({ requiredLogin }:SimpleTopBarProps) => {
   const classes = useStyles();
-  const session = useSession(true);
-  const coordinates = useCoordinate();
-  const [orders, setOrders] = useState([]);
-  const [loadingOrders, setLoadingOrders] = useState(true);
-  const [lastEndereco, setLastEndereco] = useState(undefined);
-  const [requiredDialog, setRequiredDialog] = useState(true);
-  const [locationBlocked, setLocationBlocked] = useState(false);
+
+  const [lastEndereco, setLastEndereco] = useState<string>('');
   const [openDialog, setOpenDialog] = useState(false);
+  const [requiredDialog, setRequiredDialog] = useState(true);
   const [xsMenu, setXsMenu] = useState(false);
   const [endereco, setEndereco] = useState('');
+  const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
 
-  const checkIsBlocked = async () => {
-    const asd = await navigator.permissions.query({ name: 'geolocation' });
-    if (asd.state === 'prompt') {
-      setLocationBlocked(false);
-    }
-    if (asd.state === 'granted') {
-      setLocationBlocked(false);
-    }
-    if (asd.state === 'denied') {
-      setLocationBlocked(true);
-    }
+  const session = useSession(requiredLogin);
+  const coordinates = useCoordinate();
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
   };
-
-  useEffect(() => {
-    setLastEndereco(localStorage.getItem('ComprarNoZapEnderecoCurto'));
-    if (localStorage.getItem('ComprarNoZapEnderecoCurto')) {
-      setRequiredDialog(false);
-    }
-    checkIsBlocked();
-  }, []);
-
-  const loadOrders = async () => {
-    const res = await ordersService.getOrderByConsumerid(session.profile.id);
-    setOrders(res.data);
-    setLoadingOrders(false);
-  };
-
-  const formatedOrders = useMemo(() => {
-    const orderMap:any = {};
-    for (let index = 0; index < orders.length; index += 1) {
-      const order = orders[index];
-      if (orderMap[order.id]) {
-        orderMap[order.id].items.push(order.nomeproduto);
-      } else {
-        orderMap[order.id] = { ...order, items: [order.nomeproduto] };
-      }
-    }
-    return Object.values(orderMap).reverse();
-  }, [orders]);
-
-  useEffect(() => {
-    if (session.profile.loaded === true) {
-      loadOrders();
-    }
-  }, [session]);
-
-  const getData = (data:string) => new Date(data).toLocaleString();
 
   const handleDialogClose = () => {
     if (!requiredDialog) {
       setOpenDialog(false);
     }
+  };
+
+  const handleXsMenuOpen = () => {
+    setXsMenu(true);
+  };
+
+  const handleXsMenuClose = () => {
+    setXsMenu(false);
   };
 
   const handleDangerClose = (event:any, reason:any) => {
@@ -166,16 +86,11 @@ const meuspedidos = () => {
     setAlertGeocode(false);
   };
 
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleXsMenuOpen = () => {
-    setXsMenu(true);
-  };
-
-  const handleXsMenuClose = () => {
-    setXsMenu(false);
+  const setLatLong = async (latLng:any) => {
+    const coordinatesToSave = { latitude: latLng.lat, longitude: latLng.lng };
+    localStorage.setItem('ComprarNoZapLatLng', JSON.stringify(coordinatesToSave));
+    coordinates.allowed = true;
+    handleDialogClose();
   };
 
   const getLevelAddress = (addressParts:any, levelDescription:any) => addressParts.find((addressPart:any) => addressPart.types.includes(levelDescription));
@@ -193,16 +108,8 @@ const meuspedidos = () => {
     return levelDescriptions.join(' - ');
   };
 
-  const setLatLong = (latLng:any) => {
-    const coordinatesToSave = { latitude: latLng.lat, longitude: latLng.lng };
-    localStorage.setItem('ComprarNoZapLatLng', JSON.stringify(coordinatesToSave));
-    coordinates.allowed = true;
-    handleDialogClose();
-  };
-
   const setGeolocation = ({ coords }:any) => {
     const coordinatesToSave = { lat: coords.latitude, lng: coords.longitude };
-    localStorage.setItem('ComprarNoZapLatLng', JSON.stringify(coordinatesToSave));
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=AIzaSyBb0OaO_k7YhPyJkn60P90Gw5tCi4EGGsg`).then((response) => response.json()).then((data) => {
       const shortAddress = getShortAddress(data.results[0].address_components);
       setLatLong(coordinatesToSave);
@@ -217,17 +124,47 @@ const meuspedidos = () => {
     });
   };
 
+  const askGeolocation = () => {
+    navigator.geolocation.getCurrentPosition(setGeolocation);
+  };
+
+  const checkIsAllowed = async () => {
+    const asd = await navigator.permissions.query({ name: 'geolocation' });
+    if (asd.state === 'prompt') {
+      setLocationBlocked(false);
+    }
+    if (asd.state === 'granted') {
+      setLocationBlocked(false);
+    }
+    if (asd.state === 'denied') {
+      setLocationBlocked(true);
+    }
+  };
+
+  useEffect(() => {
+    setLastEndereco(localStorage.getItem('ComprarNoZapEnderecoCurto'));
+    if (localStorage.getItem('ComprarNoZapEnderecoCurto')) {
+      setRequiredDialog(false);
+    }
+    if (!localStorage.getItem('ComprarNoZapEnderecoCurto')) {
+      setOpenDialog(true);
+    }
+    checkIsAllowed();
+  }, []);
+
   const handleAddressSelect = (address:string) => {
     geocodeByAddress(address)
-      .then((results:any) => {
+      .then((results) => {
         const completeAddress = results[0];
         const shortAddress = getShortAddress(completeAddress.address_components);
+        const superCompleteAddress = results[0].formatted_address;
+        localStorage.setItem('ComprarNoZapEndereco', superCompleteAddress);
         localStorage.setItem('ComprarNoZapEnderecoCurto', shortAddress);
         setLastEndereco(shortAddress);
         return getLatLng(completeAddress);
       })
-      .then((latLng:any) => setLatLong(latLng))
-      .catch((error:Error) => error);
+      .then((latLng) => setLatLong(latLng))
+      .catch((error) => error);
     setRequiredDialog(false);
     setOpenDialog(false);
   };
@@ -236,12 +173,8 @@ const meuspedidos = () => {
     setEndereco(selectedAddress);
   };
 
-  const askGeolocation = () => {
-    navigator.geolocation.getCurrentPosition(setGeolocation);
-  };
-
   return (
-    <Grid container spacing={2}>
+    <>
       <Hidden xsDown>
         <Grid item xs={12}>
           {session.isAutheticated && (
@@ -308,59 +241,8 @@ const meuspedidos = () => {
           </Grid>
         </Grid>
       </Hidden>
-      <Grid item xs={12}>
-        <Typography align="center" color="textSecondary" variant="h5">
-          Meus pedidos
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Container>
-          {!loadingOrders && formatedOrders.length === 0 && (
-          <Grid container alignContent="center" className={classes.missingItems}>
-            <Grid item xs={12}>
-              <ImageFeedback
-                image="/Jhon-Travolta.gif"
-                message="Ahhh! você ainda não fez pedidos."
-              />
-            </Grid>
-          </Grid>
-          )}
-          {loadingOrders && <CircularProgress size={50} className={classes.buttonProgress} />}
-          {!loadingOrders && (
-            <Timeline align="alternate">
-              {formatedOrders.map((order:any) => (
-                <TimelineItem key={order.id}>
-                  <TimelineSeparator>
-                    <TimelineDot color="primary" />
-                    <TimelineConnector className={classes.primaryTail} />
-                  </TimelineSeparator>
-                  <Box pb={2} />
-                  <TimelineContent>
-                    <Typography variant="h6" component="h1" color="primary">
-                      <Link href={`/lojas/${order.link}`}>
-                        {order.nomeloja}
-                      </Link>
-                    </Typography>
-                    <Box pt={2} pb={2}>
-                      {order.items.map((item:string) => (
-                        <Typography key={order.items.indexOf(item)} variant="body2" color="textSecondary">
-                          {item}
-                        </Typography>
-                      ))}
-                    </Box>
-                    <Typography component="span" variant="caption" color="textSecondary" className={classes.dataSize}>
-                      {getData(order.createdAt)}
-                    </Typography>
-                  </TimelineContent>
-                </TimelineItem>
-              ))}
-            </Timeline>
-          )}
-        </Container>
-      </Grid>
       <Dialog
         open={openDialog}
-        TransitionComponent={Transition}
         keepMounted
         onClose={handleDialogClose}
       >
@@ -474,8 +356,8 @@ const meuspedidos = () => {
           Ocorreu um erro ao acessar a sua localização
         </Alert>
       </Snackbar>
-    </Grid>
+    </>
   );
 };
 
-export default meuspedidos;
+export default SimpleTopBar;

@@ -617,7 +617,7 @@ function PerfilScreen({
                 </Grid>
                 <Grid container justify="flex-end" spacing={2}>
                   <Grid item xs="auto">
-                    <FormControlLabel control={<Checkbox defaultChecked={deliverman} {...delivermanBox.input} />} label="Sou motoboy" />
+                    <FormControlLabel control={<Checkbox defaultChecked={deliverman} {...delivermanBox.input} />} label="Sou entregador" />
                   </Grid>
                   <Grid item xs="auto">
                     <FormControlLabel control={<Checkbox defaultChecked={seller} {...sellerBox.input} />} label="Quero vender" />

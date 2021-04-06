@@ -505,7 +505,7 @@ function SignUpScreen() {
                   <Grid item xs="auto">
                     <FormControlLabel
                       control={<Checkbox {...deliverman.input} />}
-                      label="Sou motoboy"
+                      label="Sou entregador"
                     />
                   </Grid>
                   <Grid item xs="auto">

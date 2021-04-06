@@ -128,6 +128,7 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
             seller={session.profile.seller}
             consumerid={session.profile.id}
             likes={session.profile.likecount}
+            deliverman={session.profile.deliverman}
           />
         )}
       </Grid>

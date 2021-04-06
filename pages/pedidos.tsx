@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import ordersService from '../components/services/ordersService';
 import { formatNumberToMoneyWithSymbol } from '../formatters';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   caption: {
     fontSize: '0.60rem',
   },
@@ -15,7 +15,10 @@ const useStyles = makeStyles({
   body1: {
     fontSize: '0.80rem',
   },
-});
+  buttonSize: {
+    height: theme.spacing(5),
+  },
+}));
 const renderInfoParam = (label: string, value: string) => {
   const classes = useStyles();
   if (!value) {
@@ -141,9 +144,9 @@ const pedidos = () => {
           </Grid>
           <Grid item xs={12}>
             <Grid container justify="flex-end">
-              <Grid item xs="auto">
-                <Box pt={2} pb={2} displayPrint="none">
-                  <Button variant="outlined" color="primary" onClick={imprimir}>
+              <Grid item xs={12} sm="auto">
+                <Box pt={0} p={2} displayPrint="none">
+                  <Button fullWidth size="small" variant="outlined" color="primary" onClick={imprimir}>
                     Imprimir
                   </Button>
                 </Box>

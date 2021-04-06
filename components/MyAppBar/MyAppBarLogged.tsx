@@ -32,6 +32,7 @@ export type MyAppBarLoggedProps = {
   handleDialogOpen: () => void;
   lastEndereco: string;
   likes: number;
+  deliverman: boolean;
 };
 
 const ColorButton = withStyles((theme) => ({
@@ -101,6 +102,7 @@ const MyAppBarLogged = ({
   lastEndereco,
   handleDialogOpen,
   likes,
+  deliverman,
 }: MyAppBarLoggedProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -236,7 +238,20 @@ const MyAppBarLogged = ({
                             Editar meu perfil
                           </Button>
                         </Grid>
+                        {deliverman && (
+                        <Grid item xs={12}>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            href="/entregas"
+                            fullWidth
+                          >
+                            Fazer entrega
+                          </Button>
+                        </Grid>
+                        )}
                         {seller && (
+                        <>
                           <Grid item xs={12}>
                             <Button
                               variant="outlined"
@@ -247,6 +262,17 @@ const MyAppBarLogged = ({
                               Meu catálogo
                             </Button>
                           </Grid>
+                          <Grid item xs={12}>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              href="/pedidosrecebidos"
+                              fullWidth
+                            >
+                              Pedidos recebidos
+                            </Button>
+                          </Grid>
+                        </>
                         )}
                         <Grid item xs={12}>
                           <Button
@@ -260,12 +286,12 @@ const MyAppBarLogged = ({
                         </Grid>
                         <Grid item xs={12}>
                           <Button
-                            href="/motoboys"
+                            href="/deliver"
                             variant="outlined"
                             color="secondary"
                             fullWidth
                           >
-                            Contratar Motoboy
+                            Contratar delivery
                           </Button>
                         </Grid>
                         <Grid item xs={12}>
@@ -299,6 +325,7 @@ const MyAppBarLogged = ({
           lastEndereco={lastEndereco}
           handleDialogOpen={handleDialogOpen}
           likes={likes}
+          deliverman={deliverman}
         />
       </Hidden>
     </>
