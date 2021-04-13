@@ -443,10 +443,12 @@ export default function Home() {
         setLastEndereco(shortAddress);
         return getLatLng(completeAddress);
       })
-      .then((latLng:any) => setLatLong(latLng))
+      .then((latLng:any) => {
+        setLatLong(latLng);
+        setRequiredDialog(false);
+        setOpenDialog(false);
+      })
       .catch((error:Error) => error);
-    setRequiredDialog(false);
-    setOpenDialog(false);
   };
 
   const changeEndereco = (selectedAddress:string) => {

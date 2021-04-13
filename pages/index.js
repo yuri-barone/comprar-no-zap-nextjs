@@ -197,10 +197,12 @@ export default function Home() {
         setLastEndereco(shortAddress);
         return getLatLng(completeAddress);
       })
-      .then((latLng) => setLatLong(latLng))
+      .then((latLng) => {
+        setLatLong(latLng);
+        setRequiredDialog(false);
+        setOpenDialog(false);
+      })
       .catch((error) => error);
-    setRequiredDialog(false);
-    setOpenDialog(false);
   };
 
   const changeEndereco = (selectedAddress) => {
