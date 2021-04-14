@@ -152,7 +152,6 @@ function PerfilScreen({
   const [dominioIsValid, setDominioIsValid] = useState<boolean>(true);
   const [latLong, setLatLong] = useState<any>(undefined);
 
-  const refReward = useRef(null);
   const refRewardAfterSuccess = useRef(null);
 
   useEffect(() => {
@@ -160,12 +159,6 @@ function PerfilScreen({
       .then((results) => getLatLng(results[0]))
       .then((latLng) => setLatLong(latLng))
       .catch((error) => error);
-
-    const rewarded = localStorage.getItem('PDZReward');
-    if (!rewarded && refReward) {
-      refReward.current.rewardMe();
-      localStorage.setItem('PDZReward', 'Yes');
-    }
   }, []);
 
   const session = useSession(true);
@@ -426,21 +419,6 @@ function PerfilScreen({
                       </Grid>
                     </Grid>
                     <Grid item xs={12} sm>
-                      <Reward
-                        ref={refReward}
-                        type="confetti"
-                        config={{
-                          lifetime: 150,
-                          angle: 90,
-                          decay: 0.91,
-                          spread: 50,
-                          startVelocity: 35,
-                          elementCount: 125,
-                          elementSize: 7,
-                        }}
-                      >
-                        <div />
-                      </Reward>
                       <AlertTitle>Seu Catálogo</AlertTitle>
                       Parabéns agora seu estabelecimento tem um catálogo na internet. Clique
                       {' '}
