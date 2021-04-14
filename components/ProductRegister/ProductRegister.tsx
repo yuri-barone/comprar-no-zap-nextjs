@@ -4,8 +4,10 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  FormControlLabel,
   Grid,
   InputAdornment,
+  Switch,
   TextField,
 } from '@material-ui/core';
 import React, { useState } from 'react';
@@ -22,6 +24,7 @@ export type ProductRegisterProps = {
   defaultImage?: string;
   uploaderKey?: string,
   onCancel?: () => void;
+  pauseInput?: boolean;
 };
 
 yup.setLocale({
@@ -59,6 +62,7 @@ const ProductRegister = ({
   defaultImage,
   uploaderKey,
   onCancel,
+  pauseInput,
 }: ProductRegisterProps) => {
   const [img64, setImg64] = useState<string>(defaultImage);
   const imgActions: any = {};
@@ -85,6 +89,7 @@ const ProductRegister = ({
   const titulo = useField('titulo', form);
   const descricao = useField('descricao', form);
   const valor = useField('valor', form);
+  const paused = useField('paused', form);
 
   const handleImage = (base64: any) => {
     setImg64(base64);
@@ -170,6 +175,25 @@ const ProductRegister = ({
                     fullWidth
                   />
                 </Grid>
+                {pauseInput !== undefined && (
+                <Grid item xs={12}>
+                  <Grid container justify="flex-end">
+                    <Grid item xs="auto">
+                      <FormControlLabel
+                        {...paused.input}
+                        control={(
+                          <Switch
+                            name="paused"
+                            color="primary"
+                            defaultChecked={initialValues.paused}
+                          />
+                      )}
+                        label="Pausar"
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                )}
                 <Grid item xs={12}>
                   <Grid container justify="flex-end" spacing={2}>
                     {initialValues && (

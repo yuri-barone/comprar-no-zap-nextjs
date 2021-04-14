@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Box,
   Container,
@@ -28,7 +29,7 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
   // eslint-disable-next-line consistent-return
   const getProducts = async (termo: string | undefined, storeId?: number) => {
     try {
-      const productResponse = await productsService.findOptimized(termo, storeId, undefined, 400);
+      const productResponse = await productsService.findOptimized(termo, storeId, undefined, 400, true);
       setProductsData(productResponse.data.data);
     } catch (error) {
       return error;

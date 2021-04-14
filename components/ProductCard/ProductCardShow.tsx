@@ -341,6 +341,7 @@ function ProductCard({
         initialValues={product}
         uploaderKey={product.id}
         onCancel={() => setIsEditing(false)}
+        pauseInput
       />
     );
   }
@@ -358,6 +359,13 @@ function ProductCard({
         </div>
         <Box p={2} className={classes.content}>
           <Grid container alignContent="space-between" className={classes.root}>
+            {product.paused && (
+            <Grid item xs={12}>
+              <Typography color="textSecondary" variant="h5" align="center">
+                Produto pausado!
+              </Typography>
+            </Grid>
+            )}
             <Grid item xs={12}>
               <Grid container justify="space-between">
                 <Grid item xs="auto">

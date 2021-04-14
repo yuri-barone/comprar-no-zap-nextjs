@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { mainApi as api } from './Api';
 
 const save = async (data: object) => {
@@ -23,7 +24,7 @@ const find = async (filter: string, perfilId?:number) => {
   }
 };
 
-const findOptimized = async (filter: string, perfilId?:number, position?:any, limit?:number) => {
+const findOptimized = async (filter: string, perfilId?:number, position?:any, limit?:number, showPaused?:boolean) => {
   try {
     const args = [];
     if (filter) {
@@ -37,6 +38,9 @@ const findOptimized = async (filter: string, perfilId?:number, position?:any, li
     }
     if (limit) {
       args.push(`limit=${limit}`);
+    }
+    if (showPaused) {
+      args.push('showPaused=true');
     }
     const response = await api.get(`/products?${args.join('&')}`);
     return { data: response.data };
