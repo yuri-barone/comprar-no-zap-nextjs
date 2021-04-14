@@ -162,7 +162,7 @@ function PerfilScreen({
       .catch((error) => error);
 
     const rewarded = localStorage.getItem('PDZReward');
-    if (!rewarded) {
+    if (!rewarded && refReward) {
       refReward.current.rewardMe();
       localStorage.setItem('PDZReward', 'Yes');
     }
