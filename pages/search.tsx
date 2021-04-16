@@ -116,6 +116,7 @@ export default function Home() {
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [alertGeocode, setAlertGeocode] = useState(false);
+  const [shoppingCartOpen, setShoppingCartOpen] = useState(false);
 
   const session: any = useSession(false);
   const navigation: any = useNavigation();
@@ -311,6 +312,10 @@ export default function Home() {
     });
   };
 
+  const toggleOpened = (opened: boolean) => {
+    setShoppingCartOpen(opened);
+  };
+
   const adicionar = (item: any) => {
     let newItems = [];
     const existentItem = cartProducts.find(
@@ -323,6 +328,7 @@ export default function Home() {
       newItems = [...cartProducts, item];
     }
     setCartProducts(newItems);
+    toggleOpened(newItems.length === 1);
   };
 
   const showingCart = cartProducts.length > 0;
@@ -719,6 +725,8 @@ export default function Home() {
                   removeAll={removeAll}
                   initialEndereco={inputEndereco}
                   initialNome={inputNome}
+                  open={shoppingCartOpen}
+                  toggleOpened={toggleOpened}
                 />
               </Box>
             </Container>

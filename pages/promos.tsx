@@ -73,12 +73,11 @@ const promos = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [xsMenu, setXsMenu] = useState(false);
   const [endereco, setEndereco] = useState('');
-  // const [isValidAddress, setIsValidAddress] = useState({ ok: true, helperText: undefined });
-  // const [loadingAddressField, setLoadingAddressField] = useState(false);
   const [locationBlocked, setLocationBlocked] = useState(false);
   const [requiredDialog, setRequiredDialog] = useState(true);
   const [alertGeocode, setAlertGeocode] = useState(false);
   const [searchInput, setSearchInput] = useState<string | undefined>(undefined);
+  const [shoppingCartOpen, setShoppingCartOpen] = useState(false);
   const session: any = useSession(false);
   const coordinates:any = useCoordinate;
 
@@ -229,6 +228,10 @@ const promos = () => {
     navigator.geolocation.getCurrentPosition(setGeolocation);
   };
 
+  const toggleOpened = (opened: boolean) => {
+    setShoppingCartOpen(opened);
+  };
+
   const adicionar = (item: any) => {
     let newItems = [];
     const existentItem = cartProducts.find(
@@ -241,27 +244,10 @@ const promos = () => {
       newItems = [...cartProducts, item];
     }
     setCartProducts(newItems);
+    toggleOpened(newItems.length === 1);
   };
 
   const showingCart = cartProducts.length > 0;
-
-  // const verifyAddress = async (address:any) => {
-  //   setLoadingAddressField(true);
-  //   const result = await geocodeByAddress(address)
-  //     .then((results) => {
-  //       const completeAddress = results[0];
-  //       const street = getLevelAddress(completeAddress.address_components, 'route');
-  //       if (street) {
-  //         setIsValidAddress({ ok: true, helperText: undefined });
-  //         return true;
-  //       }
-  //       setIsValidAddress({ ok: false, helperText: 'Preencha o endereço completo (Rua e número da casa)' });
-  //       return false;
-  //     })
-  //     .catch((error) => error);
-  //   setLoadingAddressField(false);
-  //   return result;
-  // };
 
   const searchOnChange = (e: any) => {
     setSearchInput(e.target.value);
@@ -459,6 +445,8 @@ const promos = () => {
                 removeAll={removeAll}
                 initialEndereco={inputEndereco}
                 initialNome={inputNome}
+                open={shoppingCartOpen}
+                toggleOpened={toggleOpened}
               />
             </Box>
           </Container>

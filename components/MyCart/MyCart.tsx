@@ -20,6 +20,8 @@ export type MyCartProps = {
   removeAll: () => void;
   initialEndereco: string;
   initialNome: string;
+  open: boolean;
+  toggleOpened: (opened: boolean) => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -44,16 +46,10 @@ const MyCart = ({
   removeItem,
   initialEndereco,
   initialNome,
+  toggleOpened,
+  open,
 }: MyCartProps) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const checkProductQuantity = () => {
     const cartQuantity = cartProducts.length;
@@ -127,7 +123,7 @@ const MyCart = ({
                 <Button
                   color="inherit"
                   variant="contained"
-                  onClick={handleOpen}
+                  onClick={() => toggleOpened(true)}
                   size="large"
                   fullWidth
                   className={classes.pedir}
@@ -145,7 +141,7 @@ const MyCart = ({
             <Button
               color="inherit"
               variant="contained"
-              onClick={handleOpen}
+              onClick={() => toggleOpened(true)}
               size="large"
               fullWidth
               className={classes.pedir}
@@ -157,7 +153,7 @@ const MyCart = ({
       </Hidden>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => toggleOpened(false)}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
@@ -165,7 +161,7 @@ const MyCart = ({
           initialEndereco={initialEndereco}
           initialNome={initialNome}
           cartProductsData={cartProducts}
-          onContinuarComprando={handleClose}
+          onContinuarComprando={() => toggleOpened(false)}
           changeItemQuantity={changeItemQuantity}
           removeAll={removeAll}
           removeItem={removeItem}

@@ -27,6 +27,7 @@ const useStyles = makeStyles({
   paper: {
     width: '100%',
     height: '100vh',
+    paddingBottom: '40px',
     overflowX: 'hidden',
   },
 });
@@ -110,7 +111,7 @@ const MyCartDetails = ({
                   variant="contained"
                   onClick={onContinuarComprando}
                 >
-                  Fechar
+                  Continuar comprando
                 </Button>
               </Grid>
             </Grid>

@@ -71,7 +71,7 @@ const EnterpriseExclusive = ({ perfil, isTheSamePerfil, whiteText }:EnterpriseEx
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs="auto" md={3}>
+        <Grid item xs={12} md={3}>
           <Grid container spacing={1}>
             {isTheSamePerfil && (
             <Grid item xs={12}>
