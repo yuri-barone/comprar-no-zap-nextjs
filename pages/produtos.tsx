@@ -105,6 +105,9 @@ const produtos = ({ uploaderKey }:{uploaderKey:string}) => {
 
   const salvarProduto = async (values: any) => {
     const params:any = values;
+    if (params.paused === undefined) {
+      params.paused = false;
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     session;
     const response = await productsService.save(params);
