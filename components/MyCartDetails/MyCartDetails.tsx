@@ -95,21 +95,23 @@ const MyCartDetails = ({
               justify="flex-end"
               spacing={2}
             >
-              <Grid item xs="auto">
+              <Grid item xs={12} sm="auto">
                 <Button
                   color="primary"
                   variant="outlined"
                   onClick={removeAll}
+                  fullWidth
                 >
                   Limpar Carrinho
                 </Button>
               </Grid>
 
-              <Grid item xs="auto">
+              <Grid item xs={12} sm="auto">
                 <Button
                   color="primary"
                   variant="contained"
                   onClick={onContinuarComprando}
+                  fullWidth
                 >
                   Continuar comprando
                 </Button>

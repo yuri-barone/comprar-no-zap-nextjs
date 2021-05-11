@@ -410,9 +410,9 @@ const CartDetails = ({
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Grid container justify="flex-end">
-                      <Grid item xs="auto">
+                      <Grid item xs={12} sm="auto">
                         <div className={classes.wrapper}>
-                          <Button type="submit" variant="contained" color="primary" disabled={pristine || submitting}>
+                          <Button fullWidth type="submit" variant="contained" color="primary" disabled={pristine || submitting}>
                             Pedir no zap
                           </Button>
                           {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
