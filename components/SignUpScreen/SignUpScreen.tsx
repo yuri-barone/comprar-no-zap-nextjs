@@ -151,6 +151,9 @@ function SignUpScreen() {
     if (!params.delivery) {
       params.delivery = false;
     }
+    if (!params.deliverman) {
+      params.deliverman = false;
+    }
     // eslint-disable-next-line prefer-destructuring
     params.endereco = values.endereco;
     params.lat = latLong.lat;
