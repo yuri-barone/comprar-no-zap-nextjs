@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
   link: {
     cursor: 'pointer',
   },
+  iconsBtn: {
+    borderRadius: 0,
+  },
 }));
 const EnterpriseCard = ({
   name, zap, endereco, id, onNavigate, pictureId, distance, prefix, liked, likecount, toggleLike,
@@ -138,7 +141,7 @@ const EnterpriseCard = ({
             <Grid container justify="space-between">
               <Grid item xs="auto">
                 {!!onNavigate && (
-                <IconButton aria-label="see products" onClick={handleOnSeeProducts}>
+                <IconButton className={classes.iconsBtn} aria-label="see products" onClick={handleOnSeeProducts}>
                   <LocalMallOutlinedIcon />
                   <Typography component="span" color="textSecondary" variant="caption">
                     <Box pl={1} fontWeight="fontWeightBold">
@@ -147,7 +150,7 @@ const EnterpriseCard = ({
                   </Typography>
                 </IconButton>
                 )}
-                <IconButton aria-label="talk" onClick={handleSendMessage}>
+                <IconButton className={classes.iconsBtn} aria-label="talk" onClick={handleSendMessage}>
                   <QuestionAnswerOutlinedIcon />
                   {!isXs && (
                   <Typography component="span" color="textSecondary" variant="caption">
@@ -159,7 +162,7 @@ const EnterpriseCard = ({
                 </IconButton>
               </Grid>
               <Grid item xs="auto">
-                <IconButton aria-label="share" onClick={() => (toggleLike(id))}>
+                <IconButton className={classes.iconsBtn} aria-label="share" onClick={() => (toggleLike(id))}>
                   {!liked && (
                   <Clap />
                   )}

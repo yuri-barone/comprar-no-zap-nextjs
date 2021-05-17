@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   paper: {
     width: '100%',
     height: '100vh',
-    paddingBottom: '40px',
+    paddingBottom: '70px',
     overflowX: 'hidden',
   },
 });
@@ -101,6 +101,7 @@ const MyCartDetails = ({
                   variant="outlined"
                   onClick={removeAll}
                   fullWidth
+                  size="large"
                 >
                   Limpar Carrinho
                 </Button>
@@ -109,9 +110,10 @@ const MyCartDetails = ({
               <Grid item xs={12} sm="auto">
                 <Button
                   color="primary"
-                  variant="contained"
+                  variant="outlined"
                   onClick={onContinuarComprando}
                   fullWidth
+                  size="large"
                 >
                   Continuar comprando
                 </Button>
